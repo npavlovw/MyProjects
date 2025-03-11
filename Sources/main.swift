@@ -6,3 +6,10 @@ func magicButton() {
 }
 
 magicButton()
+
+
+func secretAlgirithm(input: String) -> String {
+    return Sring(input.reversed())
+}
+
+print(secretAlgirithm(input: "Git Master"))
