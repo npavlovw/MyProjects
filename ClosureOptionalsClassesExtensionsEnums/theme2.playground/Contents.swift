@@ -50,10 +50,49 @@ func filter (array: [Int], condition: ((Int) -> Bool)?) -> [Int] {
             filterdArray.append(i)
         }
     }
-    print (filterdArray)
     return filterdArray
 }
 
-filter(array: [1, 2, 3, 4, 5, 6]) { i in
-    i % 2 == 0
+print(filter(array: [1, 2, 3, 4, 5, 6]) { $0 % 2 == 0
+})
+
+
+//Классы и Наследование
+/*Создайте базовый класс Animal с такими свойствами, как name (имя животного), и методом speak(), который выводит строку с типичным звуком животного
+ 
+ Создайте два подкласса: Dog и Cat , которые наследуются от Animal .
+ Переопределите метод speak() в каждом подклассе так, чтобы собака лаяла (например,"Гав!"), а кошка мяукала (например,"Мяу!").
+ Создайте объекты каждого типа и продемонстрируйте их поведение.*/
+
+class Animal {
+    var name: String
+    
+    init(name: String) {
+        self.name = name
+    }
+    
+    func speak() -> String {
+        return "Animal speak"
+    }
 }
+
+class Dog: Animal {
+    override func speak() -> String {
+        print ("Гав!")
+        return "Гав!"
+    }
+}
+class Cat: Animal {
+    override func speak() -> String {
+        print ("Мяу!")
+        return "Мяу!"
+    }
+}
+
+let dog = Dog(name: "Рэкс")
+dog.speak()
+
+let cat = Cat(name: "Барсик")
+cat.speak()
+
+
