@@ -96,3 +96,32 @@ let cat = Cat(name: "Барсик")
 cat.speak()
 
 
+//Протоколы и Расширения
+/*Определите протокол Identifiable, требующий наличие свойства id типа String.
+ 
+ Создайте расширение для протокола Identifiable, которое добавляет метод printId(), выводящий значение id в консоль.
+ Реализуйте структуру (например, User или Product), которая соответствует протоколу Identifiable, и протестируйте работу метода из расширения*/
+
+protocol Identifiable {
+    var id: String { get set}
+}
+
+extension Identifiable {
+    func printId() {
+        print("Значение id пользователя:\(id)")
+    }
+}
+
+struct User: Identifiable {
+    var id: String
+}
+
+struct Product: Identifiable {
+    var id: String
+}
+
+var user = User(id: "123")
+user.printId()
+
+var product = Product(id: "456")
+product.printId()
