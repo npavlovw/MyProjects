@@ -125,3 +125,33 @@ user.printId()
 
 var product = Product(id: "456")
 product.printId()
+
+
+//Перечисления (Enums)
+
+/*Создайте перечисление Transport, которое включает в себя несколько кейсов, например: car , bike, bus и train.
+ 
+ Добавьте ассоциированные значения к некоторым кейсам, если это необходимо (например, для car можно добавить максимальную скорость,для bus — количество пассажиров).
+ Напишите функцию, которая принимает значение типа Transport и возвращает описание транспорта в виде строки, учитывая ассоциированные значения (если они есть).*/
+
+enum Transport {
+    case car (speed: Int)
+    case bike (name: String)
+    case bus (capacity: Int)
+    case train
+}
+
+func describeTransport(_ transport: Transport) -> String {
+    switch transport {
+    case .car(speed: var speed):
+        return "Автомобиль, максимальная скорость: \(speed) km/h"
+    case .bike(name: let name):
+        return "Название мотоцикла: \(name)"
+    case .bus(capacity: let capacity):
+        return "Вместимость автобуса \(capacity) человек"
+    case .train:
+        return "Поезд"
+    }
+}
+
+describeTransport(Transport.bus(capacity: 23))
