@@ -1,5 +1,6 @@
 import UIKit
 
+//Проект "Зоопарк"
 enum AnimalType {
     case mammal
     case bird
