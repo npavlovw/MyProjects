@@ -1,8 +1,7 @@
-<<<<<<< HEAD
 *.DS_Store
 /build
 ClosureOptionalsClassesExtensionsEnums/theme2.playground/playground.xcworkspace/xcuserdata/aleksandrpopov.xcuserdatad/
-=======
+
 # ❌ Игнорируем Xcode-проекты
 *.xcworkspace
 *.xcuserstate
