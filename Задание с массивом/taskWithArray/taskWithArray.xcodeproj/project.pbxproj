@@ -7,15 +7,7 @@
 	objects = {
 
 /* Begin PBXCopyFilesBuildPhase section */
-<<<<<<< HEAD
-<<<<<<< HEAD
-		143A91872D8C91E100113B85 /* CopyFiles */ = {
-=======
-		143A919A2D8DECA700113B85 /* CopyFiles */ = {
->>>>>>> taskWithArray
-=======
-		143A919A2D8DECA700113B85 /* CopyFiles */ = {
->>>>>>> Calculator
+		149FD0442D8EDD89000D38C9 /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = /usr/share/man/man1/;
@@ -27,41 +19,19 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-<<<<<<< HEAD
-<<<<<<< HEAD
-		143A91892D8C91E100113B85 /* MyCalculator */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = MyCalculator; sourceTree = BUILT_PRODUCTS_DIR; };
+		149FD0462D8EDD89000D38C9 /* taskWithArray */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = taskWithArray; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		143A918B2D8C91E100113B85 /* MyCalculator */ = {
-=======
-=======
->>>>>>> Calculator
-		143A919C2D8DECA700113B85 /* MyCalculator */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = MyCalculator; sourceTree = BUILT_PRODUCTS_DIR; };
-/* End PBXFileReference section */
-
-/* Begin PBXFileSystemSynchronizedRootGroup section */
-		143A919E2D8DECA700113B85 /* MyCalculator */ = {
-<<<<<<< HEAD
->>>>>>> taskWithArray
-=======
->>>>>>> Calculator
+		149FD0482D8EDD89000D38C9 /* taskWithArray */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			path = MyCalculator;
+			path = taskWithArray;
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
-<<<<<<< HEAD
-<<<<<<< HEAD
-		143A91862D8C91E100113B85 /* Frameworks */ = {
-=======
-		143A91992D8DECA700113B85 /* Frameworks */ = {
->>>>>>> taskWithArray
-=======
-		143A91992D8DECA700113B85 /* Frameworks */ = {
->>>>>>> Calculator
+		149FD0432D8EDD89000D38C9 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -71,39 +41,18 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-<<<<<<< HEAD
-<<<<<<< HEAD
-		143A91802D8C91E100113B85 = {
+		149FD03D2D8EDD89000D38C9 = {
 			isa = PBXGroup;
 			children = (
-				143A918B2D8C91E100113B85 /* MyCalculator */,
-				143A918A2D8C91E100113B85 /* Products */,
+				149FD0482D8EDD89000D38C9 /* taskWithArray */,
+				149FD0472D8EDD89000D38C9 /* Products */,
 			);
 			sourceTree = "<group>";
 		};
-		143A918A2D8C91E100113B85 /* Products */ = {
+		149FD0472D8EDD89000D38C9 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				143A91892D8C91E100113B85 /* MyCalculator */,
-=======
-=======
->>>>>>> Calculator
-		143A91932D8DECA700113B85 = {
-			isa = PBXGroup;
-			children = (
-				143A919E2D8DECA700113B85 /* MyCalculator */,
-				143A919D2D8DECA700113B85 /* Products */,
-			);
-			sourceTree = "<group>";
-		};
-		143A919D2D8DECA700113B85 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				143A919C2D8DECA700113B85 /* MyCalculator */,
-<<<<<<< HEAD
->>>>>>> taskWithArray
-=======
->>>>>>> Calculator
+				149FD0462D8EDD89000D38C9 /* taskWithArray */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -111,145 +60,64 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-<<<<<<< HEAD
-<<<<<<< HEAD
-		143A91882D8C91E100113B85 /* MyCalculator */ = {
+		149FD0452D8EDD89000D38C9 /* taskWithArray */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 143A91902D8C91E100113B85 /* Build configuration list for PBXNativeTarget "MyCalculator" */;
+			buildConfigurationList = 149FD04D2D8EDD89000D38C9 /* Build configuration list for PBXNativeTarget "taskWithArray" */;
 			buildPhases = (
-				143A91852D8C91E100113B85 /* Sources */,
-				143A91862D8C91E100113B85 /* Frameworks */,
-				143A91872D8C91E100113B85 /* CopyFiles */,
-=======
-=======
->>>>>>> Calculator
-		143A919B2D8DECA700113B85 /* MyCalculator */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 143A91A32D8DECA700113B85 /* Build configuration list for PBXNativeTarget "MyCalculator" */;
-			buildPhases = (
-				143A91982D8DECA700113B85 /* Sources */,
-				143A91992D8DECA700113B85 /* Frameworks */,
-				143A919A2D8DECA700113B85 /* CopyFiles */,
-<<<<<<< HEAD
->>>>>>> taskWithArray
-=======
->>>>>>> Calculator
+				149FD0422D8EDD89000D38C9 /* Sources */,
+				149FD0432D8EDD89000D38C9 /* Frameworks */,
+				149FD0442D8EDD89000D38C9 /* CopyFiles */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 			);
 			fileSystemSynchronizedGroups = (
-<<<<<<< HEAD
-<<<<<<< HEAD
-				143A918B2D8C91E100113B85 /* MyCalculator */,
-=======
-				143A919E2D8DECA700113B85 /* MyCalculator */,
->>>>>>> taskWithArray
-=======
-				143A919E2D8DECA700113B85 /* MyCalculator */,
->>>>>>> Calculator
+				149FD0482D8EDD89000D38C9 /* taskWithArray */,
 			);
-			name = MyCalculator;
+			name = taskWithArray;
 			packageProductDependencies = (
 			);
-			productName = MyCalculator;
-<<<<<<< HEAD
-<<<<<<< HEAD
-			productReference = 143A91892D8C91E100113B85 /* MyCalculator */;
-=======
-			productReference = 143A919C2D8DECA700113B85 /* MyCalculator */;
->>>>>>> taskWithArray
-=======
-			productReference = 143A919C2D8DECA700113B85 /* MyCalculator */;
->>>>>>> Calculator
+			productName = taskWithArray;
+			productReference = 149FD0462D8EDD89000D38C9 /* taskWithArray */;
 			productType = "com.apple.product-type.tool";
 		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
-<<<<<<< HEAD
-<<<<<<< HEAD
-		143A91812D8C91E100113B85 /* Project object */ = {
-=======
-		143A91942D8DECA700113B85 /* Project object */ = {
->>>>>>> taskWithArray
-=======
-		143A91942D8DECA700113B85 /* Project object */ = {
->>>>>>> Calculator
+		149FD03E2D8EDD89000D38C9 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 1620;
 				LastUpgradeCheck = 1620;
 				TargetAttributes = {
-<<<<<<< HEAD
-<<<<<<< HEAD
-					143A91882D8C91E100113B85 = {
-=======
-					143A919B2D8DECA700113B85 = {
->>>>>>> taskWithArray
-=======
-					143A919B2D8DECA700113B85 = {
->>>>>>> Calculator
+					149FD0452D8EDD89000D38C9 = {
 						CreatedOnToolsVersion = 16.2;
 					};
 				};
 			};
-<<<<<<< HEAD
-<<<<<<< HEAD
-			buildConfigurationList = 143A91842D8C91E100113B85 /* Build configuration list for PBXProject "MyCalculator" */;
-=======
-			buildConfigurationList = 143A91972D8DECA700113B85 /* Build configuration list for PBXProject "MyCalculator" */;
->>>>>>> taskWithArray
-=======
-			buildConfigurationList = 143A91972D8DECA700113B85 /* Build configuration list for PBXProject "MyCalculator" */;
->>>>>>> Calculator
+			buildConfigurationList = 149FD0412D8EDD89000D38C9 /* Build configuration list for PBXProject "taskWithArray" */;
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
 				Base,
 			);
-<<<<<<< HEAD
-<<<<<<< HEAD
-			mainGroup = 143A91802D8C91E100113B85;
+			mainGroup = 149FD03D2D8EDD89000D38C9;
 			minimizedProjectReferenceProxies = 1;
 			preferredProjectObjectVersion = 77;
-			productRefGroup = 143A918A2D8C91E100113B85 /* Products */;
+			productRefGroup = 149FD0472D8EDD89000D38C9 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				143A91882D8C91E100113B85 /* MyCalculator */,
-=======
-=======
->>>>>>> Calculator
-			mainGroup = 143A91932D8DECA700113B85;
-			minimizedProjectReferenceProxies = 1;
-			preferredProjectObjectVersion = 77;
-			productRefGroup = 143A919D2D8DECA700113B85 /* Products */;
-			projectDirPath = "";
-			projectRoot = "";
-			targets = (
-				143A919B2D8DECA700113B85 /* MyCalculator */,
-<<<<<<< HEAD
->>>>>>> taskWithArray
-=======
->>>>>>> Calculator
+				149FD0452D8EDD89000D38C9 /* taskWithArray */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXSourcesBuildPhase section */
-<<<<<<< HEAD
-<<<<<<< HEAD
-		143A91852D8C91E100113B85 /* Sources */ = {
-=======
-		143A91982D8DECA700113B85 /* Sources */ = {
->>>>>>> taskWithArray
-=======
-		143A91982D8DECA700113B85 /* Sources */ = {
->>>>>>> Calculator
+		149FD0422D8EDD89000D38C9 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -259,15 +127,7 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin XCBuildConfiguration section */
-<<<<<<< HEAD
-<<<<<<< HEAD
-		143A918E2D8C91E100113B85 /* Debug */ = {
-=======
-		143A91A12D8DECA700113B85 /* Debug */ = {
->>>>>>> taskWithArray
-=======
-		143A91A12D8DECA700113B85 /* Debug */ = {
->>>>>>> Calculator
+		149FD04B2D8EDD89000D38C9 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -330,15 +190,7 @@
 			};
 			name = Debug;
 		};
-<<<<<<< HEAD
-<<<<<<< HEAD
-		143A918F2D8C91E100113B85 /* Release */ = {
-=======
-		143A91A22D8DECA700113B85 /* Release */ = {
->>>>>>> taskWithArray
-=======
-		143A91A22D8DECA700113B85 /* Release */ = {
->>>>>>> Calculator
+		149FD04C2D8EDD89000D38C9 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -393,15 +245,7 @@
 			};
 			name = Release;
 		};
-<<<<<<< HEAD
-<<<<<<< HEAD
-		143A91912D8C91E100113B85 /* Debug */ = {
-=======
-		143A91A42D8DECA700113B85 /* Debug */ = {
->>>>>>> taskWithArray
-=======
-		143A91A42D8DECA700113B85 /* Debug */ = {
->>>>>>> Calculator
+		149FD04E2D8EDD89000D38C9 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
@@ -412,15 +256,7 @@
 			};
 			name = Debug;
 		};
-<<<<<<< HEAD
-<<<<<<< HEAD
-		143A91922D8C91E100113B85 /* Release */ = {
-=======
-		143A91A52D8DECA700113B85 /* Release */ = {
->>>>>>> taskWithArray
-=======
-		143A91A52D8DECA700113B85 /* Release */ = {
->>>>>>> Calculator
+		149FD04F2D8EDD89000D38C9 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
@@ -434,61 +270,25 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-<<<<<<< HEAD
-<<<<<<< HEAD
-		143A91842D8C91E100113B85 /* Build configuration list for PBXProject "MyCalculator" */ = {
+		149FD0412D8EDD89000D38C9 /* Build configuration list for PBXProject "taskWithArray" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				143A918E2D8C91E100113B85 /* Debug */,
-				143A918F2D8C91E100113B85 /* Release */,
-=======
-=======
->>>>>>> Calculator
-		143A91972D8DECA700113B85 /* Build configuration list for PBXProject "MyCalculator" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				143A91A12D8DECA700113B85 /* Debug */,
-				143A91A22D8DECA700113B85 /* Release */,
-<<<<<<< HEAD
->>>>>>> taskWithArray
-=======
->>>>>>> Calculator
+				149FD04B2D8EDD89000D38C9 /* Debug */,
+				149FD04C2D8EDD89000D38C9 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-<<<<<<< HEAD
-<<<<<<< HEAD
-		143A91902D8C91E100113B85 /* Build configuration list for PBXNativeTarget "MyCalculator" */ = {
+		149FD04D2D8EDD89000D38C9 /* Build configuration list for PBXNativeTarget "taskWithArray" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				143A91912D8C91E100113B85 /* Debug */,
-				143A91922D8C91E100113B85 /* Release */,
-=======
-=======
->>>>>>> Calculator
-		143A91A32D8DECA700113B85 /* Build configuration list for PBXNativeTarget "MyCalculator" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				143A91A42D8DECA700113B85 /* Debug */,
-				143A91A52D8DECA700113B85 /* Release */,
-<<<<<<< HEAD
->>>>>>> taskWithArray
-=======
->>>>>>> Calculator
+				149FD04E2D8EDD89000D38C9 /* Debug */,
+				149FD04F2D8EDD89000D38C9 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
-<<<<<<< HEAD
-<<<<<<< HEAD
-	rootObject = 143A91812D8C91E100113B85 /* Project object */;
-=======
-	rootObject = 143A91942D8DECA700113B85 /* Project object */;
->>>>>>> taskWithArray
-=======
-	rootObject = 143A91942D8DECA700113B85 /* Project object */;
->>>>>>> Calculator
+	rootObject = 149FD03E2D8EDD89000D38C9 /* Project object */;
 }
