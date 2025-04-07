@@ -1,3 +1,24 @@
+<<<<<<< HEAD
 *.DS_Store
 /build
 ClosureOptionalsClassesExtensionsEnums/theme2.playground/playground.xcworkspace/xcuserdata/aleksandrpopov.xcuserdatad/
+=======
+# ❌ Игнорируем Xcode-проекты
+*.xcworkspace
+*.xcuserstate
+*.xcscmblueprint
+xcuserdata/
+
+# ❌ Игнорируем сборочные файлы
+DerivedData/
+build/
+*.app
+*.ipa
+
+# ❌ Игнорируем CocoaPods, Swift Package Manager
+Pods/
+.swiftpm/
+
+# ❌ Игнорируем кэш и временные файлы
+.DS_Store
+*.log
