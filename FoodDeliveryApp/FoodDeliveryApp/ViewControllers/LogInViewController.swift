@@ -127,19 +127,29 @@ class LogInViewController: UIViewController {
         rememberMeLabel.textColor = .systemGray
         rememberMeLabel.font = UIFont.systemFont(ofSize: 16)
         rememberMeLabel.translatesAutoresizingMaskIntoConstraints = false
-            return rememberMeLabel
-        }()
+        return rememberMeLabel
+    }()
     lazy var checkboxStack: UIStackView = {
-            let stack = UIStackView(arrangedSubviews: [rememberMeButton, rememberMeLabel])
-            stack.axis = .horizontal
-            stack.spacing = 8
-            stack.alignment = .center
-            stack.translatesAutoresizingMaskIntoConstraints = false
-            return stack
-        }()
+        let stack = UIStackView(arrangedSubviews: [rememberMeButton, rememberMeLabel])
+        stack.axis = .horizontal
+        stack.spacing = 8
+        stack.alignment = .center
+        stack.translatesAutoresizingMaskIntoConstraints = false
+        return stack
+    }()
     var isChecked = false
-
-
+    lazy var loginButton: UIButton = {
+        loginButton = UIButton()
+        loginButton.tintColor = .appOrange
+        loginButton.setTitle("Log In", for: .normal)
+        loginButton.setTitleColor(.white, for: .normal)
+        loginButton.layer.cornerRadius = 12
+        loginButton.translatesAutoresizingMaskIntoConstraints = false
+        loginButton.addTarget(self, action: #selector(loginTupped), for: .touchUpInside)
+        return loginButton
+    }()
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .logInBackground
@@ -152,8 +162,9 @@ class LogInViewController: UIViewController {
         setupKeyboardObservers()
         setupForgotButton()
         setupRememberMeLabel()
+        setupLiginButton()
     }
-
+    
     private func setupImage() {
         view.addSubview(imageViewEllipse)
         view.addSubview(imageViewVector)
@@ -213,7 +224,7 @@ class LogInViewController: UIViewController {
             emailTextField.bottomAnchor.constraint(equalTo: emailTextLabel.bottomAnchor),
             emailTextField.leadingAnchor.constraint(equalTo: emailTextLabel.leadingAnchor, constant: 8),
             emailTextField.trailingAnchor.constraint(equalTo: emailTextLabel.trailingAnchor, constant: -8)
-         ])
+        ])
     }
     
     private func setPassword() {
@@ -241,14 +252,14 @@ class LogInViewController: UIViewController {
             eyeButton.centerYAnchor.constraint(equalTo: passwordTextField.centerYAnchor),
             eyeButton.heightAnchor.constraint(equalToConstant: 14),
             eyeButton.widthAnchor.constraint(equalToConstant: 19)
-         ])
+        ])
         
     }
     
     private func setupKeyboardObservers() {
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow),
                                                name: UIResponder.keyboardWillShowNotification, object: nil)
-
+        
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide),
                                                name: UIResponder.keyboardWillHideNotification, object: nil)
     }
@@ -264,14 +275,25 @@ class LogInViewController: UIViewController {
     
     private func setupRememberMeLabel() {
         view.addSubview(checkboxStack)
-                
+        
         NSLayoutConstraint.activate([
             checkboxStack.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 24),
             checkboxStack.centerYAnchor.constraint(equalTo: forgotButton.centerYAnchor),
             
             rememberMeButton.widthAnchor.constraint(equalToConstant: 20),
             rememberMeButton.heightAnchor.constraint(equalToConstant: 20)
-                ])
+        ])
+    }
+    
+    private func setupLiginButton() {
+        contentView.addSubview(loginButton)
+        
+        NSLayoutConstraint.activate([
+            loginButton.topAnchor.constraint(equalTo: forgotButton.bottomAnchor, constant: 30),
+            loginButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 24),
+            loginButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -24),
+            loginButton.heightAnchor.constraint(equalToConstant: 62)
+        ])
     }
     
     @objc func togglePasswordVisibility() {
@@ -302,4 +324,8 @@ class LogInViewController: UIViewController {
             let imageName = isChecked ? "checkmark.square" : "square"
             rememberMeButton.setImage(UIImage(systemName: imageName), for: .normal)
         }
+    
+    @objc func loginTupped() {
+        print("Login tupped")
+    }
 }

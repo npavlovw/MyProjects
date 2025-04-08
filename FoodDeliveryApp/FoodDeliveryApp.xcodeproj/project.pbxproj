@@ -11,7 +11,7 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		149ACCB92DA088B400EEBE7F /* Exceptions for "FoodDeliveryApp" folder in "FoodDeliveryApp" target */ = {
+		14C7B7822DA5BC1000D752A6 /* Exceptions for "FoodDeliveryApp" folder in "FoodDeliveryApp" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Info.plist,
@@ -24,7 +24,7 @@
 		149ACCA92DA088B200EEBE7F /* FoodDeliveryApp */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
-				149ACCB92DA088B400EEBE7F /* Exceptions for "FoodDeliveryApp" folder in "FoodDeliveryApp" target */,
+				14C7B7822DA5BC1000D752A6 /* Exceptions for "FoodDeliveryApp" folder in "FoodDeliveryApp" target */,
 			);
 			path = FoodDeliveryApp;
 			sourceTree = "<group>";
@@ -159,9 +159,13 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.npavlovw.FoodDeliveryApp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -186,9 +190,13 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.npavlovw.FoodDeliveryApp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};
