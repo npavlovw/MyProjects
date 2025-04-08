@@ -9,7 +9,6 @@ import UIKit
 
 class LogInViewController: UIViewController {
     
-    //каждую вью сделать с помощью замыкания
     lazy var imageViewEllipse: UIImageView = {
         let imageViewEllipse = UIImageView()
         imageViewEllipse.image = UIImage(named: "Ellipse")
@@ -22,16 +21,89 @@ class LogInViewController: UIViewController {
         imageViewVector.translatesAutoresizingMaskIntoConstraints = false
         return imageViewVector
     }()
-    private let loginLabel = UILabel()
-    private let loginSublabel = UILabel()
-    private let contentView = UIView()
-    private let emailLabel = UILabel()
-    private let emailTextLabel = UILabel()
-    private let emailTextField = UITextField()
-    private let passwordLabel = UILabel()
-    private let passwordTextLabel = UILabel()
-    private let passwordTextField = UITextField()
-    private let eyeButton = UIButton()
+    lazy var loginLabel: UILabel = {
+        loginLabel = UILabel()
+        loginLabel.text = "Log In"
+        loginLabel.textColor = .white
+        loginLabel.font = .systemFont(ofSize: 30, weight: .bold)
+        loginLabel.textAlignment = .center
+        loginLabel.translatesAutoresizingMaskIntoConstraints = false
+        return loginLabel
+    }()
+    lazy var loginSublabel: UILabel = {
+        loginSublabel = UILabel()
+        loginSublabel.text = "Please sign in to your existing account"
+        loginSublabel.textColor = .white
+        loginSublabel.font = .systemFont(ofSize: 16, weight: .regular)
+        loginSublabel.textAlignment = .center
+        loginSublabel.translatesAutoresizingMaskIntoConstraints = false
+        return loginSublabel
+    }()
+    lazy var contentView: UIView = {
+        contentView = UIView()
+        contentView.backgroundColor = .white
+        contentView.translatesAutoresizingMaskIntoConstraints = false
+        contentView.layer.cornerRadius = 24
+        contentView.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
+        return contentView
+    }()
+    lazy var emailLabel: UILabel = {
+        emailLabel = UILabel()
+        emailLabel.text = "EMAIL"
+        emailLabel.textColor = .black
+        emailLabel.font = .systemFont(ofSize: 13, weight: .semibold)
+        emailLabel.translatesAutoresizingMaskIntoConstraints = false
+        return emailLabel
+    }()
+    lazy var emailTextLabel: UILabel = {
+        emailTextLabel = UILabel()
+        emailTextLabel.backgroundColor = .emailBackground
+        emailTextLabel.layer.cornerRadius = 10
+        emailTextLabel.layer.masksToBounds = true
+        emailTextLabel.translatesAutoresizingMaskIntoConstraints = false
+        return emailTextLabel
+    }()
+    lazy var emailTextField: UITextField = {
+        emailTextField = UITextField()
+        emailTextField.placeholder = "example@gmail.com"
+        emailTextField.keyboardType = .emailAddress
+        emailTextField.translatesAutoresizingMaskIntoConstraints = false
+        return emailTextField
+    }()
+    lazy var passwordLabel: UILabel = {
+        passwordLabel = UILabel()
+        passwordLabel.text = "PASSWORD"
+        passwordLabel.textColor = .black
+        passwordLabel.font = .systemFont(ofSize: 13, weight: .semibold)
+        passwordLabel.translatesAutoresizingMaskIntoConstraints = false
+        return passwordLabel
+    }()
+    lazy var passwordTextLabel: UILabel = {
+        passwordTextLabel = UILabel()
+        passwordTextLabel.backgroundColor = .emailBackground
+        passwordTextLabel.layer.cornerRadius = 10
+        passwordTextLabel.layer.masksToBounds = true
+        passwordTextLabel.translatesAutoresizingMaskIntoConstraints = false
+        return passwordTextLabel
+    }()
+    lazy var passwordTextField: UITextField = {
+        passwordTextField = UITextField()
+        passwordTextField.placeholder = "**********"
+        passwordTextField.keyboardType = .emailAddress
+        passwordTextField.isSecureTextEntry = true
+        passwordTextField.translatesAutoresizingMaskIntoConstraints = false
+        passwordTextField.rightView = eyeButton
+        passwordTextField.rightViewMode = .always
+        return passwordTextField
+    }()
+    lazy var eyeButton: UIButton = {
+        eyeButton = UIButton()
+        eyeButton.setImage(UIImage(systemName: "eye"), for: .normal)
+        eyeButton.tintColor = .gray
+        eyeButton.translatesAutoresizingMaskIntoConstraints = false
+        eyeButton.addTarget(self, action: #selector(togglePasswordVisibility), for: .touchUpInside)
+        return eyeButton
+    }()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -64,18 +136,7 @@ class LogInViewController: UIViewController {
     }
     
     private func setupLabels() {
-        loginLabel.text = "Log In"
-        loginLabel.textColor = .white
-        loginLabel.font = .systemFont(ofSize: 30, weight: .bold)
-        loginLabel.textAlignment = .center
-        loginLabel.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(loginLabel)
-        
-        loginSublabel.text = "Please sign in to your existing account"
-        loginSublabel.textColor = .white
-        loginSublabel.font = .systemFont(ofSize: 16, weight: .regular)
-        loginSublabel.textAlignment = .center
-        loginSublabel.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(loginSublabel)
         
         NSLayoutConstraint.activate([
@@ -88,10 +149,6 @@ class LogInViewController: UIViewController {
     }
     
     private func setContentView() {
-        contentView.backgroundColor = .white
-        contentView.translatesAutoresizingMaskIntoConstraints = false
-        contentView.layer.cornerRadius = 24
-        contentView.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
         view.addSubview(contentView)
         
         NSLayoutConstraint.activate([
@@ -103,21 +160,8 @@ class LogInViewController: UIViewController {
     }
     
     private func setEmail() {
-        emailLabel.text = "EMAIL"
-        emailLabel.textColor = .black
-        emailLabel.font = .systemFont(ofSize: 13, weight: .semibold)
-        emailLabel.translatesAutoresizingMaskIntoConstraints = false
         contentView.addSubview(emailLabel)
-        
-        emailTextLabel.backgroundColor = .emailBackground
-        emailTextLabel.layer.cornerRadius = 10
-        emailTextLabel.layer.masksToBounds = true
-        emailTextLabel.translatesAutoresizingMaskIntoConstraints = false
         contentView.addSubview(emailTextLabel)
-        
-        emailTextField.placeholder = "example@gmail.com"
-        emailTextField.keyboardType = .emailAddress
-        emailTextField.translatesAutoresizingMaskIntoConstraints = false
         contentView.addSubview(emailTextField)
         
         NSLayoutConstraint.activate([
@@ -137,30 +181,9 @@ class LogInViewController: UIViewController {
     }
     
     private func setPassword() {
-        passwordLabel.text = "PASSWORD"
-        passwordLabel.textColor = .black
-        passwordLabel.font = .systemFont(ofSize: 13, weight: .semibold)
-        passwordLabel.translatesAutoresizingMaskIntoConstraints = false
         contentView.addSubview(passwordLabel)
-        
-        passwordTextLabel.backgroundColor = .emailBackground
-        passwordTextLabel.layer.cornerRadius = 10
-        passwordTextLabel.layer.masksToBounds = true
-        passwordTextLabel.translatesAutoresizingMaskIntoConstraints = false
         contentView.addSubview(passwordTextLabel)
-        
-        passwordTextField.placeholder = "**********"
-        passwordTextField.keyboardType = .emailAddress
-        passwordTextField.isSecureTextEntry = true
-        passwordTextField.translatesAutoresizingMaskIntoConstraints = false
         contentView.addSubview(passwordTextField)
-        passwordTextField.rightView = eyeButton
-        passwordTextField.rightViewMode = .always
-        
-        eyeButton.setImage(UIImage(systemName: "eye"), for: .normal)
-        eyeButton.tintColor = .gray
-        eyeButton.translatesAutoresizingMaskIntoConstraints = false
-        eyeButton.addTarget(self, action: #selector(togglePasswordVisibility), for: .touchUpInside)
         passwordTextField.addSubview(eyeButton)
         
         
