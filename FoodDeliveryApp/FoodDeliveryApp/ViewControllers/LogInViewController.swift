@@ -140,7 +140,7 @@ class LogInViewController: UIViewController {
     var isChecked = false
     lazy var loginButton: UIButton = {
         loginButton = UIButton()
-        loginButton.tintColor = .appOrange
+        loginButton.backgroundColor = .appOrange
         loginButton.setTitle("Log In", for: .normal)
         loginButton.setTitleColor(.white, for: .normal)
         loginButton.layer.cornerRadius = 12
@@ -162,7 +162,7 @@ class LogInViewController: UIViewController {
         setupKeyboardObservers()
         setupForgotButton()
         setupRememberMeLabel()
-        setupLiginButton()
+        setupLoginButton()
     }
     
     private func setupImage() {
@@ -285,7 +285,7 @@ class LogInViewController: UIViewController {
         ])
     }
     
-    private func setupLiginButton() {
+    private func setupLoginButton() {
         contentView.addSubview(loginButton)
         
         NSLayoutConstraint.activate([
