@@ -104,6 +104,41 @@ class LogInViewController: UIViewController {
         eyeButton.addTarget(self, action: #selector(togglePasswordVisibility), for: .touchUpInside)
         return eyeButton
     }()
+    lazy var forgotButton: UIButton = {
+        forgotButton = UIButton()
+        forgotButton.setTitle("Forgot Password", for: .normal)
+        forgotButton.setTitleColor(.appOrange, for: .normal)
+        forgotButton.titleLabel?.font = .systemFont(ofSize: 14, weight: .regular)
+        forgotButton.translatesAutoresizingMaskIntoConstraints = false
+        forgotButton.addTarget(self, action: #selector(pressForgotButton), for: .touchUpInside)
+        return forgotButton
+    }()
+    lazy var rememberMeButton: UIButton = {
+        rememberMeButton = UIButton(type: .system)
+        rememberMeButton.setImage(UIImage(systemName: "square"), for: .normal)
+        rememberMeButton.tintColor = .systemGray3
+        rememberMeButton.translatesAutoresizingMaskIntoConstraints = false
+        rememberMeButton.addTarget(nil, action: #selector(toggleCheckbox), for: .touchUpInside)
+        return rememberMeButton
+    }()
+    lazy var rememberMeLabel: UILabel = {
+        rememberMeLabel = UILabel()
+        rememberMeLabel.text = "Remember me"
+        rememberMeLabel.textColor = .systemGray
+        rememberMeLabel.font = UIFont.systemFont(ofSize: 16)
+        rememberMeLabel.translatesAutoresizingMaskIntoConstraints = false
+            return rememberMeLabel
+        }()
+    lazy var checkboxStack: UIStackView = {
+            let stack = UIStackView(arrangedSubviews: [rememberMeButton, rememberMeLabel])
+            stack.axis = .horizontal
+            stack.spacing = 8
+            stack.alignment = .center
+            stack.translatesAutoresizingMaskIntoConstraints = false
+            return stack
+        }()
+    var isChecked = false
+
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -115,7 +150,8 @@ class LogInViewController: UIViewController {
         setEmail()
         setPassword()
         setupKeyboardObservers()
-        
+        setupForgotButton()
+        setupRememberMeLabel()
     }
 
     private func setupImage() {
@@ -217,6 +253,27 @@ class LogInViewController: UIViewController {
                                                name: UIResponder.keyboardWillHideNotification, object: nil)
     }
     
+    private func setupForgotButton() {
+        contentView.addSubview(forgotButton)
+        
+        NSLayoutConstraint.activate([
+            forgotButton.topAnchor.constraint(equalTo: passwordTextLabel.bottomAnchor, constant: 25),
+            forgotButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -24)
+        ])
+    }
+    
+    private func setupRememberMeLabel() {
+        view.addSubview(checkboxStack)
+                
+        NSLayoutConstraint.activate([
+            checkboxStack.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 24),
+            checkboxStack.centerYAnchor.constraint(equalTo: forgotButton.centerYAnchor),
+            
+            rememberMeButton.widthAnchor.constraint(equalToConstant: 20),
+            rememberMeButton.heightAnchor.constraint(equalToConstant: 20)
+                ])
+    }
+    
     @objc func togglePasswordVisibility() {
         passwordTextField.isSecureTextEntry.toggle()
     }
@@ -235,4 +292,14 @@ class LogInViewController: UIViewController {
     deinit {
         NotificationCenter.default.removeObserver(self)
     }
+    
+    @objc private func pressForgotButton() {
+        print("Надали кнопку \"Забыли пароль\"")
+    }
+    
+    @objc func toggleCheckbox() {
+            isChecked.toggle()
+            let imageName = isChecked ? "checkmark.square" : "square"
+            rememberMeButton.setImage(UIImage(systemName: imageName), for: .normal)
+        }
 }
