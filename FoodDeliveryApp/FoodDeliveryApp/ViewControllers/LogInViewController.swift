@@ -10,8 +10,18 @@ import UIKit
 class LogInViewController: UIViewController {
     
     //каждую вью сделать с помощью замыкания
-    private let imageViewEllipse = UIImageView()
-    private let imageViewVector = UIImageView()
+    lazy var imageViewEllipse: UIImageView = {
+        let imageViewEllipse = UIImageView()
+        imageViewEllipse.image = UIImage(named: "Ellipse")
+        imageViewEllipse.translatesAutoresizingMaskIntoConstraints = false
+        return imageViewEllipse
+    }()
+    lazy var imageViewVector: UIImageView = {
+        let imageViewVector = UIImageView()
+        imageViewVector.image = UIImage(named: "Vector")
+        imageViewVector.translatesAutoresizingMaskIntoConstraints = false
+        return imageViewVector
+    }()
     private let loginLabel = UILabel()
     private let loginSublabel = UILabel()
     private let contentView = UIView()
@@ -37,12 +47,7 @@ class LogInViewController: UIViewController {
     }
 
     private func setupImage() {
-        imageViewEllipse.image = UIImage(named: "Ellipse")
-        imageViewEllipse.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(imageViewEllipse)
-        
-        imageViewVector.image = UIImage(named: "Vector")
-        imageViewVector.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(imageViewVector)
         
         NSLayoutConstraint.activate([
