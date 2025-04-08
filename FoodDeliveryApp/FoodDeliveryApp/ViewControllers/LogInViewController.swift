@@ -148,6 +148,31 @@ class LogInViewController: UIViewController {
         loginButton.addTarget(self, action: #selector(loginTupped), for: .touchUpInside)
         return loginButton
     }()
+    lazy var signInLabel: UILabel = {
+        signInLabel = UILabel()
+        signInLabel.text = "Don’t have an account?"
+        signInLabel.textColor = .black
+        signInLabel.font = UIFont.systemFont(ofSize: 16)
+        signInLabel.translatesAutoresizingMaskIntoConstraints = false
+        return signInLabel
+    }()
+    lazy var signInButton: UIButton = {
+        signInButton = UIButton()
+        signInButton.setTitle("SIGN IN", for: .normal)
+        signInButton.setTitleColor( .appOrange, for: .normal)
+        signInButton.titleLabel?.font = UIFont.systemFont(ofSize: 14)
+        signInButton.translatesAutoresizingMaskIntoConstraints = false
+        signInButton.addTarget(self, action: #selector(signInTupped), for: .touchUpInside)
+        return signInButton
+    }()
+    lazy var signInStack: UIStackView = {
+        signInStack = UIStackView(arrangedSubviews: [signInLabel, signInButton])
+        signInStack.axis = .horizontal
+        signInStack.spacing = 10
+        signInStack.alignment = .center
+        signInStack.translatesAutoresizingMaskIntoConstraints = false
+        return signInStack
+    }()
     
     
     override func viewDidLoad() {
@@ -163,6 +188,7 @@ class LogInViewController: UIViewController {
         setupForgotButton()
         setupRememberMeLabel()
         setupLoginButton()
+        setupSignIn()
     }
     
     private func setupImage() {
@@ -296,6 +322,15 @@ class LogInViewController: UIViewController {
         ])
     }
     
+    private func setupSignIn(){
+        contentView.addSubview(signInStack)
+        
+        NSLayoutConstraint.activate([
+            signInStack.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
+            signInStack.topAnchor.constraint(equalTo: loginButton.bottomAnchor, constant: 36)
+        ])
+    }
+    
     @objc func togglePasswordVisibility() {
         passwordTextField.isSecureTextEntry.toggle()
     }
@@ -316,7 +351,7 @@ class LogInViewController: UIViewController {
     }
     
     @objc private func pressForgotButton() {
-        print("Надали кнопку \"Забыли пароль\"")
+        print("Нажали кнопку \"Забыли пароль\"")
     }
     
     @objc func toggleCheckbox() {
@@ -327,5 +362,9 @@ class LogInViewController: UIViewController {
     
     @objc func loginTupped() {
         print("Login tupped")
+    }
+    
+    @objc func signInTupped() {
+        print("SignIn tupped")
     }
 }
