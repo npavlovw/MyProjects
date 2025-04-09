@@ -151,7 +151,7 @@ class LogInViewController: UIViewController {
     lazy var signInLabel: UILabel = {
         signInLabel = UILabel()
         signInLabel.text = "Don’t have an account?"
-        signInLabel.textColor = .black
+        signInLabel.textColor = .appGrey
         signInLabel.font = UIFont.systemFont(ofSize: 16)
         signInLabel.translatesAutoresizingMaskIntoConstraints = false
         return signInLabel
@@ -173,6 +173,14 @@ class LogInViewController: UIViewController {
         signInStack.translatesAutoresizingMaskIntoConstraints = false
         return signInStack
     }()
+    lazy var orLabel: UILabel = {
+        orLabel = UILabel()
+        orLabel.text = "Or"
+        orLabel.font = UIFont.systemFont(ofSize: 16, weight: .regular)
+        orLabel.textColor = .appGrey
+        orLabel.translatesAutoresizingMaskIntoConstraints = false
+        return orLabel
+    }()
     
     
     override func viewDidLoad() {
@@ -189,6 +197,7 @@ class LogInViewController: UIViewController {
         setupRememberMeLabel()
         setupLoginButton()
         setupSignIn()
+        setupOrLabel()
     }
     
     private func setupImage() {
@@ -328,6 +337,15 @@ class LogInViewController: UIViewController {
         NSLayoutConstraint.activate([
             signInStack.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
             signInStack.topAnchor.constraint(equalTo: loginButton.bottomAnchor, constant: 36)
+        ])
+    }
+    
+    private func setupOrLabel(){
+        contentView.addSubview(orLabel)
+        
+        NSLayoutConstraint.activate([
+            orLabel.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
+            orLabel.topAnchor.constraint(equalTo: signInStack.bottomAnchor, constant: 28)
         ])
     }
     
