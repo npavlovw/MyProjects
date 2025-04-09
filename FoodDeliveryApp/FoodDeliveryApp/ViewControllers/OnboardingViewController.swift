@@ -13,12 +13,55 @@ struct OnboardingStep {
 
 class OnboardingViewController: UIViewController {
     
-    private let mainView = UIView()
-    private let mainLabel = UILabel()
-    private let subLabel = UILabel()
-    private let pageControl = UIPageControl()
-    private let nextButton = UIButton()
-    private let skipButton = UIButton()
+    lazy var mainView: UIView = {
+        mainView = UIView()
+        mainView.backgroundColor = .appGrey
+        mainView.layer.cornerRadius = 12
+        mainView.translatesAutoresizingMaskIntoConstraints = false
+        return mainView
+    }()
+    lazy var mainLabel: UILabel = {
+        mainLabel = UILabel()
+        mainLabel.font = .systemFont(ofSize: 29, weight: .bold)
+        mainLabel.translatesAutoresizingMaskIntoConstraints = false
+        return mainLabel
+    }()
+    lazy var subLabel: UILabel = {
+        subLabel = UILabel()
+        subLabel.translatesAutoresizingMaskIntoConstraints = false
+        subLabel.text = "Get all your loved foods in one once place, you just place the order we do the rest"
+        subLabel.numberOfLines = 0
+        subLabel.textAlignment = .center
+        return subLabel
+    }()
+    lazy var pageControl: UIPageControl = {
+        pageControl = UIPageControl()
+        pageControl.numberOfPages = 4
+        pageControl.currentPage = 0
+        pageControl.currentPageIndicatorTintColor = .appOrange
+        pageControl.pageIndicatorTintColor = .appLightOrange
+        pageControl.translatesAutoresizingMaskIntoConstraints = false
+        return pageControl
+    }()
+    lazy var nextButton: UIButton = {
+        nextButton = UIButton()
+        nextButton.setTitle("NEXT", for: .normal)
+        nextButton.titleLabel?.font = .systemFont(ofSize: 17, weight: .bold)
+        nextButton.setTitleColor(.white, for: .normal)
+        nextButton.backgroundColor = .appOrange
+        nextButton.layer.cornerRadius = 14
+        nextButton.translatesAutoresizingMaskIntoConstraints = false
+        return nextButton
+    }()
+    lazy var skipButton: UIButton = {
+        skipButton = UIButton()
+        skipButton.setTitle("Skip", for: .normal)
+        skipButton.titleLabel?.font = .systemFont(ofSize: 16, weight: .regular)
+        skipButton.setTitleColor(.black, for: .normal)
+        skipButton.backgroundColor = .white
+        skipButton.translatesAutoresizingMaskIntoConstraints = false
+        return skipButton
+    }()
     
     private let steps: [OnboardingStep] = [
         OnboardingStep(title: "All your favorites"),
@@ -33,20 +76,20 @@ class OnboardingViewController: UIViewController {
         super.viewDidLoad()
         view.backgroundColor = .white
         
+        setView()
+        updateUIForCurrentStep()
+    }
+    
+    private func setView(){
         setMainView()
         setMainLabel()
         setSubLabel()
         setPageControl()
         setNextButton()
         setSkipButton()
-        updateUIForCurrentStep()
     }
     
-    
     private func setMainView() {
-        mainView.backgroundColor = .appGrey
-        mainView.layer.cornerRadius = 12
-        mainView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(mainView)
         
         NSLayoutConstraint.activate([
@@ -59,18 +102,13 @@ class OnboardingViewController: UIViewController {
     }
     
     private func setMainLabel(){
-        mainLabel.font = .systemFont(ofSize: 29, weight: .bold)
-        mainLabel.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(mainLabel)
+        
         mainLabel.topAnchor.constraint(lessThanOrEqualTo: mainView.bottomAnchor, constant: 63).isActive = true
         mainLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
     }
     
     private func setSubLabel(){
-        subLabel.translatesAutoresizingMaskIntoConstraints = false
-        subLabel.text = "Get all your loved foods in one once place, you just place the order we do the rest"
-        subLabel.numberOfLines = 0
-        subLabel.textAlignment = .center
         view.addSubview(subLabel)
         
         NSLayoutConstraint.activate([
@@ -82,11 +120,6 @@ class OnboardingViewController: UIViewController {
     }
     
     private func setPageControl(){
-        pageControl.numberOfPages = 4
-        pageControl.currentPage = 0
-        pageControl.currentPageIndicatorTintColor = .appOrange
-        pageControl.pageIndicatorTintColor = .appLightOrange
-        pageControl.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(pageControl)
         
         NSLayoutConstraint.activate([
@@ -98,12 +131,6 @@ class OnboardingViewController: UIViewController {
     }
     
     private func setNextButton(){
-        nextButton.setTitle("NEXT", for: .normal)
-        nextButton.titleLabel?.font = .systemFont(ofSize: 17, weight: .bold)
-        nextButton.setTitleColor(.white, for: .normal)
-        nextButton.backgroundColor = .appOrange
-        nextButton.layer.cornerRadius = 14
-        nextButton.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(nextButton)
         
         NSLayoutConstraint.activate([
@@ -119,11 +146,6 @@ class OnboardingViewController: UIViewController {
     }
     
     private func setSkipButton(){
-        skipButton.setTitle("Skip", for: .normal)
-        skipButton.titleLabel?.font = .systemFont(ofSize: 16, weight: .regular)
-        skipButton.setTitleColor(.black, for: .normal)
-        skipButton.backgroundColor = .white
-        skipButton.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(skipButton)
         
         NSLayoutConstraint.activate([
@@ -172,5 +194,3 @@ class OnboardingViewController: UIViewController {
         present(logInVC, animated: true, completion: nil)
     }
 }
-
-
