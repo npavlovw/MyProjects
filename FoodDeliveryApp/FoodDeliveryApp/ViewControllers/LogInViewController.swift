@@ -158,7 +158,7 @@ class LogInViewController: UIViewController {
     }()
     lazy var signInButton: UIButton = {
         signInButton = UIButton()
-        signInButton.setTitle("SIGN IN", for: .normal)
+        signInButton.setTitle("SIGN UO", for: .normal)
         signInButton.setTitleColor( .appOrange, for: .normal)
         signInButton.titleLabel?.font = UIFont.systemFont(ofSize: 14)
         signInButton.translatesAutoresizingMaskIntoConstraints = false
@@ -181,6 +181,7 @@ class LogInViewController: UIViewController {
         orLabel.translatesAutoresizingMaskIntoConstraints = false
         return orLabel
     }()
+    lazy var stack = UIStackView()
     
     
     override func viewDidLoad() {
@@ -198,6 +199,7 @@ class LogInViewController: UIViewController {
         setupLoginButton()
         setupSignIn()
         setupOrLabel()
+        setAuthBtns()
     }
     
     private func setupImage() {
@@ -234,7 +236,6 @@ class LogInViewController: UIViewController {
         view.addSubview(contentView)
         
         NSLayoutConstraint.activate([
-            contentView.topAnchor.constraint(equalTo: loginSublabel.bottomAnchor, constant: 48),
             contentView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             contentView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             contentView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
@@ -348,6 +349,50 @@ class LogInViewController: UIViewController {
             orLabel.topAnchor.constraint(equalTo: signInStack.bottomAnchor, constant: 28)
         ])
     }
+    
+    private func setAuthBtns(){
+        let authButtonsStack = getAuthBtns()
+        authButtonsStack.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(authButtonsStack)
+        
+        NSLayoutConstraint.activate([
+            authButtonsStack.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
+            authButtonsStack.topAnchor.constraint(equalTo: orLabel.bottomAnchor, constant: 30),
+            authButtonsStack.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -30)
+        ])
+    }
+    
+    private func getAuthBtns() -> UIStackView {
+        let iconNames = [ "facebook", "twitter", "apple"]
+        let icons = iconNames.compactMap { UIImage(named: $0) }
+        
+        let stack = UIStackView()
+        stack.axis = .horizontal
+        stack.distribution = .equalSpacing
+        stack.alignment = .center
+        stack.spacing = 32
+        stack.translatesAutoresizingMaskIntoConstraints = false
+        for (index, icon) in icons {
+            let button = getAuthBtn(icon: icon)
+            button.tag = index
+            button.addTarget(self, action: #selector(, for: <#T##UIControl.Event#>)
+            stack.addArrangedSubview(button)
+        }
+        return stack
+    }
+    
+    
+    private func getAuthBtn(icon: UIImage) ->UIButton {
+        let btn = UIButton()
+        btn.translatesAutoresizingMaskIntoConstraints = false
+        btn.heightAnchor.constraint(equalToConstant: 62).isActive = true
+        btn.widthAnchor.constraint(equalToConstant: 62).isActive = true
+        btn.layer.cornerRadius = 31
+        btn.setImage(icon.withRenderingMode(.alwaysOriginal), for: .normal)
+        btn.imageView?.contentMode = .scaleAspectFit
+        return btn
+    }
+       
     
     @objc func togglePasswordVisibility() {
         passwordTextField.isSecureTextEntry.toggle()
