@@ -200,6 +200,8 @@ class LogInViewController: UIViewController {
         setupSignIn()
         setupOrLabel()
         setAuthBtns()
+        setupKeyboardDismissGesture()
+
     }
     
     private func setupImage() {
@@ -358,7 +360,7 @@ class LogInViewController: UIViewController {
         NSLayoutConstraint.activate([
             authButtonsStack.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
             authButtonsStack.topAnchor.constraint(equalTo: orLabel.bottomAnchor, constant: 30),
-            authButtonsStack.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -30)
+            authButtonsStack.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -40)
         ])
     }
     
@@ -372,15 +374,14 @@ class LogInViewController: UIViewController {
         stack.alignment = .center
         stack.spacing = 32
         stack.translatesAutoresizingMaskIntoConstraints = false
-        for (index, icon) in icons {
+        for (index, icon) in icons.enumerated() {
             let button = getAuthBtn(icon: icon)
             button.tag = index
-            button.addTarget(self, action: #selector(, for: <#T##UIControl.Event#>)
+            button.addTarget(self, action: #selector(authButtonTapped(_:)), for: .touchUpInside)
             stack.addArrangedSubview(button)
         }
         return stack
     }
-    
     
     private func getAuthBtn(icon: UIImage) ->UIButton {
         let btn = UIButton()
@@ -392,7 +393,6 @@ class LogInViewController: UIViewController {
         btn.imageView?.contentMode = .scaleAspectFit
         return btn
     }
-       
     
     @objc func togglePasswordVisibility() {
         passwordTextField.isSecureTextEntry.toggle()
@@ -429,5 +429,29 @@ class LogInViewController: UIViewController {
     
     @objc func signInTupped() {
         print("SignIn tupped")
+    }
+    
+    @objc private func authButtonTapped(_ sender: UIButton) {
+        switch sender.tag {
+        case 0:
+            print("Facebook tapped")
+        case 1:
+            print("Twitter tapped")
+        case 2:
+            print("Apple tapped")
+        default:
+            break
+        }
+    }
+    
+    //Действие для убирания клавиатуры
+    private func setupKeyboardDismissGesture() {
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(hideKeyboard))
+        tapGesture.cancelsTouchesInView = false
+        view.addGestureRecognizer(tapGesture)
+    }
+
+    @objc private func hideKeyboard() {
+        view.endEditing(true)
     }
 }
