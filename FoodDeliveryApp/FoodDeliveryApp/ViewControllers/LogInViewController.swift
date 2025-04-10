@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import SnapKit
 
 class LogInViewController: UIViewController {
     
@@ -21,24 +22,7 @@ class LogInViewController: UIViewController {
         imageViewVector.translatesAutoresizingMaskIntoConstraints = false
         return imageViewVector
     }()
-    lazy var loginLabel: UILabel = {
-        loginLabel = UILabel()
-        loginLabel.text = "Log In"
-        loginLabel.textColor = .white
-        loginLabel.font = .systemFont(ofSize: 30, weight: .bold)
-        loginLabel.textAlignment = .center
-        loginLabel.translatesAutoresizingMaskIntoConstraints = false
-        return loginLabel
-    }()
-    lazy var loginSublabel: UILabel = {
-        loginSublabel = UILabel()
-        loginSublabel.text = "Please sign in to your existing account"
-        loginSublabel.textColor = .white
-        loginSublabel.font = .systemFont(ofSize: 16, weight: .regular)
-        loginSublabel.textAlignment = .center
-        loginSublabel.translatesAutoresizingMaskIntoConstraints = false
-        return loginSublabel
-    }()
+    lazy var mainLabels = MainLabels(title: "Log In", subtitle: "Please sign in to your existing account")
     lazy var contentView: UIView = {
         contentView = UIView()
         contentView.backgroundColor = .white
@@ -47,29 +31,7 @@ class LogInViewController: UIViewController {
         contentView.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
         return contentView
     }()
-    lazy var emailLabel: UILabel = {
-        emailLabel = UILabel()
-        emailLabel.text = "EMAIL"
-        emailLabel.textColor = .black
-        emailLabel.font = .systemFont(ofSize: 13, weight: .semibold)
-        emailLabel.translatesAutoresizingMaskIntoConstraints = false
-        return emailLabel
-    }()
-    lazy var emailTextLabel: UILabel = {
-        emailTextLabel = UILabel()
-        emailTextLabel.backgroundColor = .emailBackground
-        emailTextLabel.layer.cornerRadius = 10
-        emailTextLabel.layer.masksToBounds = true
-        emailTextLabel.translatesAutoresizingMaskIntoConstraints = false
-        return emailTextLabel
-    }()
-    lazy var emailTextField: UITextField = {
-        emailTextField = UITextField()
-        emailTextField.placeholder = "example@gmail.com"
-        emailTextField.keyboardType = .emailAddress
-        emailTextField.translatesAutoresizingMaskIntoConstraints = false
-        return emailTextField
-    }()
+    lazy var emailField = loginTextFieldView(title: "EMAIL", placeholder: "example@gmail.com")
     lazy var passwordLabel: UILabel = {
         passwordLabel = UILabel()
         passwordLabel.text = "PASSWORD"
@@ -222,16 +184,11 @@ class LogInViewController: UIViewController {
     }
     
     private func setupLabels() {
-        view.addSubview(loginLabel)
-        view.addSubview(loginSublabel)
+        view.addSubview(mainLabels)
         
-        NSLayoutConstraint.activate([
-            loginLabel.topAnchor.constraint(lessThanOrEqualTo: view.topAnchor, constant: 118),
-            loginLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            
-            loginSublabel.topAnchor.constraint(equalTo: loginLabel.bottomAnchor, constant: 3),
-            loginSublabel.centerXAnchor.constraint(equalTo: view.centerXAnchor)
-        ])
+        mainLabels.snp.makeConstraints { make in
+            make.top.leading.trailing.bottom.equalToSuperview()
+        }
     }
     
     private func setContentView() {
@@ -245,24 +202,12 @@ class LogInViewController: UIViewController {
     }
     
     private func setEmail() {
-        contentView.addSubview(emailLabel)
-        contentView.addSubview(emailTextLabel)
-        contentView.addSubview(emailTextField)
+        contentView.addSubview(emailField)
         
-        NSLayoutConstraint.activate([
-            emailLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 24),
-            emailLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 24),
-            
-            emailTextLabel.topAnchor.constraint(equalTo: emailLabel.bottomAnchor, constant: 8),
-            emailTextLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 24),
-            emailTextLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -24),
-            emailTextLabel.heightAnchor.constraint(equalToConstant: 62),
-            
-            emailTextField.topAnchor.constraint(equalTo: emailTextLabel.topAnchor),
-            emailTextField.bottomAnchor.constraint(equalTo: emailTextLabel.bottomAnchor),
-            emailTextField.leadingAnchor.constraint(equalTo: emailTextLabel.leadingAnchor, constant: 8),
-            emailTextField.trailingAnchor.constraint(equalTo: emailTextLabel.trailingAnchor, constant: -8)
-        ])
+        emailField.snp.makeConstraints{ make in
+            make.top.equalTo(contentView).offset(24)
+            make.leading.trailing.equalTo(contentView).offset(24)
+        }
     }
     
     private func setPassword() {
@@ -273,7 +218,7 @@ class LogInViewController: UIViewController {
         
         
         NSLayoutConstraint.activate([
-            passwordLabel.topAnchor.constraint(equalTo: emailTextLabel.bottomAnchor, constant: 24),
+            passwordLabel.topAnchor.constraint(equalTo: emailField.bottomAnchor, constant: 24),
             passwordLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 24),
             
             passwordTextLabel.topAnchor.constraint(equalTo: passwordLabel.bottomAnchor, constant: 8),
