@@ -158,7 +158,7 @@ class LogInViewController: UIViewController {
     }()
     lazy var signInButton: UIButton = {
         signInButton = UIButton()
-        signInButton.setTitle("SIGN UO", for: .normal)
+        signInButton.setTitle("SIGN UP", for: .normal)
         signInButton.setTitleColor( .appOrange, for: .normal)
         signInButton.titleLabel?.font = UIFont.systemFont(ofSize: 14)
         signInButton.translatesAutoresizingMaskIntoConstraints = false
@@ -383,12 +383,12 @@ class LogInViewController: UIViewController {
         return stack
     }
     
-    private func getAuthBtn(icon: UIImage) ->UIButton {
+    private func getAuthBtn(icon: UIImage, size: CGFloat = 62) ->UIButton {
         let btn = UIButton()
         btn.translatesAutoresizingMaskIntoConstraints = false
-        btn.heightAnchor.constraint(equalToConstant: 62).isActive = true
-        btn.widthAnchor.constraint(equalToConstant: 62).isActive = true
-        btn.layer.cornerRadius = 31
+        btn.heightAnchor.constraint(equalToConstant: size).isActive = true
+        btn.widthAnchor.constraint(equalToConstant: size).isActive = true
+        btn.layer.cornerRadius = size/2
         btn.setImage(icon.withRenderingMode(.alwaysOriginal), for: .normal)
         btn.imageView?.contentMode = .scaleAspectFit
         return btn
