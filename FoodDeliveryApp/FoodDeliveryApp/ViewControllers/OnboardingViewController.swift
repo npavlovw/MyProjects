@@ -43,16 +43,7 @@ class OnboardingViewController: UIViewController {
         pageControl.translatesAutoresizingMaskIntoConstraints = false
         return pageControl
     }()
-    lazy var nextButton: UIButton = {
-        nextButton = UIButton()
-        nextButton.setTitle("NEXT", for: .normal)
-        nextButton.titleLabel?.font = .systemFont(ofSize: 17, weight: .bold)
-        nextButton.setTitleColor(.white, for: .normal)
-        nextButton.backgroundColor = .appOrange
-        nextButton.layer.cornerRadius = 14
-        nextButton.translatesAutoresizingMaskIntoConstraints = false
-        return nextButton
-    }()
+    lazy var nextButton = mainButton(textButton: "NEXT", target: self, action: #selector(nextTapped))
     lazy var skipButton: UIButton = {
         skipButton = UIButton()
         skipButton.setTitle("Skip", for: .normal)
@@ -133,16 +124,10 @@ class OnboardingViewController: UIViewController {
     private func setNextButton(){
         view.addSubview(nextButton)
         
-        NSLayoutConstraint.activate([
-            nextButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            nextButton.topAnchor.constraint(greaterThanOrEqualTo: pageControl.bottomAnchor, constant: 24),
-            nextButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -75),
-            nextButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -24),
-            nextButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 24),
-            nextButton.heightAnchor.constraint(equalToConstant: 62)
-        ])
-        
-        nextButton.addTarget(self, action: #selector(nextTapped), for: .touchUpInside)
+        nextButton.snp.makeConstraints { make in
+            make.top.equalTo(pageControl.snp.bottom).offset(70)
+            make.leading.trailing.equalToSuperview().inset(24)
+        }
     }
     
     private func setSkipButton(){

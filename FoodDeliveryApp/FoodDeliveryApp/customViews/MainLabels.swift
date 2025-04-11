@@ -11,7 +11,7 @@ import SnapKit
 final class MainLabels: UIView {
     
     private let titleLabel = UILabel()
-    private let subTitleLabel = UILabel()
+    let subTitleLabel = UILabel()
     
     init(title: String, subtitle: String) {
         super.init(frame: .zero)
@@ -28,6 +28,7 @@ final class MainLabels: UIView {
         titleLabel.font = UIFont.systemFont(ofSize: 30, weight: .bold)
         
         subTitleLabel.text = subtitle
+        subTitleLabel.numberOfLines = 0
         subTitleLabel.textColor = .white
         subTitleLabel.font = UIFont.systemFont(ofSize: 16, weight: .regular)
         

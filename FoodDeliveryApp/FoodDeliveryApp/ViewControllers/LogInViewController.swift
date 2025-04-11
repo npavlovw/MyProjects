@@ -93,16 +93,7 @@ class LogInViewController: UIViewController {
         return stack
     }()
     var isChecked = false
-    lazy var loginButton: UIButton = {
-        loginButton = UIButton()
-        loginButton.backgroundColor = .appOrange
-        loginButton.setTitle("Log In", for: .normal)
-        loginButton.setTitleColor(.white, for: .normal)
-        loginButton.layer.cornerRadius = 12
-        loginButton.translatesAutoresizingMaskIntoConstraints = false
-        loginButton.addTarget(self, action: #selector(loginTupped), for: .touchUpInside)
-        return loginButton
-    }()
+    lazy var loginButton = mainButton(textButton: "LOG IN", target: self, action: #selector(loginTupped))
     lazy var signInLabel: UILabel = {
         signInLabel = UILabel()
         signInLabel.text = "Don’t have an account?"
@@ -264,12 +255,10 @@ class LogInViewController: UIViewController {
     private func setupLoginButton() {
         contentView.addSubview(loginButton)
         
-        NSLayoutConstraint.activate([
-            loginButton.topAnchor.constraint(equalTo: forgotButton.bottomAnchor, constant: 30),
-            loginButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 24),
-            loginButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -24),
-            loginButton.heightAnchor.constraint(equalToConstant: 62)
-        ])
+        loginButton.snp.makeConstraints { make in
+            make.top.equalTo(forgotButton.snp.bottom).offset(30)
+            make.leading.trailing.equalToSuperview().inset(24)
+        }
     }
     
     private func setupSignIn(){
