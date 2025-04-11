@@ -23,14 +23,7 @@ class LogInViewController: UIViewController {
         return imageViewVector
     }()
     lazy var mainLabels = MainLabels(title: "Log In", subtitle: "Please sign in to your existing account")
-    lazy var contentView: UIView = {
-        contentView = UIView()
-        contentView.backgroundColor = .white
-        contentView.translatesAutoresizingMaskIntoConstraints = false
-        contentView.layer.cornerRadius = 24
-        contentView.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
-        return contentView
-    }()
+    lazy var contentView = customContentView()
     lazy var emailField = loginTextFieldView(title: "EMAIL", placeholder: "example@gmail.com")
     lazy var passwordLabel: UILabel = {
         passwordLabel = UILabel()
@@ -187,18 +180,18 @@ class LogInViewController: UIViewController {
         view.addSubview(mainLabels)
         
         mainLabels.snp.makeConstraints { make in
-            make.top.leading.trailing.bottom.equalToSuperview()
+            make.top.equalToSuperview().offset(120)
+            make.leading.trailing.equalToSuperview()
         }
     }
     
     private func setContentView() {
         view.addSubview(contentView)
         
-        NSLayoutConstraint.activate([
-            contentView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-            contentView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            contentView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
-        ])
+        contentView.snp.makeConstraints { make in
+            make.top.equalTo(mainLabels.snp.bottom).offset(50)
+            make.leading.trailing.bottom.equalToSuperview()
+        }
     }
     
     private func setEmail() {
@@ -206,7 +199,7 @@ class LogInViewController: UIViewController {
         
         emailField.snp.makeConstraints{ make in
             make.top.equalTo(contentView).offset(24)
-            make.leading.trailing.equalTo(contentView).offset(24)
+            make.leading.trailing.equalTo(contentView).inset(24)
         }
     }
     

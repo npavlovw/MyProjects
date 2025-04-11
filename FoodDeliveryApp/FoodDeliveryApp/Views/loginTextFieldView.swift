@@ -11,7 +11,7 @@ import SnapKit
 final class loginTextFieldView: UIView {
     
     private let titleLabel = UILabel()
-    let textField = UITextField()
+    private let textField = UITextField()
     
     init(title: String, placeholder: String) {
         super.init(frame: .zero)

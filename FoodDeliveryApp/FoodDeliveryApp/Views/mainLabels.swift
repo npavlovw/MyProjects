@@ -36,7 +36,6 @@ final class MainLabels: UIView {
         
         titleLabel.snp.makeConstraints { make in
             make.centerX.equalToSuperview()
-            make.top.equalToSuperview().inset(120)
         }
         
         subTitleLabel.snp.makeConstraints { make in
