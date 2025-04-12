@@ -13,21 +13,21 @@ final class loginTextFieldView: UIView {
     private let titleLabel = UILabel()
     private let textField = UITextField()
     
-    init(title: String, placeholder: String) {
+    init() {
         super.init(frame: .zero)
-        setupUI(title: title, placeholder: placeholder)
+        setupUI()
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    private func setupUI(title: String, placeholder: String) {
-        titleLabel.text = title
+    private func setupUI() {
+        titleLabel.text = "EMAIL"
         titleLabel.font = UIFont.systemFont(ofSize: 13, weight: .bold)
         titleLabel.textColor = UIColor(red: 50/255, green: 52/255, blue: 62/255, alpha: 1)
         
-        textField.placeholder = placeholder
+        textField.placeholder = "example@gmail.com"
         textField.font = UIFont.systemFont(ofSize: 14, weight: .regular)
         textField.textColor = .white
         textField.layer.cornerRadius = 10

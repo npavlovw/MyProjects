@@ -11,7 +11,7 @@ import SnapKit
 final class MainLabels: UIView {
     
     private let titleLabel = UILabel()
-    let subTitleLabel = UILabel()
+    private let subTitleLabel = UILabel()
     
     init(title: String, subtitle: String) {
         super.init(frame: .zero)

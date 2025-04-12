@@ -10,21 +10,10 @@ import SnapKit
 
 class LogInViewController: UIViewController {
     
-    lazy var imageViewEllipse: UIImageView = {
-        let imageViewEllipse = UIImageView()
-        imageViewEllipse.image = UIImage(named: "Ellipse")
-        imageViewEllipse.translatesAutoresizingMaskIntoConstraints = false
-        return imageViewEllipse
-    }()
-    lazy var imageViewVector: UIImageView = {
-        let imageViewVector = UIImageView()
-        imageViewVector.image = UIImage(named: "Vector")
-        imageViewVector.translatesAutoresizingMaskIntoConstraints = false
-        return imageViewVector
-    }()
+    lazy var images = CustomImageView(customVectorName: "Vector")
     lazy var mainLabels = MainLabels(title: "Log In", subtitle: "Please sign in to your existing account")
     lazy var contentView = customContentView()
-    lazy var emailField = loginTextFieldView(title: "EMAIL", placeholder: "example@gmail.com")
+    lazy var emailField = loginTextFieldView()
     lazy var passwordLabel: UILabel = {
         passwordLabel = UILabel()
         passwordLabel.text = "PASSWORD"
@@ -93,7 +82,7 @@ class LogInViewController: UIViewController {
         return stack
     }()
     var isChecked = false
-    lazy var loginButton = mainButton(textButton: "LOG IN", target: self, action: #selector(loginTupped))
+    lazy var loginButton = MainButton(textButton: "LOG IN", target: self, action: #selector(loginTupped))
     lazy var signInLabel: UILabel = {
         signInLabel = UILabel()
         signInLabel.text = "Don’t have an account?"
@@ -151,20 +140,11 @@ class LogInViewController: UIViewController {
     }
     
     private func setupImage() {
-        view.addSubview(imageViewEllipse)
-        view.addSubview(imageViewVector)
+        view.addSubview(images)
         
-        NSLayoutConstraint.activate([
-            imageViewEllipse.topAnchor.constraint(equalTo: view.topAnchor, constant: 0),
-            imageViewEllipse.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 0),
-            imageViewEllipse.widthAnchor.constraint(equalToConstant: 177),
-            imageViewEllipse.heightAnchor.constraint(equalToConstant: 177),
-            
-            imageViewVector.topAnchor.constraint(equalTo: view.topAnchor, constant: 0),
-            imageViewVector.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: 0),
-            imageViewVector.widthAnchor.constraint(equalToConstant: 103),
-            imageViewVector.heightAnchor.constraint(equalToConstant: 355)
-        ])
+        images.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+        }
     }
     
     private func setupLabels() {
@@ -341,7 +321,9 @@ class LogInViewController: UIViewController {
     }
     
     @objc private func pressForgotButton() {
-        print("Нажали кнопку \"Забыли пароль\"")
+        let forgotPasswordVC = ForgotPasswordViewController()
+        forgotPasswordVC.modalPresentationStyle = .fullScreen
+        present(forgotPasswordVC, animated: true, completion: nil)
     }
     
     @objc func toggleCheckbox() {

@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import SnapKit
 
 struct OnboardingStep {
     let title: String
@@ -43,7 +44,7 @@ class OnboardingViewController: UIViewController {
         pageControl.translatesAutoresizingMaskIntoConstraints = false
         return pageControl
     }()
-    lazy var nextButton = mainButton(textButton: "NEXT", target: self, action: #selector(nextTapped))
+    lazy var nextButton = MainButton(textButton: "NEXT", target: self, action: #selector(nextTapped))
     lazy var skipButton: UIButton = {
         skipButton = UIButton()
         skipButton.setTitle("Skip", for: .normal)
@@ -133,13 +134,10 @@ class OnboardingViewController: UIViewController {
     private func setSkipButton(){
         view.addSubview(skipButton)
         
-        NSLayoutConstraint.activate([
-            skipButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            skipButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -40),
-            skipButton.widthAnchor.constraint(equalToConstant: 32),
-            skipButton.heightAnchor.constraint(equalToConstant: 19)
-        ])
-        
+        skipButton.snp.makeConstraints { make in
+            make.centerX.equalToSuperview()
+            make.bottom.equalTo(view.snp.bottom).offset(-40)
+        }
         skipButton.addTarget(self, action: #selector(skipTapped), for: .touchUpInside)
     }
     

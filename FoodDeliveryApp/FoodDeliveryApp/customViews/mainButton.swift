@@ -8,7 +8,7 @@
 import UIKit
 import SnapKit
 
-final class mainButton: UIButton {
+final class MainButton: UIButton {
     
     init(textButton: String, target: Any?, action: Selector) {
         super.init(frame: .zero)
@@ -31,6 +31,4 @@ final class mainButton: UIButton {
             make.height.equalTo(62)
         }
     }
-    
-   
 }
