@@ -149,7 +149,7 @@ class LogInViewController: UIViewController {
     
     private func setupLabels() {
         view.addSubview(mainLabels)
-        
+
         mainLabels.snp.makeConstraints { make in
             make.top.equalToSuperview().offset(120)
             make.leading.trailing.equalToSuperview()
@@ -305,6 +305,17 @@ class LogInViewController: UIViewController {
         passwordTextField.isSecureTextEntry.toggle()
     }
     
+    //Действие для убирания клавиатуры
+    private func setupKeyboardDismissGesture() {
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(hideKeyboard))
+        tapGesture.cancelsTouchesInView = false
+        view.addGestureRecognizer(tapGesture)
+    }
+    
+    deinit {
+            NotificationCenter.default.removeObserver(self)
+        }
+    
     @objc private func keyboardWillShow(notification: NSNotification) {
         if let keyboardFrame = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue {
             let keyboardHeight = keyboardFrame.cgRectValue.height
@@ -314,10 +325,6 @@ class LogInViewController: UIViewController {
 
     @objc private func keyboardWillHide(notification: NSNotification) {
         view.frame.origin.y = 0
-    }
-    
-    deinit {
-        NotificationCenter.default.removeObserver(self)
     }
     
     @objc private func pressForgotButton() {
@@ -351,13 +358,6 @@ class LogInViewController: UIViewController {
         default:
             break
         }
-    }
-    
-    //Действие для убирания клавиатуры
-    private func setupKeyboardDismissGesture() {
-        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(hideKeyboard))
-        tapGesture.cancelsTouchesInView = false
-        view.addGestureRecognizer(tapGesture)
     }
 
     @objc private func hideKeyboard() {

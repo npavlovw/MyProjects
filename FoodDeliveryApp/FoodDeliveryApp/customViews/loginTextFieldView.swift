@@ -11,7 +11,7 @@ import SnapKit
 final class loginTextFieldView: UIView {
     
     private let titleLabel = UILabel()
-    private let textField = UITextField()
+    let textField = UITextField()
     
     init() {
         super.init(frame: .zero)
@@ -29,7 +29,7 @@ final class loginTextFieldView: UIView {
         
         textField.placeholder = "example@gmail.com"
         textField.font = UIFont.systemFont(ofSize: 14, weight: .regular)
-        textField.textColor = .white
+        textField.textColor = .black
         textField.layer.cornerRadius = 10
         textField.borderStyle = .none
         textField.backgroundColor = UIColor(red: 240/255, green: 245/255, blue: 250/255, alpha: 1)

@@ -94,13 +94,30 @@ class ForgotPasswordViewController: UIViewController {
     }
     
     @objc private func buttonTupped() {
-    print ("Send code tapped")
+        if let text = emailTextField.textField.text, text.isEmpty {
+            let alert = UIAlertController(title: "Ошибка", message: "Введите email", preferredStyle: .alert)
+                
+                let okAction = UIAlertAction(title: "ОК", style: .default, handler: nil)
+                alert.addAction(okAction)
+                
+                present(alert, animated: true, completion: nil)
+            } else {
+            goToNextScreen()
+        }
+        
+    }
+    
+    private func goToNextScreen() {
+        let verificationVC = VerificationViewController()
+        verificationVC.receivedText = emailTextField.textField.text ?? ""
+        verificationVC.modalPresentationStyle = .fullScreen
+        present(verificationVC, animated: true)
     }
     
     @objc private func backToLoginScreen() {
         let loginVC = LogInViewController()
         loginVC.modalPresentationStyle = .fullScreen
-        present(loginVC, animated: true)
+        present(loginVC, animated: false)
     }
 
 }

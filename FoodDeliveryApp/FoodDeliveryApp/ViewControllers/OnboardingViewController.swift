@@ -21,20 +21,7 @@ class OnboardingViewController: UIViewController {
         mainView.translatesAutoresizingMaskIntoConstraints = false
         return mainView
     }()
-    lazy var mainLabel: UILabel = {
-        mainLabel = UILabel()
-        mainLabel.font = .systemFont(ofSize: 29, weight: .bold)
-        mainLabel.translatesAutoresizingMaskIntoConstraints = false
-        return mainLabel
-    }()
-    lazy var subLabel: UILabel = {
-        subLabel = UILabel()
-        subLabel.translatesAutoresizingMaskIntoConstraints = false
-        subLabel.text = "Get all your loved foods in one once place, you just place the order we do the rest"
-        subLabel.numberOfLines = 0
-        subLabel.textAlignment = .center
-        return subLabel
-    }()
+    lazy var mainLabel = MainLabels(title: "All your favorites", subtitle: "Get all your loved foods in one once place,you just place the orer we do the rest")
     lazy var pageControl: UIPageControl = {
         pageControl = UIPageControl()
         pageControl.numberOfPages = 4
@@ -75,7 +62,6 @@ class OnboardingViewController: UIViewController {
     private func setView(){
         setMainView()
         setMainLabel()
-        setSubLabel()
         setPageControl()
         setNextButton()
         setSkipButton()
@@ -94,21 +80,18 @@ class OnboardingViewController: UIViewController {
     }
     
     private func setMainLabel(){
+        mainLabel.titleLabel.font = UIFont.systemFont(ofSize: 24, weight: .bold)
+        mainLabel.titleLabel.textColor = .black
+        mainLabel.subTitleLabel.textColor = .black
+        mainLabel.subTitleLabel.numberOfLines = 0
+        mainLabel.subTitleLabel.lineBreakMode = .byWordWrapping
         view.addSubview(mainLabel)
         
-        mainLabel.topAnchor.constraint(lessThanOrEqualTo: mainView.bottomAnchor, constant: 63).isActive = true
-        mainLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-    }
-    
-    private func setSubLabel(){
-        view.addSubview(subLabel)
-        
-        NSLayoutConstraint.activate([
-            subLabel.topAnchor.constraint(equalTo: mainLabel.bottomAnchor, constant: 18),
-            subLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            subLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 28),
-            subLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -28)
-        ])
+        mainLabel.snp.makeConstraints { make in
+            make.centerX.equalToSuperview()
+            make.top.equalTo(mainView.snp.bottom).offset(64)
+            make.leading.trailing.equalToSuperview().inset(24)
+        }
     }
     
     private func setPageControl(){
@@ -116,7 +99,7 @@ class OnboardingViewController: UIViewController {
         
         NSLayoutConstraint.activate([
             pageControl.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            pageControl.topAnchor.constraint(equalTo: subLabel.bottomAnchor, constant: 32)
+            pageControl.topAnchor.constraint(equalTo: mainLabel.bottomAnchor, constant: 32)
         ])
         
         pageControl.addTarget(self, action: #selector(pageControlChanged(_:)), for: .valueChanged)
@@ -143,7 +126,7 @@ class OnboardingViewController: UIViewController {
     
     private func updateUIForCurrentStep() {
         let step = steps[currentStepIndex]
-        mainLabel.text = step.title
+        mainLabel.titleLabel.text = step.title
         pageControl.currentPage = currentStepIndex
         skipButton.isHidden = currentStepIndex == steps.count - 1
         if currentStepIndex == steps.count - 1 {
