@@ -10,11 +10,11 @@ import SnapKit
 
 class LogInViewController: UIViewController {
     
-    lazy var images = CustomImageView(customVectorName: "Vector")
-    lazy var mainLabels = MainLabels(title: "Log In", subtitle: "Please sign in to your existing account")
-    lazy var contentView = customContentView()
-    lazy var emailField = loginTextFieldView()
-    lazy var passwordLabel: UILabel = {
+    private lazy var images = CustomImageView(customVectorName: "Vector")
+    private lazy var mainLabels = MainLabels(title: "Log In", subtitle: "Please sign in to your existing account")
+    private lazy var contentView = customContentView()
+    private lazy var emailField = loginTextFieldView()
+    private lazy var passwordLabel: UILabel = {
         passwordLabel = UILabel()
         passwordLabel.text = "PASSWORD"
         passwordLabel.textColor = .black
@@ -22,7 +22,7 @@ class LogInViewController: UIViewController {
         passwordLabel.translatesAutoresizingMaskIntoConstraints = false
         return passwordLabel
     }()
-    lazy var passwordTextLabel: UILabel = {
+    private lazy var passwordTextLabel: UILabel = {
         passwordTextLabel = UILabel()
         passwordTextLabel.backgroundColor = .emailBackground
         passwordTextLabel.layer.cornerRadius = 10
@@ -30,7 +30,7 @@ class LogInViewController: UIViewController {
         passwordTextLabel.translatesAutoresizingMaskIntoConstraints = false
         return passwordTextLabel
     }()
-    lazy var passwordTextField: UITextField = {
+    private lazy var passwordTextField: UITextField = {
         passwordTextField = UITextField()
         passwordTextField.placeholder = "**********"
         passwordTextField.keyboardType = .emailAddress
@@ -40,7 +40,7 @@ class LogInViewController: UIViewController {
         passwordTextField.rightViewMode = .always
         return passwordTextField
     }()
-    lazy var eyeButton: UIButton = {
+    private lazy var eyeButton: UIButton = {
         eyeButton = UIButton()
         eyeButton.setImage(UIImage(systemName: "eye"), for: .normal)
         eyeButton.tintColor = .gray
@@ -48,7 +48,7 @@ class LogInViewController: UIViewController {
         eyeButton.addTarget(self, action: #selector(togglePasswordVisibility), for: .touchUpInside)
         return eyeButton
     }()
-    lazy var forgotButton: UIButton = {
+    private lazy var forgotButton: UIButton = {
         forgotButton = UIButton()
         forgotButton.setTitle("Forgot Password", for: .normal)
         forgotButton.setTitleColor(.appOrange, for: .normal)
@@ -57,7 +57,7 @@ class LogInViewController: UIViewController {
         forgotButton.addTarget(self, action: #selector(pressForgotButton), for: .touchUpInside)
         return forgotButton
     }()
-    lazy var rememberMeButton: UIButton = {
+    private lazy var rememberMeButton: UIButton = {
         rememberMeButton = UIButton(type: .system)
         rememberMeButton.setImage(UIImage(systemName: "square"), for: .normal)
         rememberMeButton.tintColor = .systemGray3
@@ -65,7 +65,7 @@ class LogInViewController: UIViewController {
         rememberMeButton.addTarget(nil, action: #selector(toggleCheckbox), for: .touchUpInside)
         return rememberMeButton
     }()
-    lazy var rememberMeLabel: UILabel = {
+    private lazy var rememberMeLabel: UILabel = {
         rememberMeLabel = UILabel()
         rememberMeLabel.text = "Remember me"
         rememberMeLabel.textColor = .systemGray
@@ -73,7 +73,7 @@ class LogInViewController: UIViewController {
         rememberMeLabel.translatesAutoresizingMaskIntoConstraints = false
         return rememberMeLabel
     }()
-    lazy var checkboxStack: UIStackView = {
+    private lazy var checkboxStack: UIStackView = {
         let stack = UIStackView(arrangedSubviews: [rememberMeButton, rememberMeLabel])
         stack.axis = .horizontal
         stack.spacing = 8
@@ -81,9 +81,9 @@ class LogInViewController: UIViewController {
         stack.translatesAutoresizingMaskIntoConstraints = false
         return stack
     }()
-    var isChecked = false
-    lazy var loginButton = MainButton(textButton: "LOG IN", target: self, action: #selector(loginTupped))
-    lazy var signInLabel: UILabel = {
+    private var isChecked = false
+    private lazy var loginButton = MainButton(textButton: "LOG IN", target: self, action: #selector(loginTupped))
+    private lazy var signInLabel: UILabel = {
         signInLabel = UILabel()
         signInLabel.text = "Don’t have an account?"
         signInLabel.textColor = .appGrey
@@ -91,7 +91,7 @@ class LogInViewController: UIViewController {
         signInLabel.translatesAutoresizingMaskIntoConstraints = false
         return signInLabel
     }()
-    lazy var signInButton: UIButton = {
+    private lazy var signInButton: UIButton = {
         signInButton = UIButton()
         signInButton.setTitle("SIGN UP", for: .normal)
         signInButton.setTitleColor( .appOrange, for: .normal)
@@ -100,7 +100,7 @@ class LogInViewController: UIViewController {
         signInButton.addTarget(self, action: #selector(signInTupped), for: .touchUpInside)
         return signInButton
     }()
-    lazy var signInStack: UIStackView = {
+    private lazy var signInStack: UIStackView = {
         signInStack = UIStackView(arrangedSubviews: [signInLabel, signInButton])
         signInStack.axis = .horizontal
         signInStack.spacing = 10
@@ -108,7 +108,7 @@ class LogInViewController: UIViewController {
         signInStack.translatesAutoresizingMaskIntoConstraints = false
         return signInStack
     }()
-    lazy var orLabel: UILabel = {
+    private lazy var orLabel: UILabel = {
         orLabel = UILabel()
         orLabel.text = "Or"
         orLabel.font = UIFont.systemFont(ofSize: 16, weight: .regular)
@@ -116,8 +116,7 @@ class LogInViewController: UIViewController {
         orLabel.translatesAutoresizingMaskIntoConstraints = false
         return orLabel
     }()
-    lazy var stack = UIStackView()
-    
+    private lazy var stack = UIStackView()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -136,7 +135,6 @@ class LogInViewController: UIViewController {
         setupOrLabel()
         setAuthBtns()
         setupKeyboardDismissGesture()
-
     }
     
     private func setupImage() {

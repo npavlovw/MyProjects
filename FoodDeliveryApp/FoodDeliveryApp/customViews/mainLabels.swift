@@ -34,7 +34,6 @@ final class MainLabels: UIView {
         subTitleLabel.textColor = .white
         subTitleLabel.font = UIFont.systemFont(ofSize: 16, weight: .regular)
         subTitleLabel.textAlignment = .center
-
         
         addSubview(titleLabel)
         addSubview(subTitleLabel)

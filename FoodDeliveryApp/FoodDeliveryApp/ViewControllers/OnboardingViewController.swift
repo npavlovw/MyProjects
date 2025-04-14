@@ -109,7 +109,7 @@ class OnboardingViewController: UIViewController {
         view.addSubview(nextButton)
         
         nextButton.snp.makeConstraints { make in
-            make.top.equalTo(pageControl.snp.bottom).offset(70)
+            make.top.lessThanOrEqualTo(pageControl.snp.bottom).offset(70)
             make.leading.trailing.equalToSuperview().inset(24)
         }
     }
@@ -119,11 +119,12 @@ class OnboardingViewController: UIViewController {
         
         skipButton.snp.makeConstraints { make in
             make.centerX.equalToSuperview()
-            make.bottom.equalTo(view.snp.bottom).offset(-40)
+            make.top.equalTo(nextButton.snp.bottom).offset(16)
+            make.bottom.greaterThanOrEqualTo(view.snp.bottom).offset(24)
         }
         skipButton.addTarget(self, action: #selector(skipTapped), for: .touchUpInside)
     }
-    
+        
     private func updateUIForCurrentStep() {
         let step = steps[currentStepIndex]
         mainLabel.titleLabel.text = step.title
