@@ -49,6 +49,8 @@ class OnboardingViewController: UIViewController {
         OnboardingStep(title: "Free delivery offers")
     ]
     private var currentStepIndex = 0
+    let screenWidth = UIScreen.main.bounds.width
+    let screenHeight = UIScreen.main.bounds.height
     
     
     override func viewDidLoad() {
@@ -70,13 +72,12 @@ class OnboardingViewController: UIViewController {
     private func setMainView() {
         view.addSubview(mainView)
         
-        NSLayoutConstraint.activate([
-            mainView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            mainView.topAnchor.constraint(lessThanOrEqualTo: view.topAnchor, constant: 114),
-            mainView.topAnchor.constraint(greaterThanOrEqualTo: view.topAnchor, constant: 24),
-            mainView.widthAnchor.constraint(equalToConstant: 240),
-            mainView.heightAnchor.constraint(equalToConstant: 292),
-        ])
+        mainView.snp.makeConstraints { make in
+            make.height.equalTo(screenHeight*292/812)
+            make.width.equalTo(screenWidth*240/375)
+            make.centerX.equalToSuperview()
+            make.top.equalToSuperview().offset(screenHeight*114/812)
+        }
     }
     
     private func setMainLabel(){
@@ -89,7 +90,7 @@ class OnboardingViewController: UIViewController {
         
         mainLabel.snp.makeConstraints { make in
             make.centerX.equalToSuperview()
-            make.top.equalTo(mainView.snp.bottom).offset(64)
+            make.top.equalTo(mainView.snp.bottom).offset(screenHeight*63/812)
             make.leading.trailing.equalToSuperview().inset(24)
         }
     }
@@ -97,10 +98,10 @@ class OnboardingViewController: UIViewController {
     private func setPageControl(){
         view.addSubview(pageControl)
         
-        NSLayoutConstraint.activate([
-            pageControl.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            pageControl.topAnchor.constraint(equalTo: mainLabel.bottomAnchor, constant: 32)
-        ])
+        pageControl.snp.makeConstraints { make in
+            make.centerX.equalToSuperview()
+            make.top.equalTo(mainLabel.snp.bottom).offset(screenHeight*32/812)
+        }
         
         pageControl.addTarget(self, action: #selector(pageControlChanged(_:)), for: .valueChanged)
     }
@@ -109,7 +110,7 @@ class OnboardingViewController: UIViewController {
         view.addSubview(nextButton)
         
         nextButton.snp.makeConstraints { make in
-            make.top.lessThanOrEqualTo(pageControl.snp.bottom).offset(70)
+            make.top.equalTo(pageControl.snp.bottom).offset(screenHeight*69/812)
             make.leading.trailing.equalToSuperview().inset(24)
         }
     }
@@ -119,8 +120,8 @@ class OnboardingViewController: UIViewController {
         
         skipButton.snp.makeConstraints { make in
             make.centerX.equalToSuperview()
-            make.top.equalTo(nextButton.snp.bottom).offset(16)
-            make.bottom.greaterThanOrEqualTo(view.snp.bottom).offset(24)
+            make.top.equalTo(nextButton.snp.bottom).offset(screenHeight*16/812)
+//            make.bottom.greaterThanOrEqualTo(view.snp.bottom).offset(24)
         }
         skipButton.addTarget(self, action: #selector(skipTapped), for: .touchUpInside)
     }
