@@ -12,7 +12,7 @@ class VerificationViewController: UIViewController {
     
     lazy var backButton = BackButton(target: self, action: #selector(backToLForgotPassword))
     lazy var images = CustomImageView(customVectorName: "orangeVector")
-    lazy var mainLabels = MainLabels(title: "Verification", subtitle: "We have sent a code to your email")
+    lazy var mainLabels = MainLabels(title: "Verification", titleSize: 30, textColor: .white, subtitle: "We have sent a code to your email", spacing: 4)
     var receivedText: String?
     lazy var emailCode: UILabel = {
         let label = UILabel()

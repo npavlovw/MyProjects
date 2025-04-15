@@ -21,7 +21,7 @@ class OnboardingViewController: UIViewController {
         mainView.translatesAutoresizingMaskIntoConstraints = false
         return mainView
     }()
-    lazy var mainLabel = MainLabels(title: "All your favorites", subtitle: "Get all your loved foods in one once place, you just place the order we do the rest")
+    lazy var mainLabel = MainLabels(title: "All your favorites", titleSize: 24, textColor: .black, subtitle: "Get all your loved foods in one once place, you just place the order we do the rest", spacing: 16)
     lazy var pageControl: UIPageControl = {
         pageControl = UIPageControl()
         pageControl.numberOfPages = 4
@@ -81,11 +81,6 @@ class OnboardingViewController: UIViewController {
     }
     
     private func setMainLabel(){
-        mainLabel.titleLabel.font = UIFont.systemFont(ofSize: 24, weight: .bold)
-        mainLabel.titleLabel.textColor = .black
-        mainLabel.subTitleLabel.textColor = .black
-        mainLabel.subTitleLabel.numberOfLines = 0
-        mainLabel.subTitleLabel.lineBreakMode = .byWordWrapping
         view.addSubview(mainLabel)
         
         mainLabel.snp.makeConstraints { make in

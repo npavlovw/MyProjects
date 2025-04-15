@@ -11,7 +11,7 @@ import SnapKit
 class LogInViewController: UIViewController {
     
     private lazy var images = CustomImageView(customVectorName: "Vector")
-    private lazy var mainLabels = MainLabels(title: "Log In", subtitle: "Please sign in to your existing account")
+    private lazy var mainLabels = MainLabels(title: "Log In", titleSize: 30, textColor: .white, subtitle: "Please sign in to your existing account", spacing: 3)
     private lazy var contentView = customContentView()
     private lazy var emailField = loginTextFieldView()
     private lazy var passwordTextField: UITextField = {
@@ -147,7 +147,7 @@ class LogInViewController: UIViewController {
         view.addSubview(mainLabels)
 
         mainLabels.snp.makeConstraints { make in
-            make.top.equalToSuperview().offset(screenHeight*120/812)
+            make.top.lessThanOrEqualToSuperview().offset(screenHeight*120/812)
             make.leading.trailing.equalToSuperview().inset(screenWidth*24/375)
         }
     }
@@ -156,6 +156,7 @@ class LogInViewController: UIViewController {
         view.addSubview(contentView)
         
         contentView.snp.makeConstraints { make in
+            make.top.lessThanOrEqualTo(mainLabels.snp.bottom).offset(screenHeight*50/812)
             make.leading.trailing.bottom.equalToSuperview()
         }
     }
@@ -164,7 +165,7 @@ class LogInViewController: UIViewController {
         contentView.addSubview(emailField)
         
         emailField.snp.makeConstraints{ make in
-            make.top.equalTo(contentView).offset(screenHeight*24/812)
+            make.top.lessThanOrEqualToSuperview().offset(screenHeight*24/812)
             make.leading.trailing.equalTo(contentView).inset(screenWidth*24/375)
             make.height.equalTo(screenHeight*86/812)
         }
@@ -178,19 +179,19 @@ class LogInViewController: UIViewController {
         passwordTextField.addSubview(eyeButton)
         
         passwordLabel.snp.makeConstraints { make in
-            make.top.equalTo(emailField.snp.bottom).offset(screenHeight*24/812)
+            make.top.lessThanOrEqualTo(emailField.snp.bottom).offset(screenHeight*24/812)
             make.leading.equalToSuperview().offset(screenWidth*24/375)
         }
         passwordTextField.snp.makeConstraints { make in
-            make.top.equalTo(passwordLabel.snp.bottom).offset(screenHeight*8/812)
-            make.leading.equalToSuperview().offset(screenWidth*24/375)
+            make.top.lessThanOrEqualTo(passwordLabel.snp.bottom).offset(screenHeight*8/812)
+            make.leading.trailing.equalToSuperview().inset(screenWidth*24/375)
             make.height.equalTo(screenHeight*62/812)
         }
         eyeButton.snp.makeConstraints { make in
             make.centerY.equalToSuperview()
-            make.trailing.equalTo(passwordTextField.snp.trailing).inset(screenWidth*20/375)
+            make.trailing.equalToSuperview().inset(screenWidth*20/375)
             make.height.equalTo(screenHeight*14/812)
-            make.width.equalTo(screenWidth*19/812)
+            make.width.equalTo(screenWidth*19/375)
         }
     }
     
@@ -205,49 +206,46 @@ class LogInViewController: UIViewController {
     private func setupForgotButton() {
         contentView.addSubview(forgotButton)
         
-        NSLayoutConstraint.activate([
-            forgotButton.topAnchor.constraint(equalTo: passwordTextField.bottomAnchor, constant: 25),
-            forgotButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -24)
-        ])
+        forgotButton.snp.makeConstraints { make in
+            make.top.lessThanOrEqualTo(passwordTextField.snp.bottom).offset(screenHeight*25/812)
+            make.trailing.equalTo(passwordTextField.snp.trailing)
+        }
     }
     
     private func setupRememberMeLabel() {
-        view.addSubview(checkboxStack)
+        contentView.addSubview(checkboxStack)
         
-        NSLayoutConstraint.activate([
-            checkboxStack.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 24),
-            checkboxStack.centerYAnchor.constraint(equalTo: forgotButton.centerYAnchor),
-            
-            rememberMeButton.widthAnchor.constraint(equalToConstant: 20),
-            rememberMeButton.heightAnchor.constraint(equalToConstant: 20)
-        ])
+        checkboxStack.snp.makeConstraints { make in
+            make.centerY.equalTo(forgotButton.snp.centerY)
+            make.leading.equalTo(passwordTextField)
+        }
     }
     
     private func setupLoginButton() {
         contentView.addSubview(loginButton)
         
         loginButton.snp.makeConstraints { make in
-            make.top.equalTo(forgotButton.snp.bottom).offset(30)
-            make.leading.trailing.equalToSuperview().inset(24)
+            make.top.lessThanOrEqualTo(forgotButton.snp.bottom).offset(screenHeight*14/812)
+            make.leading.trailing.equalToSuperview().inset(screenWidth*24/375)
         }
     }
     
     private func setupSignIn(){
         contentView.addSubview(signInStack)
         
-        NSLayoutConstraint.activate([
-            signInStack.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
-            signInStack.topAnchor.constraint(equalTo: loginButton.bottomAnchor, constant: 36)
-        ])
+        signInStack.snp.makeConstraints { make in
+            make.top.lessThanOrEqualTo(loginButton.snp.bottom).offset(screenHeight*38/812)
+            make.centerX.equalToSuperview()
+        }
     }
     
     private func setupOrLabel(){
         contentView.addSubview(orLabel)
         
-        NSLayoutConstraint.activate([
-            orLabel.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
-            orLabel.topAnchor.constraint(equalTo: signInStack.bottomAnchor, constant: 28)
-        ])
+        orLabel.snp.makeConstraints { make in
+            make.centerX.equalToSuperview()
+            make.top.lessThanOrEqualTo(signInStack.snp.bottom).offset(screenHeight*27/812)
+        }
     }
     
     private func setAuthBtns(){
@@ -256,15 +254,9 @@ class LogInViewController: UIViewController {
         
         authButtonsStack.snp.makeConstraints { make in
             make.centerX.equalToSuperview()
-            make.top.equalTo(orLabel.snp.bottom).offset(screenHeight*15/812)
+            make.top.lessThanOrEqualTo(orLabel.snp.bottom).offset(screenHeight*15/812)
             make.bottom.equalTo(contentView.snp.bottom).inset(screenHeight*39/812)
         }
-        
-        NSLayoutConstraint.activate([
-            authButtonsStack.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
-            authButtonsStack.topAnchor.constraint(equalTo: orLabel.bottomAnchor, constant: 30),
-            authButtonsStack.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -40)
-        ])
     }
     
     private func getAuthBtns() -> UIStackView {
@@ -298,11 +290,11 @@ class LogInViewController: UIViewController {
     }
     
     //Действие для убирания клавиатуры
-        private func setupKeyboardDismissGesture() {
-            let tapGesture = UITapGestureRecognizer(target: self, action: #selector(hideKeyboard))
-            tapGesture.cancelsTouchesInView = false
-            view.addGestureRecognizer(tapGesture)
-        }
+    private func setupKeyboardDismissGesture() {
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(hideKeyboard))
+        tapGesture.cancelsTouchesInView = false
+        view.addGestureRecognizer(tapGesture)
+    }
     
     deinit {
                     NotificationCenter.default.removeObserver(self)

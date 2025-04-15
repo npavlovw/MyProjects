@@ -41,11 +41,13 @@ final class loginTextFieldView: UIView {
         
         titleLabel.snp.makeConstraints { make in
             make.top.leading.trailing.equalToSuperview()
+            make.height.equalTo(16)
         }
         
         textField.snp.makeConstraints { make in
             make.top.equalTo(titleLabel.snp.bottom).offset(8)
             make.leading.trailing.bottom.equalToSuperview()
+            make.height.equalTo(62)
         }
     }
     

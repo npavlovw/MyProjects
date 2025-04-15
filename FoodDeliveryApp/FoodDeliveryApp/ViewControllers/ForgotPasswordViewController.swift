@@ -11,7 +11,7 @@ class ForgotPasswordViewController: UIViewController {
     
     lazy var images = CustomImageView(customVectorName: "orangeVector")
     lazy var backButton = BackButton(target: self, action: #selector(backToLoginScreen))
-    lazy var labels = MainLabels(title: "Forgot Password", subtitle: "Please sign in to your existing account")
+    lazy var labels = MainLabels(title: "Forgot Password", titleSize: 30, textColor: .white, subtitle: "Please sign in to your existing account", spacing: 4)
     lazy var contentView = customContentView()
     lazy var emailTextField = loginTextFieldView()
     lazy var button = MainButton(textButton: "Send Code", target: self, action: #selector(buttonTupped))

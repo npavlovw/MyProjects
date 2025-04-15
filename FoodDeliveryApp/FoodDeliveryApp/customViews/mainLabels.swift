@@ -10,43 +10,53 @@ import SnapKit
 
 final class MainLabels: UIView {
     
-    let titleLabel = UILabel()
-    let subTitleLabel = UILabel()
+    lazy var titleLabel: UILabel = {
+        let titleLabel = UILabel()
+        titleLabel.text = ""
+        titleLabel.font = UIFont.systemFont(ofSize: 30, weight: .bold)
+        titleLabel.textAlignment = .center
+        titleLabel.numberOfLines = 0
+        return titleLabel
+    }()
+    lazy var subTitleLabel: UILabel = {
+        let subTitleLabel = UILabel()
+        subTitleLabel.text = ""
+        subTitleLabel.numberOfLines = 0
+        subTitleLabel.font = UIFont.systemFont(ofSize: 16, weight: .regular)
+        subTitleLabel.textAlignment = .center
+        return subTitleLabel
+    }()
+    lazy var titleStack: UIStackView = {
+        let titleStack = UIStackView(arrangedSubviews: [titleLabel, subTitleLabel])
+        titleStack.axis = .vertical
+        titleStack.spacing = 0
+        titleStack.alignment = .center
+        titleStack.distribution = .fill
+        return titleStack
+    }()
     
-    init(title: String, subtitle: String) {
+    init(title: String, titleSize: CGFloat, textColor: UIColor,subtitle: String, spacing: CGFloat) {
         super.init(frame: .zero)
-        setupMainLabels(title: title, subtitle: subtitle)
+        setupMainLabels(title: title, titleSize: titleSize, textColor: textColor, subtitle: subtitle, spacing: spacing)
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    private func setupMainLabels(title: String, subtitle: String) {
+    private func setupMainLabels(title: String, titleSize: CGFloat, textColor: UIColor, subtitle: String, spacing: CGFloat) {
         titleLabel.text = title
-        titleLabel.textColor = .white
-        titleLabel.font = UIFont.systemFont(ofSize: 30, weight: .bold)
-        titleLabel.textAlignment = .center
-        titleLabel.numberOfLines = 0
-        
+        titleLabel.font = UIFont.systemFont(ofSize: titleSize, weight: .bold)
+        titleLabel.textColor = textColor
         subTitleLabel.text = subtitle
-        subTitleLabel.numberOfLines = 0
-        subTitleLabel.textColor = .white
-        subTitleLabel.font = UIFont.systemFont(ofSize: 16, weight: .regular)
-        subTitleLabel.textAlignment = .center
+        subTitleLabel.textColor = textColor
+        titleStack.spacing = spacing
         
-        addSubview(titleLabel)
-        addSubview(subTitleLabel)
         
-        titleLabel.snp.makeConstraints { make in
-            make.top.equalToSuperview()
-            make.centerX.equalToSuperview()
-        }
+        addSubview(titleStack)
         
-        subTitleLabel.snp.makeConstraints { make in
-            make.centerX.equalToSuperview()
-            make.top.equalTo(titleLabel.snp.bottom).offset(4)
-            make.bottom.leading.trailing.equalToSuperview()
+        titleStack.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
         }
     }
 }
