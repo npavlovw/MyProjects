@@ -21,7 +21,7 @@ class OnboardingViewController: UIViewController {
         mainView.translatesAutoresizingMaskIntoConstraints = false
         return mainView
     }()
-    lazy var mainLabel = MainLabels(title: "All your favorites", subtitle: "Get all your loved foods in one once place,you just place the orer we do the rest")
+    lazy var mainLabel = MainLabels(title: "All your favorites", subtitle: "Get all your loved foods in one once place, you just place the order we do the rest")
     lazy var pageControl: UIPageControl = {
         pageControl = UIPageControl()
         pageControl.numberOfPages = 4
@@ -76,7 +76,7 @@ class OnboardingViewController: UIViewController {
             make.height.equalTo(screenHeight*292/812)
             make.width.equalTo(screenWidth*240/375)
             make.centerX.equalToSuperview()
-            make.top.equalToSuperview().offset(screenHeight*114/812)
+            make.top.lessThanOrEqualToSuperview().offset(screenHeight*114/812)
         }
     }
     
@@ -110,7 +110,7 @@ class OnboardingViewController: UIViewController {
         view.addSubview(nextButton)
         
         nextButton.snp.makeConstraints { make in
-            make.top.equalTo(pageControl.snp.bottom).offset(screenHeight*69/812)
+            make.top.lessThanOrEqualTo(pageControl.snp.bottom).offset(screenHeight*69/812)
             make.leading.trailing.equalToSuperview().inset(24)
         }
     }
@@ -121,7 +121,7 @@ class OnboardingViewController: UIViewController {
         skipButton.snp.makeConstraints { make in
             make.centerX.equalToSuperview()
             make.top.equalTo(nextButton.snp.bottom).offset(screenHeight*16/812)
-//            make.bottom.greaterThanOrEqualTo(view.snp.bottom).offset(24)
+            make.bottom.equalToSuperview().inset(screenHeight*24/812)
         }
         skipButton.addTarget(self, action: #selector(skipTapped), for: .touchUpInside)
     }
