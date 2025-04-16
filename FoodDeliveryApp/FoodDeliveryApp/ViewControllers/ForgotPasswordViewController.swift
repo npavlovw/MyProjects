@@ -12,9 +12,11 @@ class ForgotPasswordViewController: UIViewController {
     lazy var images = CustomImageView(customVectorName: "orangeVector")
     lazy var backButton = BackButton(target: self, action: #selector(backToLoginScreen))
     lazy var labels = MainLabels(title: "Forgot Password", titleSize: 30, textColor: .white, subtitle: "Please sign in to your existing account", spacing: 4)
-    lazy var contentView = customContentView()
+    lazy var contentView = CustomContentView()
     lazy var emailTextField = loginTextFieldView(name: "EMAIL", placeholder: "example@gmail.com")
     lazy var button = MainButton(textButton: "Send Code", target: self, action: #selector(buttonTupped))
+    let screenWidth = UIScreen.main.bounds.width
+    let screenHeight = UIScreen.main.bounds.height
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -41,8 +43,10 @@ class ForgotPasswordViewController: UIViewController {
         view.addSubview(backButton)
         
         backButton.snp.makeConstraints { make in
-            make.top.equalToSuperview().inset(50)
-            make.leading.equalToSuperview().inset(24)
+            make.top.lessThanOrEqualToSuperview().inset(screenHeight*50/812)
+            make.leading.equalToSuperview().inset(screenWidth*24/375)
+            make.height.equalTo(screenHeight*50/812)
+            make.width.equalTo(screenHeight*50/812)
         }
     }
     
@@ -50,7 +54,7 @@ class ForgotPasswordViewController: UIViewController {
         view.addSubview(labels)
         
         labels.snp.makeConstraints { make in
-            make.top.equalToSuperview().offset(120)
+            make.top.lessThanOrEqualToSuperview().offset(screenHeight*120/812)
             make.leading.trailing.equalToSuperview()
         }
     }
@@ -59,9 +63,8 @@ class ForgotPasswordViewController: UIViewController {
         view.addSubview(contentView)
         
         contentView.snp.makeConstraints { make in
-            make.top.equalTo(labels.snp.bottom).offset(48)
+            make.top.lessThanOrEqualTo(labels.snp.bottom).offset(screenHeight*50/812)
             make.leading.trailing.bottom.equalToSuperview()
-            make.height.equalToSuperview().multipliedBy(0.713)
         }
     }
     
@@ -69,8 +72,8 @@ class ForgotPasswordViewController: UIViewController {
         contentView.addSubview(emailTextField)
         
         emailTextField.snp.makeConstraints{ make in
-            make.top.equalTo(contentView).offset(24)
-            make.leading.trailing.equalTo(contentView).inset(24)
+            make.top.lessThanOrEqualToSuperview().offset(screenHeight*24/812)
+            make.leading.trailing.equalToSuperview().inset(screenWidth*24/375)
         }
     }
     
@@ -78,8 +81,8 @@ class ForgotPasswordViewController: UIViewController {
         contentView.addSubview(button)
         
         button.snp.makeConstraints { (make) in
-            make.top.equalTo(emailTextField.snp.bottom).offset(30)
-            make.leading.trailing.equalToSuperview().inset(24)
+            make.top.lessThanOrEqualTo(emailTextField.snp.bottom).offset(screenHeight*24/812)
+            make.leading.trailing.equalToSuperview().inset(screenWidth*24/375)
         }
     }
     

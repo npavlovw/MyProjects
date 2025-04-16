@@ -8,13 +8,13 @@
 import UIKit
 import SnapKit
 
-class VerificationViewController: UIViewController {
+class VerificationViewController: UIViewController, UITextFieldDelegate {
     
-    lazy var backButton = BackButton(target: self, action: #selector(backToLForgotPassword))
-    lazy var images = CustomImageView(customVectorName: "orangeVector")
-    lazy var mainLabels = MainLabels(title: "Verification", titleSize: 30, textColor: .white, subtitle: "We have sent a code to your email", spacing: 4)
+    private lazy var backButton = BackButton(target: self, action: #selector(backToForgotPassword))
+    private lazy var images = CustomImageView(customVectorName: "orangeVector")
+    private lazy var mainLabels = MainLabels(title: "Verification", titleSize: 30, textColor: .white, subtitle: "We have sent a code to your email", spacing: 4)
     var receivedText: String?
-    lazy var emailCode: UILabel = {
+    private lazy var emailCode: UILabel = {
         let label = UILabel()
         label.text = receivedText
         label.textColor = .white
@@ -22,8 +22,8 @@ class VerificationViewController: UIViewController {
         label.font = UIFont.systemFont(ofSize: 16, weight: .bold)
         return label
     }()
-    lazy var contentView = customContentView()
-    lazy var codeLabel: UILabel = {
+    private lazy var contentView = CustomContentView()
+    private lazy var codeLabel: UILabel = {
         let codeLabel = UILabel()
         codeLabel.text = "CODE"
         codeLabel.font = UIFont.systemFont(ofSize: 13, weight: .regular)
@@ -32,7 +32,7 @@ class VerificationViewController: UIViewController {
     }()
     private var timer: Timer?
     private var secondsLeft = 60
-    lazy var resendCodeButton: UIButton = {
+    private lazy var resendCodeButton: UIButton = {
         let button = UIButton(type: .system)
         button.isEnabled = false
         button.setTitle("Reset", for: .normal)
@@ -40,15 +40,25 @@ class VerificationViewController: UIViewController {
         button.titleLabel?.font = UIFont.systemFont(ofSize: 14, weight: .regular)
         return button
     }()
-    lazy var resendLabel: UILabel = {
+    private lazy var resendLabel: UILabel = {
         let label = UILabel()
         label.text = "in 60 sec"
         label.font = UIFont.systemFont(ofSize: 14, weight: .regular)
         label.textColor = .gray
         return label
     }()
+    private lazy var numbersTextFields: UIStackView = {
+        let stack = UIStackView()
+        stack.axis = .horizontal
+        stack.spacing = 26
+        stack.distribution = .fillEqually
+        return stack
+    }()
+    private lazy var codeTextFields: [UITextField] = []
+    private lazy var verifyButton = MainButton(textButton: "VERIFY", target: self, action: #selector(verifyButtonTupped))
+    let screenWidth = UIScreen.main.bounds.width
+    let screenHeight = UIScreen.main.bounds.height
     
-
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .logInBackground
@@ -64,6 +74,8 @@ class VerificationViewController: UIViewController {
         setupContentView()
         setupCodeLabel()
         setupResendCode()
+        setNumbersTextFields()
+        setupVerifyButton()
         startTimer()
     }
    
@@ -79,18 +91,19 @@ class VerificationViewController: UIViewController {
         view.addSubview(backButton)
         
         backButton.snp.makeConstraints { make in
-            make.top.equalToSuperview().inset(50)
-            make.leading.equalToSuperview().inset(24)
+            make.top.lessThanOrEqualToSuperview().inset(screenHeight*50/812)
+            make.leading.equalToSuperview().inset(screenWidth*24/375)
+            make.height.equalTo(screenHeight*50/812)
+            make.width.equalTo(screenHeight*50/812)
         }
     }
     
-    private func setupLabels() {
+    private func setupLabels(){
         view.addSubview(mainLabels)
-
+        
         mainLabels.snp.makeConstraints { make in
-            make.top.equalToSuperview().offset(120)
-            make.leading.trailing.equalToSuperview()
-            make.height.equalTo(60)
+            make.top.lessThanOrEqualToSuperview().offset(screenHeight*120/812)
+            make.leading.trailing.equalToSuperview().inset(screenWidth*24/375)
         }
     }
     
@@ -107,9 +120,8 @@ class VerificationViewController: UIViewController {
         view.addSubview(contentView)
         
         contentView.snp.makeConstraints { make in
-            make.top.equalTo(mainLabels.snp.bottom).offset(48)
+            make.top.lessThanOrEqualTo(mainLabels.snp.bottom).offset(screenHeight*50/812)
             make.leading.trailing.bottom.equalToSuperview()
-            make.height.equalToSuperview().multipliedBy(0.713)
         }
     }
     
@@ -164,6 +176,78 @@ class VerificationViewController: UIViewController {
         resendLabel.text = "in \(secondsLeft) sec"
     }
     
+    private func setNumbersTextFields() {
+        for i in 0..<4 {
+            let textField = UITextField()
+            textField.tag = i
+            textField.textAlignment = .center
+            textField.font = UIFont.systemFont(ofSize: 16, weight: .bold)
+            textField.keyboardType = .numberPad
+            textField.layer.cornerRadius = 10
+            textField.clipsToBounds = true
+            textField.backgroundColor = UIColor(red: 240/255, green: 245/255, blue: 250/255, alpha: 1)
+            textField.delegate = self
+            textField.addTarget(self, action: #selector(textFieldDidChange), for: .editingChanged)
+            
+            codeTextFields.append(textField)
+            numbersTextFields.addArrangedSubview(textField)
+        }
+        
+        contentView.addSubview(numbersTextFields)
+        
+        numbersTextFields.snp.makeConstraints { make in
+            make.top.lessThanOrEqualTo(codeLabel.snp.bottom).offset(screenHeight*8/812)
+            make.leading.trailing.equalToSuperview().inset(screenWidth*24/375)
+            make.height.equalTo(screenHeight*62/812)
+        }
+    }
+    
+    private func setupVerifyButton() {
+        contentView.addSubview(verifyButton)
+        
+        verifyButton.snp.makeConstraints { make in
+            make.top.lessThanOrEqualTo(numbersTextFields.snp.bottom).offset(screenHeight*30/812)
+            make.leading.trailing.equalToSuperview().inset(screenWidth*24/375)
+        }
+    }
+    
+    //Действие для убирания клавиатуры
+    private func setupKeyboardDismissGesture() {
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(hideKeyboard))
+        tapGesture.cancelsTouchesInView = false
+        contentView.addGestureRecognizer(tapGesture)
+    }
+    
+    @objc private func hideKeyboard() {
+        view.endEditing(true)
+    }
+    
+    @objc private func textFieldDidChange(_ textField: UITextField) {
+        guard let text = textField.text else { return }
+        
+        // если введена цифра — переходим к следующему полю
+        if text.count == 1 {
+            let nextTag = textField.tag + 1
+            if nextTag < codeTextFields.count {
+                codeTextFields[nextTag].becomeFirstResponder()
+            } else {
+                textField.resignFirstResponder() // если последнее — убираем фокус
+            }
+        }
+        // если удаление — возвращаемся назад
+        else if text.count == 0 {
+            let prevTag = textField.tag - 1
+            if prevTag >= 0 {
+                codeTextFields[prevTag].becomeFirstResponder()
+            }
+        }
+        // ограничиваем ввод до 1 символа
+        if text.count > 1 {
+            textField.text = String(text.prefix(1))
+        }
+    }
+
+    
     @objc private func updateTimer() {
         secondsLeft -= 1
         updateButtonTitle()
@@ -187,7 +271,7 @@ class VerificationViewController: UIViewController {
         }
     }
     
-    @objc private func backToLForgotPassword() {
+    @objc private func backToForgotPassword() {
         let forgotPasswordVC = ForgotPasswordViewController()
         forgotPasswordVC.modalPresentationStyle = .fullScreen
         present(forgotPasswordVC, animated: false)
@@ -196,5 +280,9 @@ class VerificationViewController: UIViewController {
     @objc private func resendTapped() {
         print("Таймер запущен заново")
         startTimer()
+    }
+    
+    @objc private func verifyButtonTupped() {
+        print("Verify button tupped")
     }
 }

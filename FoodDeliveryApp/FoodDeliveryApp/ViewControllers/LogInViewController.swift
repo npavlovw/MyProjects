@@ -12,9 +12,16 @@ class LogInViewController: UIViewController {
     
     private lazy var images = CustomImageView(customVectorName: "Vector")
     private lazy var mainLabels = MainLabels(title: "Log In", titleSize: 30, textColor: .white, subtitle: "Please sign in to your existing account", spacing: 3)
-    private lazy var contentView = customContentView()
+    private lazy var contentView = CustomContentView()
     private lazy var emailField = loginTextFieldView(name: "EMAIL", placeholder: "example@gmail.com")
     private lazy var passwordField = PasswordTextField(name: "PASSWORD", placeholder: "**********")
+    private lazy var textFieldsStackView: UIStackView = {
+        let stackView = UIStackView(arrangedSubviews: [emailField, passwordField])
+        stackView.axis = .vertical
+        stackView.spacing = 24
+        stackView.distribution = .fillEqually
+        return stackView
+    }()
     private lazy var forgotButton: UIButton = {
         forgotButton = UIButton()
         forgotButton.setTitle("Forgot Password", for: .normal)
@@ -58,17 +65,17 @@ class LogInViewController: UIViewController {
         signInLabel.translatesAutoresizingMaskIntoConstraints = false
         return signInLabel
     }()
-    private lazy var signInButton: UIButton = {
-        signInButton = UIButton()
-        signInButton.setTitle("SIGN UP", for: .normal)
-        signInButton.setTitleColor( .appOrange, for: .normal)
-        signInButton.titleLabel?.font = UIFont.systemFont(ofSize: 14)
-        signInButton.translatesAutoresizingMaskIntoConstraints = false
-        signInButton.addTarget(self, action: #selector(signInTupped), for: .touchUpInside)
-        return signInButton
+    private lazy var signUpButton: UIButton = {
+        signUpButton = UIButton()
+        signUpButton.setTitle("SIGN UP", for: .normal)
+        signUpButton.setTitleColor( .appOrange, for: .normal)
+        signUpButton.titleLabel?.font = UIFont.systemFont(ofSize: 14)
+        signUpButton.translatesAutoresizingMaskIntoConstraints = false
+        signUpButton.addTarget(self, action: #selector(signUpTupped), for: .touchUpInside)
+        return signUpButton
     }()
     private lazy var signInStack: UIStackView = {
-        signInStack = UIStackView(arrangedSubviews: [signInLabel, signInButton])
+        signInStack = UIStackView(arrangedSubviews: [signInLabel, signUpButton])
         signInStack.axis = .horizontal
         signInStack.spacing = 10
         signInStack.alignment = .center
@@ -94,13 +101,12 @@ class LogInViewController: UIViewController {
         setupImage()
         setupLabels()
         setContentView()
-        setEmail()
-        setPassword()
+        setTextFields()
         setupKeyboardObservers()
         setupForgotButton()
         setupRememberMeLabel()
         setupLoginButton()
-        setupSignIn()
+        setupSignInStack()
         setupOrLabel()
         setAuthBtns()
         setupKeyboardDismissGesture()
@@ -132,23 +138,12 @@ class LogInViewController: UIViewController {
         }
     }
     
-    private func setEmail() {
-        contentView.addSubview(emailField)
+    private func setTextFields() {
+        contentView.addSubview(textFieldsStackView)
         
-        emailField.snp.makeConstraints{ make in
+        textFieldsStackView.snp.makeConstraints { make in
             make.top.lessThanOrEqualToSuperview().offset(screenHeight*24/812)
-            make.leading.trailing.equalTo(contentView).inset(screenWidth*24/375)
-            make.height.equalTo(screenHeight*86/812)
-        }
-    }
-    
-    private func setPassword() {
-        contentView.addSubview(passwordField)
-        
-        passwordField.snp.makeConstraints{ make in
-            make.top.lessThanOrEqualTo(emailField.snp.bottom).offset(screenHeight*24/812)
             make.leading.trailing.equalToSuperview().inset(screenWidth*24/375)
-            make.height.equalTo(screenHeight*86/812)
         }
     }
     
@@ -164,8 +159,8 @@ class LogInViewController: UIViewController {
         contentView.addSubview(forgotButton)
         
         forgotButton.snp.makeConstraints { make in
-            make.top.lessThanOrEqualTo(passwordField.snp.bottom).offset(screenHeight*25/812)
-            make.trailing.equalTo(passwordField.snp.trailing)
+            make.top.lessThanOrEqualTo(textFieldsStackView.snp.bottom).offset(screenHeight*25/812)
+            make.trailing.equalTo(textFieldsStackView.snp.trailing)
         }
     }
     
@@ -174,7 +169,7 @@ class LogInViewController: UIViewController {
         
         checkboxStack.snp.makeConstraints { make in
             make.centerY.equalTo(forgotButton.snp.centerY)
-            make.leading.equalTo(passwordField)
+            make.leading.equalTo(textFieldsStackView)
         }
     }
     
@@ -182,12 +177,12 @@ class LogInViewController: UIViewController {
         contentView.addSubview(loginButton)
         
         loginButton.snp.makeConstraints { make in
-            make.top.lessThanOrEqualTo(forgotButton.snp.bottom).offset(screenHeight*14/812)
+            make.top.lessThanOrEqualTo(forgotButton.snp.bottom).offset(screenHeight*30/812)
             make.leading.trailing.equalToSuperview().inset(screenWidth*24/375)
         }
     }
     
-    private func setupSignIn(){
+    private func setupSignInStack(){
         contentView.addSubview(signInStack)
         
         signInStack.snp.makeConstraints { make in
@@ -246,6 +241,9 @@ class LogInViewController: UIViewController {
         return btn
     }
     
+    deinit {
+                        NotificationCenter.default.removeObserver(self)
+                    }
     //Действие для убирания клавиатуры
     private func setupKeyboardDismissGesture() {
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(hideKeyboard))
@@ -253,10 +251,6 @@ class LogInViewController: UIViewController {
         view.addGestureRecognizer(tapGesture)
     }
     
-    deinit {
-                    NotificationCenter.default.removeObserver(self)
-                }
-
     @objc private func keyboardWillShow(notification: NSNotification) {
         if let keyboardFrame = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue {
             let keyboardHeight = keyboardFrame.cgRectValue.height
@@ -281,11 +275,13 @@ class LogInViewController: UIViewController {
         }
     
     @objc func loginTupped() {
-        print("Login tupped")
+        print("LoginTupped")
     }
     
-    @objc func signInTupped() {
-        print("SignIn tupped")
+    @objc func signUpTupped() {
+        let signUpVC = SignUpViewController()
+        signUpVC.modalPresentationStyle = .fullScreen
+        present(signUpVC, animated: true)
     }
     
     @objc private func authButtonTapped(_ sender: UIButton) {

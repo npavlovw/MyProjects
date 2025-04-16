@@ -8,7 +8,7 @@
 import UIKit
 import SnapKit
 
-final class customContentView: UIView {
+final class CustomContentView: UIView {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
