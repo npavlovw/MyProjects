@@ -28,7 +28,6 @@ final class PasswordTextField: UIView {
         textField.font = UIFont.systemFont(ofSize: 14, weight: .regular)
         textField.textColor = .black
         textField.layer.cornerRadius = 10
-        textField.keyboardType = .emailAddress
         textField.isSecureTextEntry = true
         textField.borderStyle = .none
         textField.backgroundColor = UIColor(red: 240/255, green: 245/255, blue: 250/255, alpha: 1)
