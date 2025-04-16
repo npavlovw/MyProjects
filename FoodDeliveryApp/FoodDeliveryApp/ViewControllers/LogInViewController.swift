@@ -14,36 +14,7 @@ class LogInViewController: UIViewController {
     private lazy var mainLabels = MainLabels(title: "Log In", titleSize: 30, textColor: .white, subtitle: "Please sign in to your existing account", spacing: 3)
     private lazy var contentView = customContentView()
     private lazy var emailField = loginTextFieldView(name: "EMAIL", placeholder: "example@gmail.com")
-    private lazy var passwordTextField: UITextField = {
-        passwordTextField = UITextField()
-        passwordTextField.placeholder = "**********"
-        passwordTextField.keyboardType = .emailAddress
-        passwordTextField.isSecureTextEntry = true
-        passwordTextField.translatesAutoresizingMaskIntoConstraints = false
-        passwordTextField.rightView = eyeButton
-        passwordTextField.rightViewMode = .always
-        passwordTextField.textColor = .black
-        passwordTextField.layer.cornerRadius = 10
-        passwordTextField.borderStyle = .none
-        passwordTextField.backgroundColor = UIColor(red: 240/255, green: 245/255, blue: 250/255, alpha: 1)
-        return passwordTextField
-    }()
-    private lazy var passwordLabel: UILabel = {
-        passwordLabel = UILabel()
-        passwordLabel.text = "PASSWORD"
-        passwordLabel.textColor = .black
-        passwordLabel.font = .systemFont(ofSize: 13, weight: .semibold)
-        passwordLabel.translatesAutoresizingMaskIntoConstraints = false
-        return passwordLabel
-    }()
-    private lazy var eyeButton: UIButton = {
-        eyeButton = UIButton()
-        eyeButton.setImage(UIImage(systemName: "eye"), for: .normal)
-        eyeButton.tintColor = .gray
-        eyeButton.translatesAutoresizingMaskIntoConstraints = false
-        eyeButton.addTarget(self, action: #selector(togglePasswordVisibility), for: .touchUpInside)
-        return eyeButton
-    }()
+    private lazy var passwordField = PasswordTextField(name: "PASSWORD", placeholder: "**********")
     private lazy var forgotButton: UIButton = {
         forgotButton = UIButton()
         forgotButton.setTitle("Forgot Password", for: .normal)
@@ -172,26 +143,12 @@ class LogInViewController: UIViewController {
     }
     
     private func setPassword() {
-        contentView.addSubview(passwordLabel)
-        passwordTextField.setLeftPaddingPoints(16)
-        passwordTextField.setRightPaddingPoints(16)
-        contentView.addSubview(passwordTextField)
-        passwordTextField.addSubview(eyeButton)
+        contentView.addSubview(passwordField)
         
-        passwordLabel.snp.makeConstraints { make in
+        passwordField.snp.makeConstraints{ make in
             make.top.lessThanOrEqualTo(emailField.snp.bottom).offset(screenHeight*24/812)
-            make.leading.equalToSuperview().offset(screenWidth*24/375)
-        }
-        passwordTextField.snp.makeConstraints { make in
-            make.top.lessThanOrEqualTo(passwordLabel.snp.bottom).offset(screenHeight*8/812)
             make.leading.trailing.equalToSuperview().inset(screenWidth*24/375)
-            make.height.equalTo(screenHeight*62/812)
-        }
-        eyeButton.snp.makeConstraints { make in
-            make.centerY.equalToSuperview()
-            make.trailing.equalToSuperview().inset(screenWidth*20/375)
-            make.height.equalTo(screenHeight*14/812)
-            make.width.equalTo(screenWidth*19/375)
+            make.height.equalTo(screenHeight*86/812)
         }
     }
     
@@ -207,8 +164,8 @@ class LogInViewController: UIViewController {
         contentView.addSubview(forgotButton)
         
         forgotButton.snp.makeConstraints { make in
-            make.top.lessThanOrEqualTo(passwordTextField.snp.bottom).offset(screenHeight*25/812)
-            make.trailing.equalTo(passwordTextField.snp.trailing)
+            make.top.lessThanOrEqualTo(passwordField.snp.bottom).offset(screenHeight*25/812)
+            make.trailing.equalTo(passwordField.snp.trailing)
         }
     }
     
@@ -217,7 +174,7 @@ class LogInViewController: UIViewController {
         
         checkboxStack.snp.makeConstraints { make in
             make.centerY.equalTo(forgotButton.snp.centerY)
-            make.leading.equalTo(passwordTextField)
+            make.leading.equalTo(passwordField)
         }
     }
     
@@ -299,11 +256,7 @@ class LogInViewController: UIViewController {
     deinit {
                     NotificationCenter.default.removeObserver(self)
                 }
-       
-    @objc func togglePasswordVisibility() {
-            passwordTextField.isSecureTextEntry.toggle()
-        }
-    
+
     @objc private func keyboardWillShow(notification: NSNotification) {
         if let keyboardFrame = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue {
             let keyboardHeight = keyboardFrame.cgRectValue.height
