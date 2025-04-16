@@ -102,13 +102,13 @@ class LogInViewController: UIViewController {
         setupLabels()
         setContentView()
         setTextFields()
-        setupKeyboardObservers()
         setupForgotButton()
         setupRememberMeLabel()
         setupLoginButton()
         setupSignInStack()
         setupOrLabel()
         setAuthBtns()
+        setupKeyboardObservers()
         setupKeyboardDismissGesture()
     }
     

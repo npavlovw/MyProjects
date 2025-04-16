@@ -39,6 +39,8 @@ class SignUpViewController: UIViewController {
         setupContentView()
         setupTextFieldStackView()
         setupSignInButton()
+        setupKeyboardObservers()
+        setupKeyboardDismissGesture()
     }
     
     private func setupBackButton() {
@@ -97,6 +99,14 @@ class SignUpViewController: UIViewController {
     }
     
     //Действие для убирания клавиатуры
+    private func setupKeyboardObservers() {
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow),
+                                               name: UIResponder.keyboardWillShowNotification, object: nil)
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide),
+                                               name: UIResponder.keyboardWillHideNotification, object: nil)
+    }
+    
     private func setupKeyboardDismissGesture() {
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(hideKeyboard))
         tapGesture.cancelsTouchesInView = false
@@ -127,5 +137,4 @@ class SignUpViewController: UIViewController {
     @objc private func signUpTupped() {
         print("Sign Up Tupped")
     }
-
 }

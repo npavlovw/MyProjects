@@ -28,6 +28,7 @@ class ForgotPasswordViewController: UIViewController {
         setupContentView()
         setupEmailTextField()
         setupButton()
+        setupKeyboardObservers()
         setupKeyboardDismissGesture()
     }
     
@@ -86,12 +87,32 @@ class ForgotPasswordViewController: UIViewController {
         }
     }
     
+    //Работа с клавиатурой
+    private func setupKeyboardObservers() {
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow),
+                                               name: UIResponder.keyboardWillShowNotification, object: nil)
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide),
+                                               name: UIResponder.keyboardWillHideNotification, object: nil)
+    }
+    
     private func setupKeyboardDismissGesture() {
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(hideKeyboard))
         tapGesture.cancelsTouchesInView = false
         view.addGestureRecognizer(tapGesture)
     }
-
+    
+    @objc private func keyboardWillShow(notification: NSNotification) {
+        if let keyboardFrame = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue {
+            let keyboardHeight = keyboardFrame.cgRectValue.height
+            view.frame.origin.y = -keyboardHeight / 5
+        }
+    }
+    
+    @objc private func keyboardWillHide(notification: NSNotification) {
+        view.frame.origin.y = 0
+    }
+    
     @objc private func hideKeyboard() {
         view.endEditing(true)
     }
