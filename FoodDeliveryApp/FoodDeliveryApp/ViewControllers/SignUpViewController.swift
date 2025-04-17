@@ -8,7 +8,7 @@
 import UIKit
 import SnapKit
 
-class SignUpViewController: UIViewController {
+class SignUpViewController: UIViewController, UIGestureRecognizerDelegate {
     
     private lazy var images = CustomImageView(customVectorName: "orangeVector")
     private lazy var backButton = BackButton(target: self, action: #selector(backToLoginScreen))
@@ -32,26 +32,25 @@ class SignUpViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .logInBackground
+        navigationController?.interactivePopGestureRecognizer?.delegate = self
 
+        setupUI()
+        setupKeyboardObservers()
+        setupKeyboardDismissGesture()
+    }
+    
+    private func setupUI() {
         setupImages()
         setupBackButton()
         setupMainLabels()
         setupContentView()
         setupTextFieldStackView()
         setupSignInButton()
-        setupKeyboardObservers()
-        setupKeyboardDismissGesture()
     }
     
     private func setupBackButton() {
-        view.addSubview(backButton)
-        
-        backButton.snp.makeConstraints { make in
-            make.top.lessThanOrEqualToSuperview().inset(screenHeight*50/812)
-            make.leading.equalToSuperview().inset(screenWidth*24/375)
-            make.height.equalTo(screenHeight*50/812)
-            make.width.equalTo(screenHeight*50/812)
-        }
+        let backBarButton = UIBarButtonItem(customView: backButton)
+        navigationItem.leftBarButtonItem = backBarButton
     }
     
     private func setupImages() {
@@ -129,9 +128,7 @@ class SignUpViewController: UIViewController {
     }
     
     @objc private func backToLoginScreen() {
-        let logInVC = LogInViewController()
-        logInVC.modalPresentationStyle = .fullScreen
-        present(logInVC, animated: false)
+        navigationController?.popViewController(animated: true)
     }
     
     @objc private func signUpTupped() {

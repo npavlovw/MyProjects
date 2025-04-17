@@ -8,7 +8,7 @@
 import UIKit
 import SnapKit
 
-class VerificationViewController: UIViewController, UITextFieldDelegate {
+class VerificationViewController: UIViewController, UITextFieldDelegate, UIGestureRecognizerDelegate {
     
     private lazy var backButton = BackButton(target: self, action: #selector(backToForgotPassword))
     private lazy var images = CustomImageView(customVectorName: "orangeVector")
@@ -62,6 +62,7 @@ class VerificationViewController: UIViewController, UITextFieldDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .logInBackground
+        navigationController?.interactivePopGestureRecognizer?.delegate = self
         
         setupUI()
     }
@@ -90,14 +91,8 @@ class VerificationViewController: UIViewController, UITextFieldDelegate {
     }
     
     private func setupBackButton() {
-        view.addSubview(backButton)
-        
-        backButton.snp.makeConstraints { make in
-            make.top.lessThanOrEqualToSuperview().inset(screenHeight*50/812)
-            make.leading.equalToSuperview().inset(screenWidth*24/375)
-            make.height.equalTo(screenHeight*50/812)
-            make.width.equalTo(screenHeight*50/812)
-        }
+        let backBarButton = UIBarButtonItem(customView: backButton)
+        navigationItem.leftBarButtonItem = backBarButton
     }
     
     private func setupLabels(){
@@ -292,9 +287,7 @@ class VerificationViewController: UIViewController, UITextFieldDelegate {
     }
     
     @objc private func backToForgotPassword() {
-        let forgotPasswordVC = ForgotPasswordViewController()
-        forgotPasswordVC.modalPresentationStyle = .fullScreen
-        present(forgotPasswordVC, animated: false)
+        navigationController?.popViewController(animated: true)
     }
     
     @objc private func resendTapped() {

@@ -6,8 +6,9 @@
 //
 
 import UIKit
+import SnapKit
 
-class ForgotPasswordViewController: UIViewController {
+class ForgotPasswordViewController: UIViewController, UIGestureRecognizerDelegate {
     
     lazy var images = CustomImageView(customVectorName: "orangeVector")
     lazy var backButton = BackButton(target: self, action: #selector(backToLoginScreen))
@@ -21,15 +22,20 @@ class ForgotPasswordViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .logInBackground
+        navigationController?.interactivePopGestureRecognizer?.delegate = self
         
+        setupUI()
+        setupKeyboardObservers()
+        setupKeyboardDismissGesture()
+    }
+    
+    private func setupUI() {
         setupImages()
         setupBackButton()
         setupLabels()
         setupContentView()
         setupEmailTextField()
         setupButton()
-        setupKeyboardObservers()
-        setupKeyboardDismissGesture()
     }
     
     private func setupImages() {
@@ -41,14 +47,8 @@ class ForgotPasswordViewController: UIViewController {
     }
     
     private func setupBackButton() {
-        view.addSubview(backButton)
-        
-        backButton.snp.makeConstraints { make in
-            make.top.lessThanOrEqualToSuperview().inset(screenHeight*50/812)
-            make.leading.equalToSuperview().inset(screenWidth*24/375)
-            make.height.equalTo(screenHeight*50/812)
-            make.width.equalTo(screenHeight*50/812)
-        }
+        let backBarButton = UIBarButtonItem(customView: backButton)
+        navigationItem.leftBarButtonItem = backBarButton
     }
     
     private func setupLabels(){
@@ -134,14 +134,11 @@ class ForgotPasswordViewController: UIViewController {
     private func goToNextScreen() {
         let verificationVC = VerificationViewController()
         verificationVC.receivedText = emailTextField.textField.text ?? ""
-        verificationVC.modalPresentationStyle = .fullScreen
-        present(verificationVC, animated: true)
+        navigationController?.pushViewController(verificationVC, animated: true)
     }
     
     @objc private func backToLoginScreen() {
-        let loginVC = LogInViewController()
-        loginVC.modalPresentationStyle = .fullScreen
-        present(loginVC, animated: false)
+        navigationController?.popViewController(animated: true)
     }
 
 }

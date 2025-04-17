@@ -152,8 +152,8 @@ class OnboardingViewController: UIViewController {
     }
     
     private func goToLogInScreen() {
+        UserDefaults.standard.set(true, forKey: "hasCompletedOnboarding")
         let logInVC = LogInViewController()
-        logInVC.modalPresentationStyle = .fullScreen
-        present(logInVC, animated: true, completion: nil)
+        navigationController?.setViewControllers([logInVC], animated: true)
     }
 }

@@ -98,6 +98,12 @@ class LogInViewController: UIViewController {
         super.viewDidLoad()
         view.backgroundColor = .logInBackground
         
+        setupUI()
+        setupKeyboardObservers()
+        setupKeyboardDismissGesture()
+    }
+    
+    private func setupUI() {
         setupImage()
         setupLabels()
         setContentView()
@@ -108,8 +114,6 @@ class LogInViewController: UIViewController {
         setupSignInStack()
         setupOrLabel()
         setAuthBtns()
-        setupKeyboardObservers()
-        setupKeyboardDismissGesture()
     }
     
     private func setupImage() {
@@ -230,7 +234,7 @@ class LogInViewController: UIViewController {
         return stack
     }
     
-    private func getAuthBtn(icon: UIImage, size: CGFloat = 62) ->UIButton {
+    private func getAuthBtn(icon: UIImage, size: CGFloat = 62) -> UIButton {
         let btn = UIButton()
         btn.translatesAutoresizingMaskIntoConstraints = false
         btn.heightAnchor.constraint(equalToConstant: size).isActive = true
@@ -244,6 +248,7 @@ class LogInViewController: UIViewController {
     deinit {
                         NotificationCenter.default.removeObserver(self)
                     }
+    
     //Действие для убирания клавиатуры
     private func setupKeyboardDismissGesture() {
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(hideKeyboard))
@@ -264,8 +269,7 @@ class LogInViewController: UIViewController {
     
     @objc private func pressForgotButton() {
         let forgotPasswordVC = ForgotPasswordViewController()
-        forgotPasswordVC.modalPresentationStyle = .fullScreen
-        present(forgotPasswordVC, animated: true, completion: nil)
+        navigationController?.pushViewController(forgotPasswordVC, animated: true)
     }
     
     @objc func toggleCheckbox() {
@@ -280,8 +284,7 @@ class LogInViewController: UIViewController {
     
     @objc func signUpTupped() {
         let signUpVC = SignUpViewController()
-        signUpVC.modalPresentationStyle = .fullScreen
-        present(signUpVC, animated: true)
+        navigationController?.pushViewController(signUpVC, animated: true)
     }
     
     @objc private func authButtonTapped(_ sender: UIButton) {
