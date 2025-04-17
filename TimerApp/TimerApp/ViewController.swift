@@ -30,7 +30,7 @@ final class TimerViewController: UIViewController {
     
     private let calculateButton: UIButton = {
         let button = UIButton()
-        button.setTitle("Calculate", for: .normal)
+        button.setTitle("Рассчитать", for: .normal)
         button.setTitleColor(.white, for: .normal)
         button.backgroundColor = .systemBlue
         button.layer.cornerRadius = 10
@@ -39,7 +39,7 @@ final class TimerViewController: UIViewController {
     
     private let resultLabel: UILabel = {
         let label = UILabel()
-        label.text = "Set time to see result"
+        label.text = "Здесь будет результат"
         label.font = UIFont.systemFont(ofSize: 18, weight: .medium)
         label.textColor = .darkGray
         label.textAlignment = .center
@@ -118,6 +118,6 @@ final class TimerViewController: UIViewController {
         let hours = diffMinutes / 60
         let minutes = diffMinutes % 60
         
-        resultLabel.text = "Set your timer for: \(hours)h \(minutes)m"
+        resultLabel.text = "Установите таймер на \(hours)h \(minutes)m"
     }
 }
