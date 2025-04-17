@@ -10,6 +10,7 @@ import SnapKit
 
 class ForgotPasswordViewController: UIViewController, UIGestureRecognizerDelegate {
     
+    //MARK: UI-components
     lazy var images = CustomImageView(customVectorName: "orangeVector")
     lazy var backButton = BackButton(target: self, action: #selector(backToLoginScreen))
     lazy var labels = MainLabels(title: "Forgot Password", titleSize: 30, textColor: .white, subtitle: "Please sign in to your existing account", spacing: 4)
@@ -19,75 +20,77 @@ class ForgotPasswordViewController: UIViewController, UIGestureRecognizerDelegat
     let screenWidth = UIScreen.main.bounds.width
     let screenHeight = UIScreen.main.bounds.height
 
+    //MARK: Lifecycles
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .logInBackground
         navigationController?.interactivePopGestureRecognizer?.delegate = self
         
-        setupUI()
+        setupConstraints()
+        setupCustomBackButton()
         setupKeyboardObservers()
         setupKeyboardDismissGesture()
     }
     
-    private func setupUI() {
-        setupImages()
-        setupBackButton()
-        setupLabels()
-        setupContentView()
-        setupEmailTextField()
-        setupButton()
-    }
-    
-    private func setupImages() {
+    private func setupConstraints() {
         view.addSubview(images)
+        view.addSubview(labels)
+        view.addSubview(contentView)
+        contentView.addSubview(emailTextField)
+        contentView.addSubview(button)
         
         images.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
-    }
-    
-    private func setupBackButton() {
-        let backBarButton = UIBarButtonItem(customView: backButton)
-        navigationItem.leftBarButtonItem = backBarButton
-    }
-    
-    private func setupLabels(){
-        view.addSubview(labels)
-        
         labels.snp.makeConstraints { make in
             make.top.lessThanOrEqualToSuperview().offset(screenHeight*120/812)
             make.leading.trailing.equalToSuperview()
         }
-    }
-    
-    private func setupContentView() {
-        view.addSubview(contentView)
-        
         contentView.snp.makeConstraints { make in
             make.top.lessThanOrEqualTo(labels.snp.bottom).offset(screenHeight*50/812)
             make.leading.trailing.bottom.equalToSuperview()
         }
-    }
-    
-    private func setupEmailTextField() {
-        contentView.addSubview(emailTextField)
-        
         emailTextField.snp.makeConstraints{ make in
             make.top.lessThanOrEqualToSuperview().offset(screenHeight*24/812)
             make.leading.trailing.equalToSuperview().inset(screenWidth*24/375)
         }
-    }
-    
-    private func setupButton(){
-        contentView.addSubview(button)
-        
         button.snp.makeConstraints { (make) in
             make.top.lessThanOrEqualTo(emailTextField.snp.bottom).offset(screenHeight*24/812)
             make.leading.trailing.equalToSuperview().inset(screenWidth*24/375)
         }
     }
     
-    //Работа с клавиатурой
+    private func setupCustomBackButton() {
+        let backBarButton = UIBarButtonItem(customView: backButton)
+        navigationItem.leftBarButtonItem = backBarButton
+    }
+    
+    //MARK: Logics
+    @objc private func buttonTupped() {
+            if let text = emailTextField.textField.text, text.isEmpty {
+                let alert = UIAlertController(title: "Ошибка", message: "Введите email", preferredStyle: .alert)
+                    
+                    let okAction = UIAlertAction(title: "ОК", style: .default, handler: nil)
+                    alert.addAction(okAction)
+                    
+                    present(alert, animated: true, completion: nil)
+                } else {
+                goToNextScreen()
+            }
+            
+        }
+        
+    private func goToNextScreen() {
+        let verificationVC = VerificationViewController()
+        verificationVC.receivedText = emailTextField.textField.text ?? ""
+        navigationController?.pushViewController(verificationVC, animated: true)
+    }
+        
+    @objc private func backToLoginScreen() {
+        navigationController?.popViewController(animated: true)
+    }
+    
+    //MARK: Keyboard
     private func setupKeyboardObservers() {
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow),
                                                name: UIResponder.keyboardWillShowNotification, object: nil)
@@ -116,29 +119,4 @@ class ForgotPasswordViewController: UIViewController, UIGestureRecognizerDelegat
     @objc private func hideKeyboard() {
         view.endEditing(true)
     }
-    
-    @objc private func buttonTupped() {
-        if let text = emailTextField.textField.text, text.isEmpty {
-            let alert = UIAlertController(title: "Ошибка", message: "Введите email", preferredStyle: .alert)
-                
-                let okAction = UIAlertAction(title: "ОК", style: .default, handler: nil)
-                alert.addAction(okAction)
-                
-                present(alert, animated: true, completion: nil)
-            } else {
-            goToNextScreen()
-        }
-        
-    }
-    
-    private func goToNextScreen() {
-        let verificationVC = VerificationViewController()
-        verificationVC.receivedText = emailTextField.textField.text ?? ""
-        navigationController?.pushViewController(verificationVC, animated: true)
-    }
-    
-    @objc private func backToLoginScreen() {
-        navigationController?.popViewController(animated: true)
-    }
-
 }

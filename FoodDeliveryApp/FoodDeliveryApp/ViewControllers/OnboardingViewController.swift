@@ -14,6 +14,7 @@ struct OnboardingStep {
 
 class OnboardingViewController: UIViewController {
     
+    //MARK: UI-Components
     lazy var mainView: UIView = {
         mainView = UIView()
         mainView.backgroundColor = .appGrey
@@ -41,7 +42,6 @@ class OnboardingViewController: UIViewController {
         skipButton.translatesAutoresizingMaskIntoConstraints = false
         return skipButton
     }()
-    
     private let steps: [OnboardingStep] = [
         OnboardingStep(title: "All your favorites"),
         OnboardingStep(title: "All your favorites"),
@@ -52,25 +52,24 @@ class OnboardingViewController: UIViewController {
     let screenWidth = UIScreen.main.bounds.width
     let screenHeight = UIScreen.main.bounds.height
     
-    
+    //MARK: Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
         
-        setView()
+        setupConstraints()
+        pageControl.addTarget(self, action: #selector(pageControlChanged(_:)), for: .valueChanged)
+        skipButton.addTarget(self, action: #selector(skipTapped), for: .touchUpInside)
         updateUIForCurrentStep()
     }
     
-    private func setView(){
-        setMainView()
-        setMainLabel()
-        setPageControl()
-        setNextButton()
-        setSkipButton()
-    }
-    
-    private func setMainView() {
+    //MARK: Constraints
+    private func setupConstraints() {
         view.addSubview(mainView)
+        view.addSubview(mainLabel)
+        view.addSubview(pageControl)
+        view.addSubview(nextButton)
+        view.addSubview(skipButton)
         
         mainView.snp.makeConstraints { make in
             make.height.equalTo(screenHeight*292/812)
@@ -78,49 +77,27 @@ class OnboardingViewController: UIViewController {
             make.centerX.equalToSuperview()
             make.top.lessThanOrEqualToSuperview().offset(screenHeight*114/812)
         }
-    }
-    
-    private func setMainLabel(){
-        view.addSubview(mainLabel)
-        
         mainLabel.snp.makeConstraints { make in
             make.centerX.equalToSuperview()
             make.top.equalTo(mainView.snp.bottom).offset(screenHeight*63/812)
             make.leading.trailing.equalToSuperview().inset(24)
         }
-    }
-    
-    private func setPageControl(){
-        view.addSubview(pageControl)
-        
         pageControl.snp.makeConstraints { make in
             make.centerX.equalToSuperview()
             make.top.equalTo(mainLabel.snp.bottom).offset(screenHeight*32/812)
         }
-        
-        pageControl.addTarget(self, action: #selector(pageControlChanged(_:)), for: .valueChanged)
-    }
-    
-    private func setNextButton(){
-        view.addSubview(nextButton)
-        
         nextButton.snp.makeConstraints { make in
             make.top.lessThanOrEqualTo(pageControl.snp.bottom).offset(screenHeight*69/812)
             make.leading.trailing.equalToSuperview().inset(24)
         }
-    }
-    
-    private func setSkipButton(){
-        view.addSubview(skipButton)
-        
         skipButton.snp.makeConstraints { make in
             make.centerX.equalToSuperview()
             make.top.equalTo(nextButton.snp.bottom).offset(screenHeight*16/812)
             make.bottom.equalToSuperview().inset(screenHeight*24/812)
         }
-        skipButton.addTarget(self, action: #selector(skipTapped), for: .touchUpInside)
     }
-        
+ 
+    //MARK: Logics
     private func updateUIForCurrentStep() {
         let step = steps[currentStepIndex]
         mainLabel.titleLabel.text = step.title

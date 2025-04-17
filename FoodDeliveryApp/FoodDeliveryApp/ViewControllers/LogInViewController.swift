@@ -10,6 +10,7 @@ import SnapKit
 
 class LogInViewController: UIViewController {
     
+    //MARK: UI-components
     private lazy var images = CustomImageView(customVectorName: "Vector")
     private lazy var mainLabels = MainLabels(title: "Log In", titleSize: 30, textColor: .white, subtitle: "Please sign in to your existing account", spacing: 3)
     private lazy var contentView = CustomContentView()
@@ -94,120 +95,65 @@ class LogInViewController: UIViewController {
     let screenWidth = UIScreen.main.bounds.width
     let screenHeight = UIScreen.main.bounds.height
     
+    //MARK: Lifecycles
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .logInBackground
         
-        setupUI()
+        setupConstraints()
         setupKeyboardObservers()
         setupKeyboardDismissGesture()
     }
     
-    private func setupUI() {
-        setupImage()
-        setupLabels()
-        setContentView()
-        setTextFields()
-        setupForgotButton()
-        setupRememberMeLabel()
-        setupLoginButton()
-        setupSignInStack()
-        setupOrLabel()
-        setAuthBtns()
-    }
-    
-    private func setupImage() {
+    //MARK: Constraints
+    private func setupConstraints() {
         view.addSubview(images)
-        
+        view.addSubview(mainLabels)
+        view.addSubview(contentView)
+        contentView.addSubview(textFieldsStackView)
+        contentView.addSubview(forgotButton)
+        contentView.addSubview(checkboxStack)
+        contentView.addSubview(loginButton)
+        contentView.addSubview(signInStack)
+        contentView.addSubview(orLabel)
+        let authButtonsStack = getAuthBtns()
+        contentView.addSubview(authButtonsStack)
+
         images.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
-    }
-    
-    private func setupLabels() {
-        view.addSubview(mainLabels)
-
         mainLabels.snp.makeConstraints { make in
             make.top.lessThanOrEqualToSuperview().offset(screenHeight*120/812)
             make.leading.trailing.equalToSuperview().inset(screenWidth*24/375)
         }
-    }
-    
-    private func setContentView() {
-        view.addSubview(contentView)
-        
         contentView.snp.makeConstraints { make in
             make.top.lessThanOrEqualTo(mainLabels.snp.bottom).offset(screenHeight*50/812)
             make.leading.trailing.bottom.equalToSuperview()
         }
-    }
-    
-    private func setTextFields() {
-        contentView.addSubview(textFieldsStackView)
-        
         textFieldsStackView.snp.makeConstraints { make in
             make.top.lessThanOrEqualToSuperview().offset(screenHeight*24/812)
             make.leading.trailing.equalToSuperview().inset(screenWidth*24/375)
         }
-    }
-    
-    private func setupKeyboardObservers() {
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow),
-                                               name: UIResponder.keyboardWillShowNotification, object: nil)
-        
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide),
-                                               name: UIResponder.keyboardWillHideNotification, object: nil)
-    }
-    
-    private func setupForgotButton() {
-        contentView.addSubview(forgotButton)
-        
         forgotButton.snp.makeConstraints { make in
             make.top.lessThanOrEqualTo(textFieldsStackView.snp.bottom).offset(screenHeight*25/812)
             make.trailing.equalTo(textFieldsStackView.snp.trailing)
         }
-    }
-    
-    private func setupRememberMeLabel() {
-        contentView.addSubview(checkboxStack)
-        
         checkboxStack.snp.makeConstraints { make in
             make.centerY.equalTo(forgotButton.snp.centerY)
             make.leading.equalTo(textFieldsStackView)
         }
-    }
-    
-    private func setupLoginButton() {
-        contentView.addSubview(loginButton)
-        
         loginButton.snp.makeConstraints { make in
             make.top.lessThanOrEqualTo(forgotButton.snp.bottom).offset(screenHeight*30/812)
             make.leading.trailing.equalToSuperview().inset(screenWidth*24/375)
         }
-    }
-    
-    private func setupSignInStack(){
-        contentView.addSubview(signInStack)
-        
         signInStack.snp.makeConstraints { make in
             make.top.lessThanOrEqualTo(loginButton.snp.bottom).offset(screenHeight*38/812)
             make.centerX.equalToSuperview()
         }
-    }
-    
-    private func setupOrLabel(){
-        contentView.addSubview(orLabel)
-        
         orLabel.snp.makeConstraints { make in
             make.centerX.equalToSuperview()
             make.top.lessThanOrEqualTo(signInStack.snp.bottom).offset(screenHeight*27/812)
         }
-    }
-    
-    private func setAuthBtns(){
-        let authButtonsStack = getAuthBtns()
-        contentView.addSubview(authButtonsStack)
-        
         authButtonsStack.snp.makeConstraints { make in
             make.centerX.equalToSuperview()
             make.top.lessThanOrEqualTo(orLabel.snp.bottom).offset(screenHeight*15/812)
@@ -215,6 +161,7 @@ class LogInViewController: UIViewController {
         }
     }
     
+    //MARK: Logics
     private func getAuthBtns() -> UIStackView {
         let iconNames = [ "facebook", "twitter", "apple"]
         let icons = iconNames.compactMap { UIImage(named: $0) }
@@ -249,7 +196,48 @@ class LogInViewController: UIViewController {
                         NotificationCenter.default.removeObserver(self)
                     }
     
-    //Действие для убирания клавиатуры
+    @objc private func pressForgotButton() {
+           let forgotPasswordVC = ForgotPasswordViewController()
+           navigationController?.pushViewController(forgotPasswordVC, animated: true)
+       }
+       
+    @objc func toggleCheckbox() {
+        isChecked.toggle()
+        let imageName = isChecked ? "checkmark.square" : "square"
+        rememberMeButton.setImage(UIImage(systemName: imageName), for: .normal)
+        }
+       
+    @objc func loginTupped() {
+        print("LoginTupped")
+    }
+       
+    @objc func signUpTupped() {
+        let signUpVC = SignUpViewController()
+        navigationController?.pushViewController(signUpVC, animated: true)
+    }
+       
+    @objc private func authButtonTapped(_ sender: UIButton) {
+        switch sender.tag {
+        case 0:
+            print("Facebook tapped")
+        case 1:
+            print("Twitter tapped")
+        case 2:
+            print("Apple tapped")
+        default:
+            break
+        }
+    }
+
+    //MARK: Keyboard
+    private func setupKeyboardObservers() {
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow),
+                                               name: UIResponder.keyboardWillShowNotification, object: nil)
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide),
+                                               name: UIResponder.keyboardWillHideNotification, object: nil)
+    }
+
     private func setupKeyboardDismissGesture() {
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(hideKeyboard))
         tapGesture.cancelsTouchesInView = false
@@ -267,40 +255,7 @@ class LogInViewController: UIViewController {
         view.frame.origin.y = 0
     }
     
-    @objc private func pressForgotButton() {
-        let forgotPasswordVC = ForgotPasswordViewController()
-        navigationController?.pushViewController(forgotPasswordVC, animated: true)
-    }
-    
-    @objc func toggleCheckbox() {
-            isChecked.toggle()
-            let imageName = isChecked ? "checkmark.square" : "square"
-            rememberMeButton.setImage(UIImage(systemName: imageName), for: .normal)
-        }
-    
-    @objc func loginTupped() {
-        print("LoginTupped")
-    }
-    
-    @objc func signUpTupped() {
-        let signUpVC = SignUpViewController()
-        navigationController?.pushViewController(signUpVC, animated: true)
-    }
-    
-    @objc private func authButtonTapped(_ sender: UIButton) {
-        switch sender.tag {
-        case 0:
-            print("Facebook tapped")
-        case 1:
-            print("Twitter tapped")
-        case 2:
-            print("Apple tapped")
-        default:
-            break
-        }
-    }
-
     @objc private func hideKeyboard() {
         view.endEditing(true)
-    }
+       }
 }

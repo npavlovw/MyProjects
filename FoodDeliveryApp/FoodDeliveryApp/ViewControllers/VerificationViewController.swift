@@ -10,6 +10,7 @@ import SnapKit
 
 class VerificationViewController: UIViewController, UITextFieldDelegate, UIGestureRecognizerDelegate {
     
+    //MARK: UI-components
     private lazy var backButton = BackButton(target: self, action: #selector(backToForgotPassword))
     private lazy var images = CustomImageView(customVectorName: "orangeVector")
     private lazy var mainLabels = MainLabels(title: "Verification", titleSize: 30, textColor: .white, subtitle: "We have sent a code to your email", spacing: 4)
@@ -59,81 +60,51 @@ class VerificationViewController: UIViewController, UITextFieldDelegate, UIGestu
     let screenWidth = UIScreen.main.bounds.width
     let screenHeight = UIScreen.main.bounds.height
     
+    //MARK: Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .logInBackground
         navigationController?.interactivePopGestureRecognizer?.delegate = self
         
-        setupUI()
-    }
-    
-    private func setupUI() {
-        setupImages()
+        setuoConstraints()
         setupBackButton()
-        setupLabels()
-        setupEmailCode()
-        setupContentView()
-        setupCodeLabel()
-        setupResendCode()
         setNumbersTextFields()
-        setupVerifyButton()
+        resendCodeButton.addTarget(self, action: #selector(resendTapped), for: .touchUpInside)
         setupKeyboardObservers()
         setupKeyboardDismissGesture()
         startTimer()
     }
-   
-    private func setupImages() {
+    
+    //MARK: Cpnstraints
+    private func setuoConstraints() {
         view.addSubview(images)
+        view.addSubview(mainLabels)
+        view.addSubview(emailCode)
+        view.addSubview(contentView)
+        contentView.addSubview(codeLabel)
+        contentView.addSubview(resendLabel)
+        contentView.addSubview(resendCodeButton)
+        contentView.addSubview(numbersTextFields)
+        contentView.addSubview(verifyButton)
         
         images.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
-    }
-    
-    private func setupBackButton() {
-        let backBarButton = UIBarButtonItem(customView: backButton)
-        navigationItem.leftBarButtonItem = backBarButton
-    }
-    
-    private func setupLabels(){
-        view.addSubview(mainLabels)
-        
         mainLabels.snp.makeConstraints { make in
             make.top.lessThanOrEqualToSuperview().offset(screenHeight*120/812)
             make.leading.trailing.equalToSuperview().inset(screenWidth*24/375)
         }
-    }
-    
-    private func setupEmailCode() {
-        view.addSubview(emailCode)
-        
         emailCode.snp.makeConstraints { make in
             make.top.equalTo(mainLabels.snp.bottom).offset(6)
             make.centerX.equalToSuperview()
         }
-    }
-    
-    private func setupContentView() {
-        view.addSubview(contentView)
-        
         contentView.snp.makeConstraints { make in
             make.top.lessThanOrEqualTo(mainLabels.snp.bottom).offset(screenHeight*50/812)
             make.leading.trailing.bottom.equalToSuperview()
         }
-    }
-    
-    private func setupCodeLabel() {
-        contentView.addSubview(codeLabel)
-        
         codeLabel.snp.makeConstraints { make in
             make.top.leading.equalToSuperview().inset(24)
         }
-    }
-
-    private func setupResendCode() {
-        contentView.addSubview(resendLabel)
-        contentView.addSubview(resendCodeButton)
-        
         resendLabel.snp.makeConstraints { make in
             make.centerY.equalTo(codeLabel.snp.centerY)
             make.trailing.equalToSuperview().offset(-24)
@@ -142,8 +113,21 @@ class VerificationViewController: UIViewController, UITextFieldDelegate, UIGestu
             make.centerY.equalTo(resendLabel.snp.centerY)
             make.trailing.equalTo(resendLabel.snp.leading).offset(-2)
         }
-        
-        resendCodeButton.addTarget(self, action: #selector(resendTapped), for: .touchUpInside)
+        numbersTextFields.snp.makeConstraints { make in
+            make.top.lessThanOrEqualTo(codeLabel.snp.bottom).offset(screenHeight*8/812)
+            make.leading.trailing.equalToSuperview().inset(screenWidth*24/375)
+            make.height.equalTo(screenHeight*62/812)
+        }
+        verifyButton.snp.makeConstraints { make in
+            make.top.lessThanOrEqualTo(numbersTextFields.snp.bottom).offset(screenHeight*30/812)
+            make.leading.trailing.equalToSuperview().inset(screenWidth*24/375)
+        }
+    }
+    
+    //MARK: Logics
+    private func setupBackButton() {
+        let backBarButton = UIBarButtonItem(customView: backButton)
+        navigationItem.leftBarButtonItem = backBarButton
     }
     
     private func startTimer() {
@@ -189,26 +173,70 @@ class VerificationViewController: UIViewController, UITextFieldDelegate, UIGestu
             codeTextFields.append(textField)
             numbersTextFields.addArrangedSubview(textField)
         }
-        
-        contentView.addSubview(numbersTextFields)
-        
-        numbersTextFields.snp.makeConstraints { make in
-            make.top.lessThanOrEqualTo(codeLabel.snp.bottom).offset(screenHeight*8/812)
-            make.leading.trailing.equalToSuperview().inset(screenWidth*24/375)
-            make.height.equalTo(screenHeight*62/812)
-        }
     }
     
-    private func setupVerifyButton() {
-        contentView.addSubview(verifyButton)
+    @objc private func textFieldDidChange(_ textField: UITextField) {
+           guard let text = textField.text else { return }
+           
+           // если введена цифра — переходим к следующему полю
+           if text.count == 1 {
+               let nextTag = textField.tag + 1
+               if nextTag < codeTextFields.count {
+                   codeTextFields[nextTag].becomeFirstResponder()
+               } else {
+                   textField.resignFirstResponder() // если последнее — убираем фокус
+               }
+           }
+           // если удаление — возвращаемся назад
+           else if text.count == 0 {
+               let prevTag = textField.tag - 1
+               if prevTag >= 0 {
+                   codeTextFields[prevTag].becomeFirstResponder()
+               }
+           }
+           // ограничиваем ввод до 1 символа
+           if text.count > 1 {
+               textField.text = String(text.prefix(1))
+           }
+       }
+
+    @objc private func updateTimer() {
+        secondsLeft -= 1
+        updateButtonTitle()
         
-        verifyButton.snp.makeConstraints { make in
-            make.top.lessThanOrEqualTo(numbersTextFields.snp.bottom).offset(screenHeight*30/812)
-            make.leading.trailing.equalToSuperview().inset(screenWidth*24/375)
+        if secondsLeft <= 0 {
+            resendLabel.text = ""
+            timer?.invalidate()
+            UIView.performWithoutAnimation {
+                let attributedTitle = NSAttributedString(
+                    string: "Resend",
+                    attributes: [
+                        .font: UIFont.systemFont(ofSize: 14, weight: .bold),
+                        .underlineStyle: NSUnderlineStyle.single.rawValue
+                    ]
+                )
+                resendCodeButton.setAttributedTitle(attributedTitle, for: .normal)
+                resendCodeButton.layoutIfNeeded()
+            }
+            resendCodeButton.isEnabled = true
+            resendCodeButton.setTitleColor(.black, for: .normal)
         }
     }
+       
+    @objc private func backToForgotPassword() {
+        navigationController?.popViewController(animated: true)
+    }
+       
+    @objc private func resendTapped() {
+        print("Таймер запущен заново")
+        startTimer()
+    }
+       
+    @objc private func verifyButtonTupped() {
+        print("Verify button tupped")
+    }
     
-    //Работа с клавиатурой
+    //MARK: Keyboard
     private func setupKeyboardObservers() {
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow),
                                                name: UIResponder.keyboardWillShowNotification, object: nil)
@@ -236,66 +264,5 @@ class VerificationViewController: UIViewController, UITextFieldDelegate, UIGestu
     
     @objc private func hideKeyboard() {
         view.endEditing(true)
-    }
-    
-    @objc private func textFieldDidChange(_ textField: UITextField) {
-        guard let text = textField.text else { return }
-        
-        // если введена цифра — переходим к следующему полю
-        if text.count == 1 {
-            let nextTag = textField.tag + 1
-            if nextTag < codeTextFields.count {
-                codeTextFields[nextTag].becomeFirstResponder()
-            } else {
-                textField.resignFirstResponder() // если последнее — убираем фокус
-            }
-        }
-        // если удаление — возвращаемся назад
-        else if text.count == 0 {
-            let prevTag = textField.tag - 1
-            if prevTag >= 0 {
-                codeTextFields[prevTag].becomeFirstResponder()
-            }
-        }
-        // ограничиваем ввод до 1 символа
-        if text.count > 1 {
-            textField.text = String(text.prefix(1))
-        }
-    }
-
-    @objc private func updateTimer() {
-        secondsLeft -= 1
-        updateButtonTitle()
-        
-        if secondsLeft <= 0 {
-            resendLabel.text = ""
-            timer?.invalidate()
-            UIView.performWithoutAnimation {
-                let attributedTitle = NSAttributedString(
-                    string: "Resend",
-                    attributes: [
-                        .font: UIFont.systemFont(ofSize: 14, weight: .bold),
-                        .underlineStyle: NSUnderlineStyle.single.rawValue
-                    ]
-                )
-                resendCodeButton.setAttributedTitle(attributedTitle, for: .normal)
-                resendCodeButton.layoutIfNeeded()
-            }
-            resendCodeButton.isEnabled = true
-            resendCodeButton.setTitleColor(.black, for: .normal)
-        }
-    }
-    
-    @objc private func backToForgotPassword() {
-        navigationController?.popViewController(animated: true)
-    }
-    
-    @objc private func resendTapped() {
-        print("Таймер запущен заново")
-        startTimer()
-    }
-    
-    @objc private func verifyButtonTupped() {
-        print("Verify button tupped")
     }
 }

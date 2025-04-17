@@ -10,6 +10,7 @@ import SnapKit
 
 class SignUpViewController: UIViewController, UIGestureRecognizerDelegate {
     
+    //MARK: UI-components
     private lazy var images = CustomImageView(customVectorName: "orangeVector")
     private lazy var backButton = BackButton(target: self, action: #selector(backToLoginScreen))
     private lazy var mainLabels = MainLabels(title: "Sign Up", titleSize: 30, textColor: .white, subtitle: "Please sign up to get started", spacing: 16)
@@ -28,76 +29,61 @@ class SignUpViewController: UIViewController, UIGestureRecognizerDelegate {
     let screenWidth = UIScreen.main.bounds.width
     let screenHeight = UIScreen.main.bounds.height
     
-
+    //MARK: Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .logInBackground
         navigationController?.interactivePopGestureRecognizer?.delegate = self
 
-        setupUI()
+        setupBackButton()
         setupKeyboardObservers()
         setupKeyboardDismissGesture()
     }
     
-    private func setupUI() {
-        setupImages()
-        setupBackButton()
-        setupMainLabels()
-        setupContentView()
-        setupTextFieldStackView()
-        setupSignInButton()
-    }
-    
-    private func setupBackButton() {
-        let backBarButton = UIBarButtonItem(customView: backButton)
-        navigationItem.leftBarButtonItem = backBarButton
-    }
-    
-    private func setupImages() {
+    //MARK: Constraints
+    private func setupConstraints() {
         view.addSubview(images)
+        view.addSubview(mainLabels)
+        view.addSubview(contentView)
+        contentView.addSubview(textFieldsStackView)
+        contentView.addSubview(signUoButton)
         
         images.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
-    }
-    
-    private func setupMainLabels() {
-        view.addSubview(mainLabels)
-        
         mainLabels.snp.makeConstraints { make in
             make.top.lessThanOrEqualToSuperview().offset(screenHeight*120/812)
             make.leading.trailing.equalToSuperview().inset(screenWidth*24/375)
         }
-    }
-    
-    private func setupContentView() {
-        view.addSubview(contentView)
-        
         contentView.snp.makeConstraints { make in
             make.top.lessThanOrEqualTo(mainLabels.snp.bottom).offset(screenHeight*50/812)
             make.leading.trailing.bottom.equalToSuperview()
         }
-    }
-    
-    private func setupTextFieldStackView() {
-        contentView.addSubview(textFieldsStackView)
-        
         textFieldsStackView.snp.makeConstraints { make in
             make.top.lessThanOrEqualToSuperview().offset(screenHeight*24/812)
             make.leading.trailing.equalToSuperview().inset(screenWidth*24/375)
         }
-    }
-    
-    private func setupSignInButton() {
-        contentView.addSubview(signUoButton)
-        
         signUoButton.snp.makeConstraints { make in
             make.top.lessThanOrEqualTo(textFieldsStackView.snp.bottom).offset(screenHeight*48/812)
             make.leading.trailing.equalToSuperview().inset(screenWidth*24/375)
         }
     }
+
+    //MARK: Logics
+    private func setupBackButton() {
+        let backBarButton = UIBarButtonItem(customView: backButton)
+        navigationItem.leftBarButtonItem = backBarButton
+    }
     
-    //Действие для убирания клавиатуры
+    @objc private func backToLoginScreen() {
+        navigationController?.popViewController(animated: true)
+    }
+    
+    @objc private func signUpTupped() {
+        print("Sign Up Tupped")
+    }
+
+    //MARL: Keyboard
     private func setupKeyboardObservers() {
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow),
                                                name: UIResponder.keyboardWillShowNotification, object: nil)
@@ -125,13 +111,5 @@ class SignUpViewController: UIViewController, UIGestureRecognizerDelegate {
     
     @objc private func hideKeyboard() {
         view.endEditing(true)
-    }
-    
-    @objc private func backToLoginScreen() {
-        navigationController?.popViewController(animated: true)
-    }
-    
-    @objc private func signUpTupped() {
-        print("Sign Up Tupped")
     }
 }
