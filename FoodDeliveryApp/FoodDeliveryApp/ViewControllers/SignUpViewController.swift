@@ -35,6 +35,7 @@ class SignUpViewController: UIViewController, UIGestureRecognizerDelegate {
         view.backgroundColor = .logInBackground
         navigationController?.interactivePopGestureRecognizer?.delegate = self
 
+        setupConstraints()
         setupBackButton()
         setupKeyboardObservers()
         setupKeyboardDismissGesture()
@@ -83,7 +84,7 @@ class SignUpViewController: UIViewController, UIGestureRecognizerDelegate {
         print("Sign Up Tupped")
     }
 
-    //MARL: Keyboard
+    //MARK: Keyboard
     private func setupKeyboardObservers() {
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow),
                                                name: UIResponder.keyboardWillShowNotification, object: nil)
