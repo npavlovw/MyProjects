@@ -208,7 +208,23 @@ class LogInViewController: UIViewController {
         }
        
     @objc func loginTupped() {
-        print("LoginTupped")
+        if emailField.textField.text == "user", passwordField.textField.text == "1234" {
+            UserDefaults.standard.set(true, forKey: "hasLoggedIn")
+            if let windowScene = UIApplication.shared.connectedScenes.first(where: { $0.activationState == .foregroundActive }) as? UIWindowScene,
+               let window = windowScene.windows.first {
+                window.rootViewController = UINavigationController(rootViewController: HomeViewController())
+                UIView.transition(with: window,
+                                  duration: 0.5,
+                                  options: .transitionFlipFromRight,
+                                  animations: nil,
+                                  completion: nil)
+            }
+        } else {
+            emailField.textField.layer.borderColor = UIColor.red.cgColor
+            emailField.textField.layer.borderWidth = 2.0
+            passwordField.textField.layer.borderColor = UIColor.red.cgColor
+            passwordField.textField.layer.borderWidth = 2.0
+        }
     }
        
     @objc func signUpTupped() {

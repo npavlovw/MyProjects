@@ -18,10 +18,16 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         self.window = UIWindow(windowScene: scene)
         
         let hasCompletedOnboarding = UserDefaults.standard.bool(forKey: "hasCompletedOnboarding")
+        let hasLoggedIn = UserDefaults.standard.bool(forKey: "hasLoggedIn")
+        
 
         let rootVC: UIViewController
         if hasCompletedOnboarding {
-            rootVC = LogInViewController()
+            if hasLoggedIn {
+                rootVC = HomeViewController()
+            } else {
+                rootVC = LogInViewController()
+            }
         } else {
             rootVC = OnboardingViewController()
         }
