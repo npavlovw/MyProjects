@@ -1,29 +1,30 @@
 //
-//  backButton.swift
+//  customButton.swift
 //  FoodDeliveryApp
 //
-//  Created by Никита Павлов on 12.04.2025.
+//  Created by Никита Павлов on 24.04.2025.
 //
 
 import UIKit
 import SnapKit
 
-final class BackButton: UIButton {
+final class CustomButton: UIButton {
     
-    init(target: Any?, action: Selector, backgroundColor: UIColor) {
+    init(target: Any?, action: Selector, backgroundColor: UIColor, image: UIImage) {
         super.init(frame: .zero)
-        setupBackButton(target: target, action: action, backgroundColor: backgroundColor)
+        setupButton(target: target, action: action, backgroundColor: backgroundColor, image: image)
     }
+    
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    private func setupBackButton(target: Any?, action: Selector, backgroundColor: UIColor) {
+    private func setupButton(target: Any?, action: Selector, backgroundColor: UIColor, image: UIImage) {
         self.backgroundColor = backgroundColor
         layer.cornerRadius = 22.5
         imageView?.contentMode = .scaleAspectFit
-        setImage(UIImage(systemName: "chevron.left"), for: .normal)
+        setImage(image, for: .normal)
         tintColor = .label
         addTarget(target, action: action, for: .touchUpInside)
         
@@ -32,6 +33,3 @@ final class BackButton: UIButton {
         }
     }
 }
-
-    
-    

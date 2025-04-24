@@ -12,7 +12,7 @@ class SignUpViewController: UIViewController, UIGestureRecognizerDelegate {
     
     //MARK: UI-components
     private lazy var images = CustomImageView(customVectorName: "orangeVector")
-    private lazy var backButton = BackButton(target: self, action: #selector(backToLoginScreen))
+    private lazy var backButton = BackButton(target: self, action: #selector(backToLoginScreen), backgroundColor: .white)
     private lazy var mainLabels = MainLabels(title: "Sign Up", titleSize: 30, textColor: .white, subtitle: "Please sign up to get started", spacing: 16)
     private lazy var contentView = CustomContentView()
     private lazy var nameTextField = loginTextFieldView(name: "NAME", placeholder: "John doe")

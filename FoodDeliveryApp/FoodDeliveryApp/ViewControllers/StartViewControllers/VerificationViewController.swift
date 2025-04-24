@@ -11,7 +11,7 @@ import SnapKit
 class VerificationViewController: UIViewController, UITextFieldDelegate, UIGestureRecognizerDelegate {
     
     //MARK: UI-components
-    private lazy var backButton = BackButton(target: self, action: #selector(backToForgotPassword))
+    private lazy var backButton = BackButton(target: self, action: #selector(backToForgotPassword), backgroundColor: .white)
     private lazy var images = CustomImageView(customVectorName: "orangeVector")
     private lazy var mainLabels = MainLabels(title: "Verification", titleSize: 30, textColor: .white, subtitle: "We have sent a code to your email", spacing: 4)
     var receivedText: String?
@@ -66,7 +66,7 @@ class VerificationViewController: UIViewController, UITextFieldDelegate, UIGestu
         view.backgroundColor = .logInBackground
         navigationController?.interactivePopGestureRecognizer?.delegate = self
         
-        setuoConstraints()
+        setupConstraints()
         setupBackButton()
         setNumbersTextFields()
         resendCodeButton.addTarget(self, action: #selector(resendTapped), for: .touchUpInside)
@@ -76,7 +76,7 @@ class VerificationViewController: UIViewController, UITextFieldDelegate, UIGestu
     }
     
     //MARK: Cpnstraints
-    private func setuoConstraints() {
+    private func setupConstraints() {
         view.addSubview(images)
         view.addSubview(mainLabels)
         view.addSubview(emailCode)

@@ -12,7 +12,7 @@ class ForgotPasswordViewController: UIViewController, UIGestureRecognizerDelegat
     
     //MARK: UI-components
     lazy var images = CustomImageView(customVectorName: "orangeVector")
-    lazy var backButton = BackButton(target: self, action: #selector(backToLoginScreen))
+    lazy var backButton = BackButton(target: self, action: #selector(backToLoginScreen), backgroundColor: .white)
     lazy var labels = MainLabels(title: "Forgot Password", titleSize: 30, textColor: .white, subtitle: "Please sign in to your existing account", spacing: 4)
     lazy var contentView = CustomContentView()
     lazy var emailTextField = loginTextFieldView(name: "EMAIL", placeholder: "example@gmail.com")
