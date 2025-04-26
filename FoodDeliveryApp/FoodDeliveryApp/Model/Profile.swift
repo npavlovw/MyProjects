@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct Profile{
+struct Profile: Equatable{
     
     let label: String
     let image: String

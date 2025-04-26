@@ -21,14 +21,13 @@ class ProfileViewController: UIViewController, UIGestureRecognizerDelegate {
         titleLabel.textColor = .black
         titleLabel.font = .systemFont(ofSize: 17, weight: .regular)
         
-        let moreButton = CustomButton(target: self, action: #selector(moreButtonTupped), backgroundColor: UIColor(named: "btnGray") ?? .gray, image: UIImage(named: "MoreIcon")!)
+        let moreButton = CustomButton(target: self, action: #selector(moreButtonTupped), backgroundColor: UIColor(named: "btnGray") ?? .gray, image: UIImage(named: "More")!)
         
         navBarView.addSubview(backButton)
         navBarView.addSubview(moreButton)
         navBarView.addSubview(titleLabel)
 
         navBarView.snp.makeConstraints { make in
-            make.width.equalTo(327)
             make.height.equalTo(45)
         }
         backButton.snp.makeConstraints { make in
@@ -40,48 +39,21 @@ class ProfileViewController: UIViewController, UIGestureRecognizerDelegate {
             make.centerY.equalToSuperview()
         }
         titleLabel.snp.makeConstraints { make in
-            make.center.equalToSuperview()
+            make.centerY.equalToSuperview()
+            make.leading.equalTo(backButton.snp.trailing).offset(16)
         }
         return navBarView
     }()
-    var recievedNameLabel: String?
-    private lazy var nameLabel: UILabel = {
-        let label = UILabel()
-        label.text = recievedNameLabel
-        label.font = .systemFont(ofSize: 20, weight: .bold)
-        label.textAlignment = .left
-        return label
+    private lazy var containerView: UIView = {
+        let view = UIView()
+        view.frame = CGRect(x: 0, y: 0, width: (screenWidth * 272 / 375), height: 124)
+        return view
     }()
-    var recievedBioLabel: String?
-    private lazy var bioLabel: UILabel = {
-        let label = UILabel()
-        label.text = recievedBioLabel
-        label.font = .systemFont(ofSize: 14, weight: .regular)
-        label.textAlignment = .left
-        return label
-    }()
-    private lazy var vStack: UIStackView = {
-       let stackView = UIStackView(arrangedSubviews: [nameLabel, bioLabel])
-        stackView.axis = .vertical
-        stackView.spacing = 8
-        stackView.alignment = .leading
-        return stackView
-    }()
-    private lazy var profileImageView: UIImageView = {
-        let imageView = UIImageView()
-        imageView.contentMode = .scaleAspectFill
-        imageView.clipsToBounds = true
-        imageView.image = UIImage(systemName: "person.circle.fill")
-        imageView.layer.cornerRadius = 50
-        return imageView
-    }()
-    private lazy var profileStackView: UIStackView = {
-        let stackView = UIStackView(arrangedSubviews: [profileImageView, vStack])
-        stackView.axis = .horizontal
-        stackView.spacing = 32
-        stackView.alignment = .center
-        return stackView
-    }()
+    private lazy var profileDescription = ProfileDescription(
+        nameLabel: "",
+        bioLabel: "",
+        image: UIImage(systemName: "person.circle.fill")!,
+    )
     private lazy var tableView: UITableView = {
         $0.backgroundColor = .white
         $0.layer.cornerRadius = 16
@@ -89,6 +61,7 @@ class ProfileViewController: UIViewController, UIGestureRecognizerDelegate {
         $0.dataSource = self
         $0.delegate = self
         $0.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
+        $0.tableHeaderView = containerView
         return $0
     }(UITableView(frame: .zero, style: .insetGrouped))
     let sections = Profile.makeData()
@@ -102,40 +75,45 @@ class ProfileViewController: UIViewController, UIGestureRecognizerDelegate {
         view.backgroundColor = .white
         navigationController?.interactivePopGestureRecognizer?.delegate = self
         self.navigationItem.hidesBackButton = true
-        
-        
+        self.navigationController?.navigationBar.isHidden = true
+
         setupConstraints()
-       
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        profileDescription.nameLabel.text = UserDefaults.standard.string(forKey: "fullName")
+        profileDescription.bioLabel.text = UserDefaults.standard.string(forKey: "bio")
     }
     
     //MARK: Constraints
     private func setupConstraints() {
+        containerView.addSubview(profileDescription)
         view.addSubview(navBarView)
-        view.addSubview(profileStackView)
         view.addSubview(tableView)
-        
-        profileImageView.snp.makeConstraints { make in
-            make.width.height.equalTo(100)
+       
+        profileDescription.snp.makeConstraints { make in
+            make.leading.equalToSuperview().offset(16)
+            make.bottom.equalToSuperview().inset(24)
+            make.trailing.top.equalToSuperview()
         }
-        
         navBarView.snp.makeConstraints { make in
-            make.top.equalToSuperview().offset(50)
+            make.top.equalTo(view.safeAreaLayoutGuide)
             make.leading.trailing.equalToSuperview().inset(24)
         }
-        profileStackView.snp.makeConstraints { make in
-            make.width.equalTo(272)
-            make.height.equalTo(100)
-            make.top.equalTo(navBarView.snp.bottom).offset(24)
-            make.leading.equalToSuperview().offset(24)
-        }
         tableView.snp.makeConstraints { make in
-            make.top.equalTo(profileStackView.snp.bottom).offset(32)
+            make.top.equalTo(navBarView.snp.bottom).offset(24)
             make.leading.trailing.equalToSuperview()
-            make.bottom.equalToSuperview().inset(24)
+            make.bottom.equalToSuperview()
         }
     }
     
     //MARK: Logics
+    func didTapSaveButton(name: String, bio: String) {
+        profileDescription.nameLabel.text = name
+        profileDescription.bioLabel.text = bio
+    }
+    
     @objc private func backToMenuScreen() {
         navigationController?.popViewController(animated: true)
     }
@@ -166,9 +144,41 @@ extension ProfileViewController: UITableViewDataSource {
         cell.accessoryType = .disclosureIndicator
         return cell
     }
+    
+    
 }
 
 extension ProfileViewController: UITableViewDelegate {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+        if indexPath.section == 3 && indexPath.row == 0 {
+            let alert = UIAlertController(title: "Внимание!", message: "Вы уверены, что хотите выйти?", preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "Отмена", style: .cancel, handler: nil))
+            alert.addAction(UIAlertAction(title: "Выйти", style: .destructive, handler: { _ in
+                UserDefaults.standard.removeObject(forKey: "hasLoggedIn")
+                if let windowScene = UIApplication.shared.connectedScenes.first(where: { $0.activationState == .foregroundActive }) as? UIWindowScene,
+                   let window = windowScene.windows.first {
+                    window.rootViewController = UINavigationController(rootViewController: LogInViewController())
+                    UIView.transition(with: window,
+                                      duration: 0.5,
+                                      options: .transitionFlipFromRight,
+                                      animations: nil,
+                                      completion: nil)
+                }
+            }))
+            present(alert, animated: true)
+        }
+        if indexPath.section == 0 && indexPath.row == 0 {
+            let personalInfoVC = PersonalInfoViewController()
+            navigationController?.pushViewController(personalInfoVC, animated: true)
+        }
+    }
+    
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        100
+    }
+    
     
 }
+
 

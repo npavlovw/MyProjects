@@ -15,8 +15,8 @@ class SignUpViewController: UIViewController, UIGestureRecognizerDelegate {
     private lazy var backButton = BackButton(target: self, action: #selector(backToLoginScreen), backgroundColor: .white)
     private lazy var mainLabels = MainLabels(title: "Sign Up", titleSize: 30, textColor: .white, subtitle: "Please sign up to get started", spacing: 16)
     private lazy var contentView = CustomContentView()
-    private lazy var nameTextField = LoginTextFieldView(name: "NAME", placeholder: "John doe")
-    private lazy var emailTextField = LoginTextFieldView(name: "EMAIL", placeholder: "example@gmail.com")
+    private lazy var nameTextField = TextFieldView(name: "NAME", placeholder: "John doe")
+    private lazy var emailTextField = TextFieldView(name: "EMAIL", placeholder: "example@gmail.com")
     private lazy var passwordTextField = PasswordTextField(name: "PASSWORD", placeholder: "**********")
     private lazy var reTypePasswordTextField = PasswordTextField(name: "RE-TYPE PASSWORD", placeholder: "**********")
     private lazy var textFieldsStackView: UIStackView = {
