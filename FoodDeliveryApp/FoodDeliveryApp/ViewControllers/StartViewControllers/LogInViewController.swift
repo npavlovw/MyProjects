@@ -14,7 +14,7 @@ class LogInViewController: UIViewController {
     private lazy var images = CustomImageView(customVectorName: "Vector")
     private lazy var mainLabels = MainLabels(title: "Log In", titleSize: 30, textColor: .white, subtitle: "Please sign in to your existing account", spacing: 3)
     private lazy var contentView = CustomContentView()
-    private lazy var emailField = loginTextFieldView(name: "EMAIL", placeholder: "example@gmail.com")
+    private lazy var emailField = LoginTextFieldView(name: "EMAIL", placeholder: "example@gmail.com")
     private lazy var passwordField = PasswordTextField(name: "PASSWORD", placeholder: "**********")
     private lazy var textFieldsStackView: UIStackView = {
         let stackView = UIStackView(arrangedSubviews: [emailField, passwordField])

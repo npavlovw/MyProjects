@@ -8,7 +8,7 @@
 import UIKit
 import SnapKit
 
-final class loginTextFieldView: UIView {
+final class LoginTextFieldView: UIView {
     
     lazy var titleLabel: UILabel = {
         let titleLabel = UILabel()

@@ -31,7 +31,7 @@ class HomeViewController: UIViewController {
     }
     
     @objc private func menuTupped() {
-        let menuVC = MenuViewController()
+        let menuVC = ProfileViewController()
         navigationController?.pushViewController(menuVC, animated: true)
     }
 

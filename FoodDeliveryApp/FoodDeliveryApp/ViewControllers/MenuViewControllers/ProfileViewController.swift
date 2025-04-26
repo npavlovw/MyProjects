@@ -8,7 +8,7 @@
 import UIKit
 import SnapKit
 
-class MenuViewController: UIViewController, UIGestureRecognizerDelegate {
+class ProfileViewController: UIViewController, UIGestureRecognizerDelegate {
     
     //MARK: UI-components
     private lazy var navBarView: UIView = {
@@ -27,6 +27,10 @@ class MenuViewController: UIViewController, UIGestureRecognizerDelegate {
         navBarView.addSubview(moreButton)
         navBarView.addSubview(titleLabel)
 
+        navBarView.snp.makeConstraints { make in
+            make.width.equalTo(327)
+            make.height.equalTo(45)
+        }
         backButton.snp.makeConstraints { make in
             make.leading.equalToSuperview()
             make.centerY.equalToSuperview()
@@ -36,9 +40,7 @@ class MenuViewController: UIViewController, UIGestureRecognizerDelegate {
             make.centerY.equalToSuperview()
         }
         titleLabel.snp.makeConstraints { make in
-            make.centerY.equalTo(backButton.snp.centerY)
-            make.leading.equalTo(backButton.snp.trailing).offset(16)
-            make.trailing.equalTo(moreButton.snp.leading).inset(16)
+            make.center.equalToSuperview()
         }
         return navBarView
     }()
@@ -80,6 +82,16 @@ class MenuViewController: UIViewController, UIGestureRecognizerDelegate {
         stackView.alignment = .center
         return stackView
     }()
+    private lazy var tableView: UITableView = {
+        $0.backgroundColor = .white
+        $0.layer.cornerRadius = 16
+        $0.separatorStyle = .none
+        $0.dataSource = self
+        $0.delegate = self
+        $0.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
+        return $0
+    }(UITableView(frame: .zero, style: .insetGrouped))
+    let sections = Profile.makeData()
 
     let screenWidth = UIScreen.main.bounds.width
     let screenHeight = UIScreen.main.bounds.height
@@ -89,41 +101,41 @@ class MenuViewController: UIViewController, UIGestureRecognizerDelegate {
         super.viewDidLoad()
         view.backgroundColor = .white
         navigationController?.interactivePopGestureRecognizer?.delegate = self
+        self.navigationItem.hidesBackButton = true
         
-        setupNavBarView()
+        
         setupConstraints()
-        
-        
+       
     }
     
     //MARK: Constraints
     private func setupConstraints() {
+        view.addSubview(navBarView)
         view.addSubview(profileStackView)
+        view.addSubview(tableView)
         
-        
-        navBarView.snp.makeConstraints { make in
-            make.width.equalTo(screenWidth * 327 / 345)
-            make.height.equalTo(screenHeight * 45 / 812)
-        }
         profileImageView.snp.makeConstraints { make in
             make.width.height.equalTo(100)
         }
-        profileStackView.snp.makeConstraints { make in
-            make.width.equalTo(screenWidth * 272 / 345)
-            make.height.equalTo(screenHeight * 100 / 812)
-            make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(screenHeight * 24 / 812)
-            make.leading.equalToSuperview().offset(screenWidth * 24 / 345)
-        }
         
+        navBarView.snp.makeConstraints { make in
+            make.top.equalToSuperview().offset(50)
+            make.leading.trailing.equalToSuperview().inset(24)
+        }
+        profileStackView.snp.makeConstraints { make in
+            make.width.equalTo(272)
+            make.height.equalTo(100)
+            make.top.equalTo(navBarView.snp.bottom).offset(24)
+            make.leading.equalToSuperview().offset(24)
+        }
+        tableView.snp.makeConstraints { make in
+            make.top.equalTo(profileStackView.snp.bottom).offset(32)
+            make.leading.trailing.equalToSuperview()
+            make.bottom.equalToSuperview().inset(24)
+        }
     }
     
     //MARK: Logics
-    
-    private func setupNavBarView() {
-        self.navigationItem.titleView = navBarView
-        self.navigationItem.hidesBackButton = true
-    }
-    
     @objc private func backToMenuScreen() {
         navigationController?.popViewController(animated: true)
     }
@@ -132,3 +144,31 @@ class MenuViewController: UIViewController, UIGestureRecognizerDelegate {
         print("More button tapped")
     }
 }
+
+extension ProfileViewController: UITableViewDataSource {
+    
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return sections.count
+    }
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return sections[section].count
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
+        cell.backgroundColor = UIColor(red: 246/255, green: 248/255, blue: 250/255, alpha: 1)
+        let model = sections[indexPath.section][indexPath.row]
+        var config = cell.defaultContentConfiguration()
+        config.text = model.label
+        config.image = UIImage(named: model.image)
+        cell.contentConfiguration = config
+        cell.accessoryType = .disclosureIndicator
+        return cell
+    }
+}
+
+extension ProfileViewController: UITableViewDelegate {
+    
+}
+
