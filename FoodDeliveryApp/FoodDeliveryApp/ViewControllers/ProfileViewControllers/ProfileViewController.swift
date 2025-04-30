@@ -123,6 +123,8 @@ class ProfileViewController: UIViewController, UIGestureRecognizerDelegate {
     }
 }
 
+//MARK: UITableViewDataSource UITableViewDelegate
+
 extension ProfileViewController: UITableViewDataSource {
     
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -177,8 +179,6 @@ extension ProfileViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         100
     }
-    
-    
 }
 
 
