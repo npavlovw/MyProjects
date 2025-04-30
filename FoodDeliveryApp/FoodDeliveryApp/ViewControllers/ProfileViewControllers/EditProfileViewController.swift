@@ -8,7 +8,7 @@
 import UIKit
 import SnapKit
 
-class EditProfileViewController: UIViewController, UIGestureRecognizerDelegate {
+class EditProfileViewController: UIViewController, UIGestureRecognizerDelegate, UITextViewDelegate {
     
     
     //MARK: UI-Components
@@ -41,12 +41,36 @@ class EditProfileViewController: UIViewController, UIGestureRecognizerDelegate {
     private lazy var fullNameTextField = TextFieldView(name: "Full Name", placeholder: "Vishal Khadok")
     private lazy var emailTextField = TextFieldView(name: "EMAIL", placeholder: "hello@halallab.co")
     private lazy var phoneNumberTextField = TextFieldView(name: "PHONE NUMBER", placeholder: "408-841-0926")
-    private lazy var bioTextField = TextFieldView(name: "BIO", placeholder: "I love fast food")
+    private lazy var bioLabel: UILabel = {
+        $0.text = "BIO"
+        $0.font = UIFont.systemFont(ofSize: 13, weight: .bold)
+        $0.textColor = UIColor(red: 50/255, green: 52/255, blue: 62/255, alpha: 1)
+        return $0
+    }(UILabel())
+    private let placeholderText = "I love fast food"
+    private lazy var bioTextView: UITextView = {
+        let textView = UITextView()
+        textView.font = UIFont.systemFont(ofSize: 14, weight: .regular)
+        textView.layer.cornerRadius = 10
+        textView.backgroundColor = UIColor(red: 240/255, green: 245/255, blue: 250/255, alpha: 1)
+        textView.textColor = .lightGray
+        textView.text = placeholderText
+        textView.textContainerInset = UIEdgeInsets(top: 12, left: 12, bottom: 12, right: 12)
+        textView.delegate = self
+        return textView
+    }()
+    private lazy var bioStack: UIStackView = {
+        $0.axis = .vertical
+        $0.spacing = 8
+        $0.alignment = .leading
+        $0.distribution = .fill
+        return $0
+    }(UIStackView(arrangedSubviews: [bioLabel, bioTextView]))
     private lazy var textFieldsStack: UIStackView = {
         $0.axis = .vertical
         $0.spacing = 24
         return $0
-    }(UIStackView(arrangedSubviews: [fullNameTextField, emailTextField, phoneNumberTextField, bioTextField]))
+    }(UIStackView(arrangedSubviews: [fullNameTextField, emailTextField, phoneNumberTextField, bioStack]))
     private lazy var saveButton = MainButton(textButton: "Save", target: self, action: #selector(saveButtonTupped))
 
     override func viewDidLoad() {
@@ -68,7 +92,8 @@ class EditProfileViewController: UIViewController, UIGestureRecognizerDelegate {
         fullNameTextField.textField.text = UserDefaults.standard.string(forKey: "fullName")
         emailTextField.textField.text = UserDefaults.standard.string(forKey: "email")
         phoneNumberTextField.textField.text = UserDefaults.standard.string(forKey: "phoneNumber")
-        bioTextField.textField.text = UserDefaults.standard.string(forKey: "bio")
+        bioTextView.text = UserDefaults.standard.string(forKey: "bio")
+        checkBioText(bioTextView)
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -76,7 +101,7 @@ class EditProfileViewController: UIViewController, UIGestureRecognizerDelegate {
         UserDefaults.standard.set(fullNameTextField.textField.text, forKey: "fullName")
         UserDefaults.standard.set(emailTextField.textField.text, forKey: "email")
         UserDefaults.standard.set(phoneNumberTextField.textField.text, forKey: "phoneNumber")
-        UserDefaults.standard.set(bioTextField.textField.text, forKey: "bio")
+        UserDefaults.standard.set(bioTextView.text, forKey: "bio")
     }
     
     //MARK: Constraints
@@ -98,10 +123,11 @@ class EditProfileViewController: UIViewController, UIGestureRecognizerDelegate {
         }
         imageViewSettingsButton.snp.makeConstraints { make in
             make.height.width.equalTo(41)
-            make.trailing.bottom.equalToSuperview()
+            make.trailing.bottom.equalToSuperview().inset(8)
         }
-        bioTextField.snp.makeConstraints { make in
-            make.height.equalTo(127)
+        bioTextView.snp.makeConstraints { make in
+            make.height.equalTo(100)
+            make.leading.trailing.equalToSuperview()
         }
         textFieldsStack.snp.makeConstraints { make in
             make.top.lessThanOrEqualTo(imageView.snp.bottom).offset(30)
@@ -126,6 +152,29 @@ class EditProfileViewController: UIViewController, UIGestureRecognizerDelegate {
     @objc private func saveButtonTupped(){
         navigationController?.popViewController(animated: true)
     }
+    
+    private func checkBioText(_ textView: UITextView){
+        if textView.text == placeholderText {
+            textView.textColor = .lightGray
+        } else {
+            textView.textColor = .black
+        }
+    }
+    
+    func textViewDidBeginEditing(_ textView: UITextView) {
+        if textView.text == placeholderText {
+            textView.text = ""
+            textView.textColor = .black
+        }
+    }
+
+    func textViewDidEndEditing(_ textView: UITextView) {
+        if textView.text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+            textView.text = placeholderText
+            textView.textColor = .lightGray
+        }
+    }
+
     
     //MARK: Keyboard
     private func setupKeyboardObservers() {

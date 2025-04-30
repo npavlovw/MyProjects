@@ -7,20 +7,20 @@
 
 import UIKit
 
-final class TopAlignedTextField: UITextField {
+class TopAlignedTextField: UITextField {
     
-    let padding = UIEdgeInsets(top: 10, left: 8, bottom: 0, right: 8)
-
-    override func placeholderRect(forBounds bounds: CGRect) -> CGRect {
-        return bounds.inset(by: padding)
-    }
+    var textPadding = UIEdgeInsets(top: 12, left: 12, bottom: 74, right: 12)
 
     override func textRect(forBounds bounds: CGRect) -> CGRect {
-        return bounds.inset(by: padding)
+        return bounds.inset(by: textPadding)
     }
 
     override func editingRect(forBounds bounds: CGRect) -> CGRect {
-        return bounds.inset(by: padding)
+        return bounds.inset(by: textPadding)
+    }
+
+    override func placeholderRect(forBounds bounds: CGRect) -> CGRect {
+        return bounds.inset(by: textPadding)
     }
 }
 

@@ -20,20 +20,18 @@ final class TextFieldView: UIView {
     lazy var textField: UITextField = {
         let textField = UITextField()
         textField.font = UIFont.systemFont(ofSize: 14, weight: .regular)
-        textField.textColor = .black
         textField.layer.cornerRadius = 10
         textField.borderStyle = .none
         textField.backgroundColor = UIColor(red: 240/255, green: 245/255, blue: 250/255, alpha: 1)
         return textField
     }()
-    lazy var loginEmailStack: UIStackView = {
-        let stack = UIStackView(arrangedSubviews: [titleLabel, textField])
-        stack.axis = .vertical
-        stack.spacing = 8
-        stack.alignment = .leading
-        stack.distribution = .fill
-        return stack
-    }()
+    lazy var textFieldStack: UIStackView = {
+        $0.axis = .vertical
+        $0.spacing = 8
+        $0.alignment = .leading
+        $0.distribution = .fill
+        return $0
+    }(UIStackView(arrangedSubviews: [titleLabel, textField]))
     
     init(name: String, placeholder: String) {
         super.init(frame: .zero)
@@ -49,9 +47,9 @@ final class TextFieldView: UIView {
         textField.placeholder = placeholder
         textField.setLeftPaddingPoints(16)
         textField.setRightPaddingPoints(16)        
-        addSubview(loginEmailStack)
+        addSubview(textFieldStack)
         
-        loginEmailStack.snp.makeConstraints { make in
+        textFieldStack.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
         titleLabel.snp.makeConstraints { make in
