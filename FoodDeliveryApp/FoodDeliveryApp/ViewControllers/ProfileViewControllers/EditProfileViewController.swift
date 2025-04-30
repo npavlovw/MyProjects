@@ -24,6 +24,8 @@ class EditProfileViewController: UIViewController, UIGestureRecognizerDelegate, 
         $0.alignment = .center
         return $0
     }(UIStackView(arrangedSubviews: [backButton, titleLabel]))
+    private lazy var scrollView = UIScrollView()
+    private lazy var contentView = UIView()
     private lazy var imageView: UIImageView = {
         $0.image = UIImage(systemName: "person.circle.fill")
         $0.layer.cornerRadius = 65
@@ -107,18 +109,29 @@ class EditProfileViewController: UIViewController, UIGestureRecognizerDelegate, 
     //MARK: Constraints
     private func makeConstraints() {
         view.addSubview(titleStack)
-        view.addSubview(imageView)
+        view.addSubview(scrollView)
+        scrollView.addSubview(contentView)
+        contentView.addSubview(imageView)
         imageView.addSubview(imageViewSettingsButton)
-        view.addSubview(textFieldsStack)
-        view.addSubview(saveButton)
+        contentView.addSubview(textFieldsStack)
+        contentView.addSubview(saveButton)
         
         titleStack.snp.makeConstraints { make in
             make.top.equalTo(view.safeAreaLayoutGuide.snp.top)
+            make.height.equalTo(45)
             make.leading.trailing.equalToSuperview().inset(24)
+        }
+        scrollView.snp.makeConstraints { make in
+            make.top.equalTo(titleStack.snp.bottom)
+            make.leading.trailing.bottom.equalToSuperview()
+        }
+        contentView.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+            make.width.equalToSuperview()
         }
         imageView.snp.makeConstraints { make in
             make.height.width.equalTo(130)
-            make.top.lessThanOrEqualTo(titleStack.snp.bottom).offset(25)
+            make.top.equalToSuperview().offset(25)
             make.centerX.equalToSuperview()
         }
         imageViewSettingsButton.snp.makeConstraints { make in
@@ -130,13 +143,13 @@ class EditProfileViewController: UIViewController, UIGestureRecognizerDelegate, 
             make.leading.trailing.equalToSuperview()
         }
         textFieldsStack.snp.makeConstraints { make in
-            make.top.lessThanOrEqualTo(imageView.snp.bottom).offset(30)
+            make.top.equalTo(imageView.snp.bottom).offset(30)
             make.leading.trailing.equalToSuperview().inset(24)
         }
         saveButton.snp.makeConstraints { make in
-            make.top.lessThanOrEqualTo(textFieldsStack.snp.bottom).offset(32)
+            make.top.equalTo(textFieldsStack.snp.bottom).offset(32)
             make.leading.trailing.equalToSuperview().inset(24)
-            make.bottom.equalToSuperview().inset(30)
+            make.bottom.equalToSuperview().offset(-30)
         }
     }
     
