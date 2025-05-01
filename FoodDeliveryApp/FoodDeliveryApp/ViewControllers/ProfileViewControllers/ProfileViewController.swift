@@ -174,6 +174,10 @@ extension ProfileViewController: UITableViewDelegate {
             let personalInfoVC = PersonalInfoViewController()
             navigationController?.pushViewController(personalInfoVC, animated: true)
         }
+        if indexPath.section == 0 && indexPath.row == 1 {
+            let adressesVC = AdressesViewController()
+            navigationController?.pushViewController(adressesVC, animated: true)
+        }
     }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
