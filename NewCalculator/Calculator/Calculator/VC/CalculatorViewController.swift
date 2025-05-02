@@ -6,8 +6,9 @@
 //
 
 import UIKit
+import Foundation
 
-class ViewController: UIViewController {
+class CalculatorViewController: UIViewController {
     
     //MARK: UI-components
     private lazy var mainLabel: UILabel = {
@@ -35,17 +36,13 @@ class ViewController: UIViewController {
     private lazy var buttonEquals = CustomButton(title: "=", backgroundColor: .darkGray , target: self, action: #selector(btnEqualsTapped))
     private lazy var ACButton = CustomButton(title: "AC", backgroundColor: .darkGray , target: self, action: #selector(btnACTapped))
     private lazy var deleteButton = CustomButton(title: "DEL", backgroundColor: .darkGray , target: self, action: #selector(btnDeleteTapped))
+    private lazy var commaButton = CustomButton(title: ".", backgroundColor: .darkGray, target: self, action: #selector(btnCommaTapped))
     private lazy var emptyView: UIView = {
         $0.backgroundColor = .clear
         $0.translatesAutoresizingMaskIntoConstraints = false
         return $0
     }(UIView())
     private lazy var emptyView2: UIView = {
-        $0.backgroundColor = .clear
-        $0.translatesAutoresizingMaskIntoConstraints = false
-        return $0
-    }(UIView())
-    private lazy var emptyView3: UIView = {
         $0.backgroundColor = .clear
         $0.translatesAutoresizingMaskIntoConstraints = false
         return $0
@@ -63,7 +60,7 @@ class ViewController: UIViewController {
         $0.distribution = .fillEqually
         $0.translatesAutoresizingMaskIntoConstraints = false
         return $0
-    }(UIStackView(arrangedSubviews: [buttonOne, buttonTwo, buttonThree, emptyView3]))
+    }(UIStackView(arrangedSubviews: [buttonOne, buttonTwo, buttonThree, commaButton]))
     private lazy var fourFiveSixStack: UIStackView = {
         $0.axis = .horizontal
         $0.spacing = 8
@@ -138,91 +135,49 @@ class ViewController: UIViewController {
             label.bottomAnchor.constraint(equalTo: mainStack.topAnchor, constant: -12)
         ])
     }
+    
     //MARK: Logics
-    @objc private func btnOneTapped() {
+    private func appendToLabel(_ value: String) {
         if label.text == "0" {
-            label.text = "1"
+            label.text = value
         } else {
-            label.text = (label.text ?? "") + "1"
+            label.text = (label.text ?? "") + value
         }
     }
-    @objc private func btnTwoTapped() {
-        if label.text == "0" {
-            label.text = "2"
-        } else {
-            label.text = (label.text ?? "") + "2"
+    
+    @objc private func btnOneTapped() { appendToLabel("1")}
+    @objc private func btnTwoTapped() { appendToLabel("2")}
+    @objc private func btnThreeTapped() { appendToLabel("3")}
+    @objc private func btnFourTapped() { appendToLabel("4")}
+    @objc private func btnFiveTapped() { appendToLabel("5")}
+    @objc private func btnSixTapped() { appendToLabel("6")}
+    @objc private func btnSevenTapped() { appendToLabel("7")}
+    @objc private func btnEightTapped() { appendToLabel("8")}
+    @objc private func btnNineTapped() { appendToLabel("9")}
+    @objc private func btnZeroTapped() { appendToLabel("0")}
+    
+    private func appendToOperator(_ op: String) {
+        if let lastChar = label.text?.last {
+            if ["+", "-", "*", "/"].contains(lastChar) {
+                label.text?.removeLast()
+                label.text?.append(op)
+            } else {
+                label.text = (label.text ?? "") + op
+            }
         }
     }
-    @objc private func btnThreeTapped() {
-        if label.text == "0" {
-            label.text = "3"
-        } else {
-            label.text = (label.text ?? "") + "3"
-        }
-    }
-    @objc private func btnFourTapped() {
-        if label.text == "0" {
-            label.text = "4"
-        } else {
-            label.text = (label.text ?? "") + "4"
-        }
-    }
-    @objc private func btnFiveTapped() {
-        if label.text == "0" {
-            label.text = "5"
-        } else {
-            label.text = (label.text ?? "") + "5"
-        }
-    }
-    @objc private func btnSixTapped() {
-        if label.text == "0" {
-            label.text = "6"
-        } else {
-            label.text = (label.text ?? "") + "6"
-        }
-    }
-    @objc private func btnSevenTapped() {
-        if label.text == "0" {
-            label.text = "7"
-        } else {
-            label.text = (label.text ?? "") + "7"
-        }
-    }
-    @objc private func btnEightTapped() {
-        if label.text == "0" {
-            label.text = "8"
-        } else {
-            label.text = (label.text ?? "") + "8"
-        }
-    }
-    @objc private func btnNineTapped() {
-        if label.text == "0" {
-            label.text = "9"
-        } else {
-            label.text = (label.text ?? "") + "9"
-        }
-    }
-    @objc private func btnZeroTapped() {
-        if label.text == "0" {
-            label.text = "0"
-        } else {
-            label.text = (label.text ?? "") + "0"
-        }
-    }
-    @objc private func btnPlusTapped() {
-        print("+")
-    }
-    @objc private func btnMinusTapped() {
-        print("-")
-    }
-    @objc private func btnMultiplyTapped() {
-        print("*")
-    }
-    @objc private func btnDevideTapped() {
-        print("/")
-    }
+    @objc private func btnPlusTapped() { appendToOperator("+")}
+    @objc private func btnMinusTapped() { appendToOperator("-")}
+    @objc private func btnMultiplyTapped() { appendToOperator("*")}
+    @objc private func btnDevideTapped() { appendToOperator("/")}
+    
     @objc private func btnEqualsTapped() {
-        print("=")
+        if let lastChar = label.text?.last, "+-*/".contains(lastChar) {
+            label.text?.removeLast()
+        }
+        let expression = NSExpression(format: (label.text ?? ""))
+        guard let result = expression.expressionValue(with: nil, context: nil) as? Double else { return }
+        label.text = result.truncatingRemainder(dividingBy: 1) == 0 ? String(Int(result)) : String(result)
     }
     @objc private func btnACTapped() {
         label.text = "0"
@@ -234,5 +189,11 @@ class ViewController: UIViewController {
         } else {
             label.text = "0"
         }
+    }
+    @objc private func btnCommaTapped() {
+        let components = label.text?.components(separatedBy: CharacterSet(charactersIn: "+-*/")) ?? []
+        if let last = components.last, !last.contains(".") {
+               label.text = (label.text ?? "") + "."
+           }
     }
 }
