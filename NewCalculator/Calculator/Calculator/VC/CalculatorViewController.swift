@@ -10,7 +10,7 @@ import Foundation
 
 class CalculatorViewController: UIViewController {
     
-    //MARK: UI-components
+    //MARK: - UI-components
     private lazy var mainLabel: UILabel = {
         $0.text = "Калькулятор"
         $0.textAlignment = .center
@@ -19,6 +19,7 @@ class CalculatorViewController: UIViewController {
         $0.translatesAutoresizingMaskIntoConstraints = false
         return $0
     }(UILabel())
+    var isResultDisplayed: Bool = false
     private lazy var buttonOne = CustomButton(title: "1", backgroundColor: .darkGray , target: self, action: #selector(btnOneTapped))
     private lazy var buttonTwo = CustomButton(title: "2", backgroundColor: .darkGray , target: self, action: #selector(btnTwoTapped))
     private lazy var buttonThree = CustomButton(title: "3", backgroundColor: .darkGray , target: self, action: #selector(btnThreeTapped))
@@ -29,6 +30,7 @@ class CalculatorViewController: UIViewController {
     private lazy var buttonEight = CustomButton(title: "8", backgroundColor: .darkGray , target: self, action: #selector(btnEightTapped))
     private lazy var buttonNine = CustomButton(title: "9", backgroundColor: .darkGray , target: self, action: #selector(btnNineTapped))
     private lazy var buttonZero = CustomButton(title: "0", backgroundColor: .darkGray , target: self, action: #selector(btnZeroTapped))
+    
     private lazy var buttonPlus = CustomButton(title: "+", backgroundColor: .darkGray , target: self, action: #selector(btnPlusTapped))
     private lazy var buttonMinus = CustomButton(title: "-", backgroundColor: .darkGray , target: self, action: #selector(btnMinusTapped))
     private lazy var buttonMultiply = CustomButton(title: "*", backgroundColor: .darkGray , target: self, action: #selector(btnMultiplyTapped))
@@ -98,7 +100,7 @@ class CalculatorViewController: UIViewController {
         return $0
     }(UILabel())
     
-    //MARK: Lifecycle
+    //MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .black
@@ -136,12 +138,26 @@ class CalculatorViewController: UIViewController {
         ])
     }
     
-    //MARK: Logics
+    //MARK: - Logics
     private func appendToLabel(_ value: String) {
+        guard let lastChar = label.text?.last else { return }
+
+        // Если отображается результат и последний символ — не оператор, обнуляем поле
+        if isResultDisplayed && !"+-*/".contains(lastChar) {
+            label.text = "0"
+            isResultDisplayed = false
+        }
+
+        // Сбрасываем флаг, если результат отображается и добавляется оператор
+        if isResultDisplayed && "+-*/".contains(lastChar) {
+            isResultDisplayed = false
+        }
+
+        // Заменяем 0 на значение или добавляем значение к существующему тексту
         if label.text == "0" {
             label.text = value
         } else {
-            label.text = (label.text ?? "") + value
+            label.text? += value
         }
     }
     
@@ -171,14 +187,27 @@ class CalculatorViewController: UIViewController {
     @objc private func btnMultiplyTapped() { appendToOperator("*")}
     @objc private func btnDevideTapped() { appendToOperator("/")}
     
+    
     @objc private func btnEqualsTapped() {
-        if let lastChar = label.text?.last, "+-*/".contains(lastChar) {
-            label.text?.removeLast()
+        guard let text = label.text, !text.isEmpty else { return }
+
+        // Проверяем, чтобы последний символ не был оператором
+        if let lastChar = text.trimmingCharacters(in: .whitespaces).last, "+-*/".contains(lastChar) {
+            return
         }
-        let expression = NSExpression(format: (label.text ?? ""))
-        guard let result = expression.expressionValue(with: nil, context: nil) as? Double else { return }
-        label.text = result.truncatingRemainder(dividingBy: 1) == 0 ? String(Int(result)) : String(result)
+
+        let expression = NSExpression(format: text)
+
+        if let result = expression.expressionValue(with: nil, context: nil) as? NSNumber {
+            let value = result.doubleValue
+            label.text = value.truncatingRemainder(dividingBy: 1) == 0 ? String(Int(value)) : String(value)
+        } else {
+            label.text = "Ошибка"
+        }
+
+        isResultDisplayed = true
     }
+
     @objc private func btnACTapped() {
         label.text = "0"
     }
@@ -191,6 +220,10 @@ class CalculatorViewController: UIViewController {
         }
     }
     @objc private func btnCommaTapped() {
+        guard let lastChar = label.text?.last else { return }
+
+        guard "0123456789".contains(lastChar) else { return }
+
         let components = label.text?.components(separatedBy: CharacterSet(charactersIn: "+-*/")) ?? []
         if let last = components.last, !last.contains(".") {
                label.text = (label.text ?? "") + "."
