@@ -23,27 +23,16 @@ class HomeViewController: UIViewController {
         $0.font = .systemFont(ofSize: 14, weight: .medium)
         return $0
     }(UILabel())
-    private lazy var  setLocationButton: UIButton = {
+    private lazy var setLocationButton: UIButton = {
         let image = UIImage(named: "Polygon 2")?.withRenderingMode(.alwaysTemplate)
         $0.setImage(image, for: .normal)
         $0.tintColor = UIColor(red: 24/255, green: 28/255, blue: 46/255, alpha: 1)
         $0.addTarget(self, action: #selector(setLocationButtonTapped), for: .touchUpInside)
         return $0
     }(UIButton(type: .system))
-    private lazy var locationStack: UIStackView = {
-        $0.axis = .horizontal
-        $0.spacing = 8
-        $0.alignment = .center
-        $0.distribution = .fill
-        return $0
-    }(UIStackView(arrangedSubviews: [locationLabel, setLocationButton]))
-    private lazy var setDeliveryStack: UIStackView = {
-        $0.axis = .vertical
-        $0.spacing = 3
-        $0.alignment = .leading
-        return $0
-    }(UIStackView(arrangedSubviews: [deliverToLabel, locationStack]))
-    let locations = ["Halal Lab office", "Home", "Work", "Other"]
+    
+    let locations = ["Halal Lab office", "Home", "Work", "Very long text, which is very long", "Other"]
+    private lazy var basketButton = CustomButton(target: self, action: #selector(basketButtonTapped), backgroundColor: .logInBackground, image: UIImage(named: "Icon")!)
     
     
     let screenWidth = UIScreen.main.bounds.width
@@ -56,7 +45,7 @@ class HomeViewController: UIViewController {
     }
     
     private func setConstraints() {
-        [menuButton, setDeliveryStack].forEach {
+        [menuButton, deliverToLabel, locationLabel, setLocationButton, basketButton].forEach {
             view.addSubview($0)
         }
         
@@ -64,9 +53,22 @@ class HomeViewController: UIViewController {
             make.top.equalToSuperview().offset(screenHeight*54/812)
             make.leading.equalToSuperview().offset(screenWidth*24/375)
         }
-        setDeliveryStack.snp.makeConstraints { make in
+        deliverToLabel.snp.makeConstraints { make in
             make.leading.equalTo(menuButton.snp.trailing).offset(18)
             make.top.equalToSuperview().offset(screenHeight*59/812)
+        }
+        locationLabel.snp.makeConstraints { make in
+            make.leading.equalTo(deliverToLabel.snp.leading)
+            make.top.equalTo(deliverToLabel.snp.bottom).offset(3)
+        }
+        setLocationButton.snp.makeConstraints { make in
+            make.leading.equalTo(locationLabel.snp.trailing).offset(8)
+            make.centerY.equalTo(locationLabel.snp.centerY)
+        }
+        basketButton.snp.makeConstraints { make in
+            make.centerY.equalTo(menuButton.snp.centerY)
+            make.trailing.equalToSuperview().inset(screenWidth*24/375)
+            make.leading.greaterThanOrEqualTo(setLocationButton.snp.trailing).offset(8)
         }
     }
     
@@ -90,6 +92,10 @@ class HomeViewController: UIViewController {
         alertController.addAction(cancelAction)
         
         present(alertController, animated: true)
+    }
+    
+    @objc private func basketButtonTapped() {
+        print ("basketButtonTapped")
     }
 
 }
