@@ -8,7 +8,7 @@
 import UIKit
 import SnapKit
 
-class HomeViewController: UIViewController {
+class HomeViewController: UIViewController, UISearchBarDelegate {
     
     //MARK: -UI-Components
     private lazy var menuButton = CustomButton(target: self, action: #selector(menuTupped), backgroundColor: .btnGray, image: UIImage(named: "menuIcon")!)
@@ -37,6 +37,7 @@ class HomeViewController: UIViewController {
         $0.alignment = .center
         return $0
     }(UIStackView(arrangedSubviews: [locationLabel, setLocationButton]))
+    private lazy var basketButton = CustomButton(target: self, action: #selector(basketButtonTapped), backgroundColor: .logInBackground, image: UIImage(named: "Icon")!)
     private lazy var badgeView: UIView = {
         $0.backgroundColor = .appOrange
         $0.translatesAutoresizingMaskIntoConstraints = false
@@ -52,9 +53,41 @@ class HomeViewController: UIViewController {
         $0.textAlignment = .center
         return $0
     }(UILabel())
-    
     let locations = ["Halal Lab office", "Home", "Work"]
-    private lazy var basketButton = CustomButton(target: self, action: #selector(basketButtonTapped), backgroundColor: .logInBackground, image: UIImage(named: "Icon")!)
+    private lazy var greetingLabel: UILabel = {
+        let normalText = "Hey Halal, "
+        let boldText = "Good Afternoon"
+        let attributedText = NSMutableAttributedString(
+            string: normalText,
+            attributes: [.font: UIFont.systemFont(ofSize: 16)]
+        )
+        let boldPart = NSAttributedString(
+            string: boldText,
+            attributes: [.font: UIFont.boldSystemFont(ofSize: 16)]
+        )
+        attributedText.append(boldPart)
+        
+        $0.attributedText = attributedText
+        $0.textAlignment = .left
+        return $0
+    }(UILabel())
+    private lazy var searchBar: UISearchBar = {
+        $0.placeholder = "Search dishes, restaurants"
+        $0.searchBarStyle = .minimal
+        return $0
+    }(UISearchBar())
+    var allCategories = AllCategories.mockData()
+    let layout: UICollectionViewFlowLayout = {
+        $0.scrollDirection = .horizontal
+        $0.minimumLineSpacing = 10
+        return $0
+    }(UICollectionViewFlowLayout())
+    private lazy var allCategoriesCollectionView: UICollectionView = {
+        $0.backgroundColor = .white
+        $0.register(AllCategoriesCell.self, forCellWithReuseIdentifier: AllCategoriesCell.reuseID)
+        $0.showsHorizontalScrollIndicator = false
+        return $0
+    }(UICollectionView(frame: .zero, collectionViewLayout: layout))
     
     let screenWidth = UIScreen.main.bounds.width
     let screenHeight = UIScreen.main.bounds.height
@@ -64,11 +97,14 @@ class HomeViewController: UIViewController {
         super.viewDidLoad()
         view.backgroundColor = .white
         setConstraints()
+        searchBar.delegate = self
+        allCategoriesCollectionView.delegate = self
+        allCategoriesCollectionView.dataSource = self
     }
     
     //MARK: -Constraints
     private func setConstraints() {
-        [menuButton, deliverToLabel, locationStack, basketButton].forEach {
+        [menuButton, deliverToLabel, locationStack, basketButton, greetingLabel,searchBar, allCategoriesCollectionView].forEach {
             view.addSubview($0)
         }
         basketButton.addSubview(badgeView)
@@ -98,6 +134,20 @@ class HomeViewController: UIViewController {
         }
         badgeLabel.snp.makeConstraints { make in
             make.edges.equalToSuperview()
+        }
+        greetingLabel.snp.makeConstraints { make in
+            make.top.equalTo(menuButton.snp.bottom).offset(24)
+            make.leading.trailing.equalToSuperview().inset(24)
+        }
+        searchBar.snp.makeConstraints { make in
+            make.top.equalTo(greetingLabel.snp.bottom).offset(8)
+            make.leading.trailing.equalToSuperview().inset(16)
+        }
+        allCategoriesCollectionView.snp.makeConstraints { make in
+            make.top.equalTo(searchBar.snp.bottom).offset(32)
+            make.leading.equalToSuperview().offset(24)
+            make.trailing.equalToSuperview()
+            make.height.equalTo(104)
         }
         
         locationLabel.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
@@ -138,4 +188,32 @@ class HomeViewController: UIViewController {
         }
     }
 
+    //Что происзодит при вводе текста в SearchBar
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+    }
+}
+
+extension HomeViewController: UICollectionViewDataSource {
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        allCategories.count
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: AllCategoriesCell.reuseID, for: indexPath) as! AllCategoriesCell
+        cell.configure(with: allCategories[indexPath.item])
+        return cell
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        for i in 0..<allCategories.count {
+            allCategories[i].isSelected = (i == indexPath.item)
+        }
+        collectionView.reloadData()
+    }
+}
+
+extension HomeViewController: UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        CGSize(width: 120, height: 48)
+    }
 }
