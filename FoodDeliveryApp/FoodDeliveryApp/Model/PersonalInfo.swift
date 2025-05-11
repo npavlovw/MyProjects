@@ -15,7 +15,7 @@ struct PersonalInfo{
     
     static func getAll() -> [PersonalInfo] {
         [
-            PersonalInfo(label: "FULL NAME", subLabel: UserDefaults.standard.string(forKey: "fullName") ?? "", icon: "Group 3365"),
+            PersonalInfo(label: "FULL NAME", subLabel: UserDefaults.standard.string(forKey: "fullName") ?? "", icon: "Group 3363"),
             PersonalInfo(label: "EMAIL", subLabel: UserDefaults.standard.string(forKey: "email") ?? "", icon: "Group 3423"),
             PersonalInfo(label: "PHONE NUMBER", subLabel: UserDefaults.standard.string(forKey: "phoneNumber") ?? "", icon: "Group 3425")
         ]

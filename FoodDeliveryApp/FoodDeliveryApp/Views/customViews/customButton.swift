@@ -27,7 +27,6 @@ final class CustomButton: UIButton {
         setImage(image, for: .normal)
         tintColor = .label
         addTarget(target, action: action, for: .touchUpInside)
-        clipsToBounds = true
         
         snp.makeConstraints { make in
             make.height.width.equalTo(45)

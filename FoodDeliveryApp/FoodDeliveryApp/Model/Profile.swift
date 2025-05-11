@@ -15,7 +15,7 @@ struct Profile: Equatable{
     static func makeData() -> [[Profile]] {
         [
             [
-            Profile(label: "Personal Info", image: "Group 3365"),
+            Profile(label: "Personal Info", image: "Group 3363"),
             Profile(label: "Addresses", image: "map")
         ],
          [
