@@ -13,7 +13,7 @@ class AllCategoriesCell: UICollectionViewCell {
     let names = AllCategories.mockData()
     
     private lazy var view: UIView = {
-        $0.layer.cornerRadius = 50
+        $0.layer.cornerRadius = 30
         $0.backgroundColor = .appGrey
         $0.addSubview(mainStack)
         return $0
@@ -30,11 +30,14 @@ class AllCategoriesCell: UICollectionViewCell {
         $0.layer.cornerRadius = 22
         $0.translatesAutoresizingMaskIntoConstraints = false
         $0.heightAnchor.constraint(equalToConstant: 44).isActive = true
-        $0.heightAnchor.constraint(equalToConstant: 44).isActive = true
+        $0.widthAnchor.constraint(equalToConstant: 44).isActive = true
         return $0
     }(UIView())
     private lazy var mainLabel: UILabel = {
         $0.font = .systemFont(ofSize: 14, weight: .medium)
+        $0.numberOfLines = 1
+        $0.setContentHuggingPriority(.required, for: .horizontal)
+        $0.setContentCompressionResistancePriority(.required, for: .horizontal)
         return $0
     }(UILabel())
     
@@ -57,6 +60,7 @@ class AllCategoriesCell: UICollectionViewCell {
         
         mainStack.snp.makeConstraints { make in
             make.leading.equalToSuperview().offset(8)
+            make.trailing.equalToSuperview().inset(16)
             make.top.bottom.equalToSuperview().inset(8)
         }
     }
@@ -65,7 +69,7 @@ class AllCategoriesCell: UICollectionViewCell {
         mainLabel.text = category.name
         
         if category.isSelected {
-            view.backgroundColor = .appOrange
+            view.backgroundColor = UIColor(red: 1, green: 210/255, blue: 124/255, alpha: 1)
         } else {
             view.backgroundColor = .white
         }

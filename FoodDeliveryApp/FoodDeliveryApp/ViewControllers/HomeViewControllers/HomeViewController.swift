@@ -74,18 +74,22 @@ class HomeViewController: UIViewController, UISearchBarDelegate {
     private lazy var searchBar: UISearchBar = {
         $0.placeholder = "Search dishes, restaurants"
         $0.searchBarStyle = .minimal
+        $0.delegate = self
         return $0
     }(UISearchBar())
     var allCategories = AllCategories.mockData()
     let layout: UICollectionViewFlowLayout = {
         $0.scrollDirection = .horizontal
         $0.minimumLineSpacing = 10
+        $0.estimatedItemSize = UICollectionViewFlowLayout.automaticSize
         return $0
     }(UICollectionViewFlowLayout())
     private lazy var allCategoriesCollectionView: UICollectionView = {
         $0.backgroundColor = .white
         $0.register(AllCategoriesCell.self, forCellWithReuseIdentifier: AllCategoriesCell.reuseID)
         $0.showsHorizontalScrollIndicator = false
+        $0.delegate = self
+        $0.dataSource = self
         return $0
     }(UICollectionView(frame: .zero, collectionViewLayout: layout))
     
@@ -97,9 +101,6 @@ class HomeViewController: UIViewController, UISearchBarDelegate {
         super.viewDidLoad()
         view.backgroundColor = .white
         setConstraints()
-        searchBar.delegate = self
-        allCategoriesCollectionView.delegate = self
-        allCategoriesCollectionView.dataSource = self
     }
     
     //MARK: -Constraints
@@ -213,7 +214,4 @@ extension HomeViewController: UICollectionViewDataSource {
 }
 
 extension HomeViewController: UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        CGSize(width: 120, height: 48)
-    }
 }
