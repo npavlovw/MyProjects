@@ -101,6 +101,7 @@ class HomeViewController: UIViewController, UISearchBarDelegate {
         super.viewDidLoad()
         view.backgroundColor = .white
         setConstraints()
+        setupKeyboardDismissGesture()
     }
     
     //MARK: -Constraints
@@ -189,8 +190,19 @@ class HomeViewController: UIViewController, UISearchBarDelegate {
         }
     }
 
-    //Что происзодит при вводе текста в SearchBar
+    //Что происходит при вводе текста в SearchBar
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+    }
+    
+    //MARK: -Keyboard
+    private func setupKeyboardDismissGesture() {
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(hideKeyboard))
+        tapGesture.cancelsTouchesInView = false
+        view.addGestureRecognizer(tapGesture)
+    }
+    
+    @objc private func hideKeyboard() {
+        view.endEditing(true)
     }
 }
 
