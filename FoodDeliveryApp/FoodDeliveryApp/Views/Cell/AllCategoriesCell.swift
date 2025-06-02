@@ -7,6 +7,7 @@
 
 
 import UIKit
+import SnapKit
 
 class AllCategoriesCell: UICollectionViewCell {
     static let reuseID = "AllCategoriesCell"
@@ -14,7 +15,6 @@ class AllCategoriesCell: UICollectionViewCell {
     
     private lazy var view: UIView = {
         $0.layer.cornerRadius = 30
-        $0.backgroundColor = .appGrey
         $0.addSubview(mainStack)
         return $0
     }(UIView())
@@ -44,7 +44,6 @@ class AllCategoriesCell: UICollectionViewCell {
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupConstraints()
-        
     }
     
     required init?(coder: NSCoder) {
@@ -60,7 +59,7 @@ class AllCategoriesCell: UICollectionViewCell {
         
         mainStack.snp.makeConstraints { make in
             make.leading.equalToSuperview().offset(8)
-            make.trailing.equalToSuperview().inset(16)
+            make.trailing.equalToSuperview().inset(8)
             make.top.bottom.equalToSuperview().inset(8)
         }
     }

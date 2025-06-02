@@ -78,20 +78,37 @@ class HomeViewController: UIViewController, UISearchBarDelegate {
         return $0
     }(UISearchBar())
     var allCategories = AllCategories.mockData()
-    let layout: UICollectionViewFlowLayout = {
+    private lazy var allCategoriesLabel = AllCategoriesView(target: self, action: #selector(seeAllCategoriesTapped), title: "All Categories")
+    let layoutAllCategories: UICollectionViewFlowLayout = {
         $0.scrollDirection = .horizontal
-        $0.minimumLineSpacing = 10
         $0.estimatedItemSize = UICollectionViewFlowLayout.automaticSize
+        $0.sectionInset = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 0)
         return $0
     }(UICollectionViewFlowLayout())
     private lazy var allCategoriesCollectionView: UICollectionView = {
-        $0.backgroundColor = .white
         $0.register(AllCategoriesCell.self, forCellWithReuseIdentifier: AllCategoriesCell.reuseID)
         $0.showsHorizontalScrollIndicator = false
         $0.delegate = self
         $0.dataSource = self
+        $0.contentInset = .zero
         return $0
-    }(UICollectionView(frame: .zero, collectionViewLayout: layout))
+    }(UICollectionView(frame: .zero, collectionViewLayout: layoutAllCategories))
+    private lazy var openRestaurantsLabel = AllCategoriesView(target: self, action: #selector(seeAllRestaurantsTapped), title: "Open Restaurants")
+    var allRestaurants = AllRestaurants.mockData()
+    let layoutRestourants: UICollectionViewFlowLayout = {
+        $0.scrollDirection = .vertical
+        $0.minimumLineSpacing = 20
+        $0.estimatedItemSize = UICollectionViewFlowLayout.automaticSize
+        return $0
+    }(UICollectionViewFlowLayout())
+    private lazy var openRestaurantsCollectionView: UICollectionView = {
+        $0.register(OpenRestaurantsCell.self, forCellWithReuseIdentifier: OpenRestaurantsCell.reuseID)
+        $0.showsVerticalScrollIndicator = false
+        $0.delegate = self
+        $0.dataSource = self
+        $0.contentInset = .zero
+        return $0
+    }(UICollectionView(frame: .zero, collectionViewLayout: layoutRestourants))
     
     let screenWidth = UIScreen.main.bounds.width
     let screenHeight = UIScreen.main.bounds.height
@@ -106,7 +123,7 @@ class HomeViewController: UIViewController, UISearchBarDelegate {
     
     //MARK: -Constraints
     private func setConstraints() {
-        [menuButton, deliverToLabel, locationStack, basketButton, greetingLabel,searchBar, allCategoriesCollectionView].forEach {
+        [menuButton, deliverToLabel, locationStack, basketButton, greetingLabel,searchBar, allCategoriesLabel, allCategoriesCollectionView, openRestaurantsLabel, openRestaurantsCollectionView].forEach {
             view.addSubview($0)
         }
         basketButton.addSubview(badgeView)
@@ -144,12 +161,30 @@ class HomeViewController: UIViewController, UISearchBarDelegate {
         searchBar.snp.makeConstraints { make in
             make.top.equalTo(greetingLabel.snp.bottom).offset(8)
             make.leading.trailing.equalToSuperview().inset(16)
+            make.height.equalTo(62)
+        }
+        allCategoriesLabel.snp.makeConstraints { make in
+            make.top.equalTo(searchBar.snp.bottom).offset(16)
+            make.leading.equalTo(greetingLabel.snp.leading)
+            make.trailing.equalTo(greetingLabel.snp.trailing)
+            make.height.equalTo(24)
         }
         allCategoriesCollectionView.snp.makeConstraints { make in
-            make.top.equalTo(searchBar.snp.bottom).offset(32)
-            make.leading.equalToSuperview().offset(24)
+            make.top.equalTo(allCategoriesLabel.snp.bottom).offset(20)
+            make.leading.equalToSuperview()
             make.trailing.equalToSuperview()
-            make.height.equalTo(104)
+            make.height.equalTo(60)
+        }
+        openRestaurantsLabel.snp.makeConstraints { make in
+            make.top.equalTo(allCategoriesCollectionView.snp.bottom).offset(16)
+            make.leading.equalTo(greetingLabel.snp.leading)
+            make.trailing.equalTo(greetingLabel.snp.trailing)
+            make.height.equalTo(24)
+        }
+        openRestaurantsCollectionView.snp.makeConstraints { make in
+            make.top.equalTo(openRestaurantsLabel.snp.bottom).offset(20)
+            make.leading.trailing.equalToSuperview().inset(24)
+            make.bottom.equalToSuperview()
         }
         
         locationLabel.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
@@ -189,6 +224,14 @@ class HomeViewController: UIViewController, UISearchBarDelegate {
             badgeView.isHidden = false
         }
     }
+                                                            
+    @objc private func seeAllCategoriesTapped() {
+        print("See All Categories Tapped")
+    }
+    
+    @objc private func seeAllRestaurantsTapped() {
+        print("See All Restaurants Tapped")
+    }
 
     //Что происходит при вводе текста в SearchBar
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
@@ -206,24 +249,45 @@ class HomeViewController: UIViewController, UISearchBarDelegate {
     }
 }
 
+//MARK: -DataSource
 extension HomeViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        allCategories.count
+        if collectionView == allCategoriesCollectionView {
+            return allCategories.count
+        } else if collectionView == openRestaurantsCollectionView {
+            return allRestaurants.count
+        }
+        return 0
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: AllCategoriesCell.reuseID, for: indexPath) as! AllCategoriesCell
-        cell.configure(with: allCategories[indexPath.item])
-        return cell
+        if collectionView == allCategoriesCollectionView {
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: AllCategoriesCell.reuseID, for: indexPath) as! AllCategoriesCell
+            cell.configure(with: allCategories[indexPath.item])
+            return cell
+        } else {
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: OpenRestaurantsCell.reuseID, for: indexPath) as! OpenRestaurantsCell
+            cell.configure(with: allRestaurants[indexPath.item])
+            return cell
+        }
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        for i in 0..<allCategories.count {
-            allCategories[i].isSelected = (i == indexPath.item)
+        if collectionView == allCategoriesCollectionView {
+            for i in 0..<allCategories.count {
+                allCategories[i].isSelected = (i == indexPath.item)
+            }
+            collectionView.reloadData()
+        } else {
+            for i in 0..<allRestaurants.count {
+                allRestaurants[i].isSelected = (i == indexPath.item)
+            }
+            collectionView.reloadData()
         }
-        collectionView.reloadData()
     }
 }
 
+//MARK: -Delegate
 extension HomeViewController: UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
+    
 }
