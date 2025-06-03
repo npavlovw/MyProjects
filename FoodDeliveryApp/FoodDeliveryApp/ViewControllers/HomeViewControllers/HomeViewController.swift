@@ -97,7 +97,7 @@ class HomeViewController: UIViewController, UISearchBarDelegate {
     var allRestaurants = AllRestaurants.mockData()
     let layoutRestourants: UICollectionViewFlowLayout = {
         $0.scrollDirection = .vertical
-        $0.minimumLineSpacing = 20
+        $0.minimumLineSpacing = 25
         $0.estimatedItemSize = UICollectionViewFlowLayout.automaticSize
         return $0
     }(UICollectionViewFlowLayout())
@@ -184,7 +184,7 @@ class HomeViewController: UIViewController, UISearchBarDelegate {
         openRestaurantsCollectionView.snp.makeConstraints { make in
             make.top.equalTo(openRestaurantsLabel.snp.bottom).offset(20)
             make.leading.trailing.equalToSuperview().inset(24)
-            make.bottom.equalToSuperview()
+            make.bottom.equalTo(view.snp.bottom)
         }
         
         locationLabel.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)

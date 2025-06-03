@@ -26,7 +26,7 @@ class AllCategoriesCell: UICollectionViewCell {
         return $0
     }(UIStackView(arrangedSubviews: [grayView, mainLabel]))
     private lazy var grayView: UIView = {
-        $0.backgroundColor = .gray
+        $0.backgroundColor = UIColor(red: 152/255, green: 168/255, blue: 184/255, alpha: 1)
         $0.layer.cornerRadius = 22
         $0.translatesAutoresizingMaskIntoConstraints = false
         $0.heightAnchor.constraint(equalToConstant: 44).isActive = true

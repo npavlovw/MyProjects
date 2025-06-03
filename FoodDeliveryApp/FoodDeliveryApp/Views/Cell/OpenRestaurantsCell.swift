@@ -9,16 +9,10 @@ import UIKit
 import SnapKit
 
 class OpenRestaurantsCell: UICollectionViewCell {
-    static let reuseID = "AllRestaurantsCell"
+    static let reuseID = "OpenRestaurantsCell"
     
-    let names = AllRestaurants.mockData()
-    
-    private lazy var view: UIView = {
-        let view = UIView()
-        return view
-    }()
     private lazy var grayView: UIView = {
-        $0.backgroundColor = .gray
+        $0.backgroundColor = UIColor(red: 152/255, green: 168/255, blue: 184/255, alpha: 1)
         $0.layer.cornerRadius = 5
         return $0
     }(UIView())
@@ -107,34 +101,36 @@ class OpenRestaurantsCell: UICollectionViewCell {
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupConstraints()
-        
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        contentView.layoutIfNeeded()
+    }
+    
     //MARK: -Constraints
     private func setupConstraints() {
-        contentView.addSubview(view)
-        view.addSubview(grayView)
-        view.addSubview(nameStackView)
-        view.addSubview(infoStackView)
+        contentView.addSubview(grayView)
+        contentView.addSubview(nameStackView)
+        contentView.addSubview(infoStackView)
 
-        view.snp.makeConstraints { make in
-            make.leading.trailing.equalToSuperview()
-        }
         grayView.snp.makeConstraints { make in
-            make.leading.trailing.top.equalToSuperview()
+            make.top.leading.trailing.equalToSuperview()
             make.height.equalTo(137)
+            make.width.equalTo(UIScreen.main.bounds.width - 48)
         }
         nameStackView.snp.makeConstraints { make in
-            make.leading.equalToSuperview()
+            make.leading.trailing.equalToSuperview()
             make.top.equalTo(grayView.snp.bottom).offset(8)
         }
         infoStackView.snp.makeConstraints { make in
-            make.leading.bottom.equalToSuperview()
+            make.leading.equalToSuperview()
             make.top.equalTo(nameStackView.snp.bottom).offset(14)
+            make.bottom.equalToSuperview()
         }
     }
     
@@ -148,9 +144,9 @@ class OpenRestaurantsCell: UICollectionViewCell {
         timeLabel.text = category.time
         
         if category.isSelected {
-            view.backgroundColor = UIColor(red: 1, green: 210/255, blue: 124/255, alpha: 1)
+            contentView.backgroundColor = UIColor(red: 1, green: 210/255, blue: 124/255, alpha: 1)
         } else {
-            view.backgroundColor = .white
+            contentView.backgroundColor = .white
         }
     }
 }
