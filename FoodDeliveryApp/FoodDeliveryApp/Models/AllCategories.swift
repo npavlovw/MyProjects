@@ -18,6 +18,6 @@ struct AllCategories {
             AllCategories(name: "Burgers"),
             AllCategories(name: "Pizza"),
             AllCategories(name: "Pasta")
-            ]
+        ]
     }
 }

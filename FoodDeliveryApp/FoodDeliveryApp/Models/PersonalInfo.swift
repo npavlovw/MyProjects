@@ -7,13 +7,14 @@
 
 import Foundation
 
-struct PersonalInfo{
+struct PersonalInfo {
     
     let label: String
     let subLabel: String
     let icon: String
     
-    static func getAll() -> [PersonalInfo] {
+    // TODO: - Исправить
+    static func mockData() -> [PersonalInfo] {
         [
             PersonalInfo(label: "FULL NAME", subLabel: UserDefaults.standard.string(forKey: "fullName") ?? "", icon: "Group 3363"),
             PersonalInfo(label: "EMAIL", subLabel: UserDefaults.standard.string(forKey: "email") ?? "", icon: "Group 3423"),

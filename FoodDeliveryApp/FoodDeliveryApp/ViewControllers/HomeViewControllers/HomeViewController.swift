@@ -10,27 +10,49 @@ import SnapKit
 
 class HomeViewController: UIViewController, UISearchBarDelegate {
     
-    //MARK: -UI-Components
-    private lazy var menuButton = CustomButton(target: self, action: #selector(menuTupped), backgroundColor: .btnGray, image: UIImage(named: "menuIcon")!)
+    //MARK: - UI-Components
+    private lazy var menuButton = CustomButton(
+        target: self,
+        action: #selector(menuTupped),
+        backgroundColor: .btnGray,
+        image: .menuIcon
+    )
+    
     private lazy var deliverToLabel: UILabel = {
-        $0.text = "DELIVER TO"
-        $0.font = .systemFont(ofSize: 12, weight: .bold)
-        $0.textColor = .appOrange
-        return $0
-    }(UILabel())
+        let label = UILabel()
+        label.text = "DELIVER TO"
+        label.font = .systemFont(ofSize: 12, weight: .bold)
+        label.textColor = .appOrange
+        return label
+    }()
+    
     private lazy var locationLabel: UILabel = {
         $0.text = "Halal Lab office"
-        $0.textColor = UIColor(red: 103/255, green: 103/255, blue: 103/255, alpha: 1)
+        $0.textColor = UIColor(
+            red: 103/255,
+            green: 103/255,
+            blue: 103/255,
+            alpha: 1
+        )
         $0.font = .systemFont(ofSize: 14, weight: .medium)
         return $0
     }(UILabel())
+    
+    // TODO: - по другому переменные, где переменная существительное, а метод - это глагол
     private lazy var setLocationButton: UIButton = {
-        let image = UIImage(named: "Polygon 2")?.withRenderingMode(.alwaysTemplate)
+        let image = UIImage(named: "Polygon 2")
         $0.setImage(image, for: .normal)
-        $0.tintColor = UIColor(red: 24/255, green: 28/255, blue: 46/255, alpha: 1)
+        $0.tintColor = UIColor(
+            red: 24/255,
+            green: 28/255,
+            blue: 46/255,
+            alpha: 1
+        )
+        // TODO: - Убираем такие нейминги как ButtinTapped и делаем имя = то что делает функция
         $0.addTarget(self, action: #selector(setLocationButtonTapped), for: .touchUpInside)
         return $0
     }(UIButton(type: .system))
+    
     private lazy var locationStack: UIStackView = {
         $0.axis = .horizontal
         $0.spacing = 8
@@ -39,13 +61,14 @@ class HomeViewController: UIViewController, UISearchBarDelegate {
     }(UIStackView(arrangedSubviews: [locationLabel, setLocationButton]))
     private lazy var basketButton = CustomButton(target: self, action: #selector(basketButtonTapped), backgroundColor: .logInBackground, image: UIImage(named: "Icon")!)
     private lazy var badgeView: UIView = {
-        $0.backgroundColor = .appOrange
-        $0.translatesAutoresizingMaskIntoConstraints = false
-        $0.widthAnchor.constraint(equalToConstant: 25).isActive = true
-        $0.heightAnchor.constraint(equalToConstant: 25).isActive = true
-        $0.layer.cornerRadius = 12.5
-        return $0
-    }(UIView())
+        let view = UIView()
+        view.backgroundColor = .appOrange
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.widthAnchor.constraint(equalToConstant: 25).isActive = true
+        view.heightAnchor.constraint(equalToConstant: 25).isActive = true
+        view.layer.cornerRadius = 12.5
+        return view
+    }()
     private lazy var badgeLabel: UILabel = {
         $0.text = "2"
         $0.font = .systemFont(ofSize: 12, weight: .bold)
@@ -107,10 +130,12 @@ class HomeViewController: UIViewController, UISearchBarDelegate {
         $0.delegate = self
         $0.dataSource = self
         $0.contentInset = .zero
+        $0.restorationIdentifier = "openRestaurantsCollectionView"
         return $0
     }(UICollectionView(frame: .zero, collectionViewLayout: layoutRestourants))
     
-    let screenWidth = UIScreen.main.bounds.width
+    // TODO: - добавить private
+    private let screenWidth = UIScreen.main.bounds.width
     let screenHeight = UIScreen.main.bounds.height
 
     //MARK: -Lifecycle
@@ -123,15 +148,20 @@ class HomeViewController: UIViewController, UISearchBarDelegate {
     
     //MARK: -Constraints
     private func setConstraints() {
-        [menuButton, deliverToLabel, locationStack, basketButton, greetingLabel,searchBar, allCategoriesLabel, allCategoriesCollectionView, openRestaurantsLabel, openRestaurantsCollectionView].forEach {
+        // TODO: - Прибраться
+        [
+            menuButton,
+            deliverToLabel, locationStack, basketButton, greetingLabel,searchBar, allCategoriesLabel, allCategoriesCollectionView, openRestaurantsLabel, openRestaurantsCollectionView].forEach {
             view.addSubview($0)
         }
+        
         basketButton.addSubview(badgeView)
         badgeView.addSubview(badgeLabel)
         
-        menuButton.snp.makeConstraints { make in
-            make.top.equalToSuperview().offset(screenHeight*54/812)
-            make.leading.equalToSuperview().offset(screenWidth*24/375)
+        // TODO: - Прибраться make на $0
+        menuButton.snp.makeConstraints {
+            $0.top.equalToSuperview().offset(screenHeight * 54 / 812)
+            $0.leading.equalToSuperview().offset(screenWidth*24/375)
         }
         basketButton.snp.makeConstraints { make in
             make.centerY.equalTo(menuButton.snp.centerY)
@@ -197,8 +227,15 @@ class HomeViewController: UIViewController, UISearchBarDelegate {
         navigationController?.pushViewController(menuVC, animated: true)
     }
     
+    
+    // TODO: - Для Саши подумать что тут можно сделать.
+    // SOLID
     @objc private func setLocationButtonTapped() {
-        let alertController = UIAlertController(title: "Deliver to", message: nil, preferredStyle: .actionSheet)
+        let alertController = UIAlertController(
+            title: "Deliver to",
+            message: nil,
+            preferredStyle: .actionSheet
+        )
         
         for location in locations {
             let action = UIAlertAction(title: location, style: .default) { _ in
@@ -212,6 +249,7 @@ class HomeViewController: UIViewController, UISearchBarDelegate {
         
         present(alertController, animated: true)
     }
+    
     
     @objc private func basketButtonTapped() {
         print ("basketButtonTapped")
@@ -252,28 +290,39 @@ class HomeViewController: UIViewController, UISearchBarDelegate {
 //MARK: -DataSource
 extension HomeViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        
+        // TODO: - испольщуем свитч
+        
         if collectionView == allCategoriesCollectionView {
             return allCategories.count
         } else if collectionView == openRestaurantsCollectionView {
             return allRestaurants.count
         }
+        
         return 0
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        if collectionView == allCategoriesCollectionView {
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: AllCategoriesCell.reuseID, for: indexPath) as! AllCategoriesCell
-            cell.configure(with: allCategories[indexPath.item])
-            return cell
-        } else {
+        
+            
+        
+        switch collectionView.restorationIdentifier {
+            
+        case "openRestaurantsCollectionView":
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: OpenRestaurantsCell.reuseID, for: indexPath) as! OpenRestaurantsCell
             cell.configure(with: allRestaurants[indexPath.item])
             return cell
+            
+        default:
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: AllCategoriesCell.reuseID, for: indexPath) as! AllCategoriesCell
+            cell.configure(with: allCategories[indexPath.item])
+            return cell
         }
+
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        if collectionView == allCategoriesCollectionView {
+        if collectionView.restorationIdentifier == allCategoriesCollectionView {
             for i in 0..<allCategories.count {
                 allCategories[i].isSelected = (i == indexPath.item)
             }

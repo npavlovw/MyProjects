@@ -85,6 +85,7 @@ extension AdressesViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        // TODO: - guard
         if let cell = tableView.dequeueReusableCell(withIdentifier: AdressCell.reuseID, for: indexPath) as? AdressCell {
             let adress = adresses[indexPath.row]
             cell.setupCell(adress: adress)

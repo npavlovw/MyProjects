@@ -11,21 +11,21 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     var window: UIWindow?
 
-
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         guard let scene = (scene as? UIWindowScene) else { return }
         
         self.window = UIWindow(windowScene: scene)
         
+        // TODO: - убрать хардкор
         let hasCompletedOnboarding = UserDefaults.standard.bool(forKey: "hasCompletedOnboarding")
         let hasLoggedIn = UserDefaults.standard.bool(forKey: "hasLoggedIn")
-        
 
         let rootVC: UIViewController
         if hasCompletedOnboarding {
             if hasLoggedIn {
                 rootVC = HomeViewController()
             } else {
+                // TODO: - убрать большую I
                 rootVC = LogInViewController()
             }
         } else {
