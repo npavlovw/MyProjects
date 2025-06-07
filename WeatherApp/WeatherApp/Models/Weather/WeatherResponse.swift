@@ -10,13 +10,10 @@ struct WeatherResponse: Decodable {
     let main: Main
     let visibility: Int
     let wind: Wind
-    let rain: Rain?
 }
 
 struct Weather: Decodable {
     let id: Int
-    let main: String
-    let description: String
     let icon: String
 }
 
@@ -29,14 +26,5 @@ struct Main: Decodable {
 
 struct Wind: Decodable {
     let speed: Double
-    let deg: Int
-}
-
-struct Rain: Decodable {
-    let oneHour: Double?
-
-    enum CodingKeys: String, CodingKey {
-        case oneHour = "1h"
-    }
 }
 

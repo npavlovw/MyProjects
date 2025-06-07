@@ -8,16 +8,20 @@
 import Foundation
 
 class WeatherNetworkManager {
+    static let shared = WeatherNetworkManager()
+    
     let apiKey: String = "5c42533f27b084c1b2b5a8319e4060f5"
     let coordinateNetworkManager = CoordinateNetworkManager()
     
-    func fetchWeather(for city: String) {
+    func fetchWeather(for city: String, completion: @escaping (WeatherResponse?) -> Void) {
         coordinateNetworkManager.sendRequest(city: city) { lat, lon in
-            self.sendWeatherRequest(lat: lat, lon: lon)
+            self.sendWeatherRequest(lat: lat, lon: lon) { weather in
+                completion(weather)
+            }
         }
     }
     
-    func sendWeatherRequest(lat: Double, lon: Double) {
+    func sendWeatherRequest(lat: Double, lon: Double, completion: @escaping (WeatherResponse?) -> Void) {
         var urlComponents = URLComponents()
         urlComponents.scheme = "https"
         urlComponents.host = "api.openweathermap.org"
@@ -44,9 +48,10 @@ class WeatherNetworkManager {
             
             do {
                 let result = try JSONDecoder().decode(WeatherResponse.self, from: data)
-                print(String(format: "%.1f", result.main.temp - 273.15))
+                completion(result)
             } catch {
                 print(error.localizedDescription)
+                completion(nil)
             }
         }.resume()
     }
