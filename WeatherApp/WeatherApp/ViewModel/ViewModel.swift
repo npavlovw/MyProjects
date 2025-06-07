@@ -14,4 +14,3 @@ class ViewModel {
         print("Search city")
     }
 }
-

@@ -1,5 +1,5 @@
 //
-//  NetworkManager.swift
+//  CoordinateNetworkManager2.swift
 //  WeatherApp
 //
 //  Created by Никита Павлов on 07.06.2025.
@@ -35,9 +35,11 @@ class CoordinateNetworkManager {
             guard let data else { return }
             
             do {
-                let result = try JSONDecoder().decode(CoordinateResponce.self, from: data)
-                print(result.lat)
-                print(result.lon)
+                let result = try JSONDecoder().decode([CoordinateResponse].self, from: data)
+                if let first = result.first {
+                    print(first.lat)
+                    print(first.lon)
+                }
             } catch {
                 print(error.localizedDescription)
             }
