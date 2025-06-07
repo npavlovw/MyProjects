@@ -1,5 +1,5 @@
 //
-//  CoordinateNetworkManager2.swift
+//  WeatherNetworkManager.swift
 //  WeatherApp
 //
 //  Created by Никита Павлов on 07.06.2025.
@@ -7,18 +7,26 @@
 
 import Foundation
 
-class CoordinateNetworkManager {
+class WeatherNetworkManager {
     let apiKey: String = "5c42533f27b084c1b2b5a8319e4060f5"
+    let coordinateNetworkManager = CoordinateNetworkManager()
     
-    func sendRequest(city: String, completion: @escaping(_ lat: Double, _ lon: Double) -> Void) {
+    func fetchWeather(for city: String) {
+        coordinateNetworkManager.sendRequest(city: city) { lat, lon in
+            self.sendWeatherRequest(lat: lat, lon: lon)
+        }
+    }
+    
+    func sendWeatherRequest(lat: Double, lon: Double) {
         var urlComponents = URLComponents()
         urlComponents.scheme = "https"
         urlComponents.host = "api.openweathermap.org"
-        urlComponents.path = "/geo/1.0/direct"
+        urlComponents.path = "/data/2.5/weather"
         
         urlComponents.queryItems = [
-            URLQueryItem(name: "q", value: city),
-            URLQueryItem(name: "appid", value: apiKey),
+            URLQueryItem(name: "lat", value: String(lat)),
+            URLQueryItem(name: "lon", value: String(lon)),
+            URLQueryItem(name: "appid", value: apiKey)
         ]
         
         guard let url = urlComponents.url else { return }
@@ -35,10 +43,8 @@ class CoordinateNetworkManager {
             guard let data else { return }
             
             do {
-                let result = try JSONDecoder().decode([CoordinateResponse].self, from: data)
-                if let first = result.first {
-                    completion(first.lat, first.lon)
-                }
+                let result = try JSONDecoder().decode(WeatherResponse.self, from: data)
+                print(String(format: "%.1f", result.main.temp - 273.15))
             } catch {
                 print(error.localizedDescription)
             }

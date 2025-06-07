@@ -12,6 +12,7 @@ class ViewController: UIViewController {
     
     private let viewModel = ViewModel()
     private let coordinateNetworkManager = CoordinateNetworkManager()
+    private let weatherNetworkManager = WeatherNetworkManager()
     
     //MARK: -UI-Components
     private lazy var mainLabel: UILabel = {
@@ -69,7 +70,6 @@ class ViewController: UIViewController {
         view.backgroundColor = .white
         searchBtn.addTarget(self, action: #selector(searchCity), for: .touchUpInside)
         setupConstraints()
-        coordinateNetworkManager.sendRequest(city: "Moscow")
     }
 
     private func setupConstraints() {
@@ -88,8 +88,8 @@ class ViewController: UIViewController {
     
     //MARK: -Logics
     @objc private func searchCity() {
-        viewModel.searchCity()
+        let city = searchCityBar.text ?? ""
+        weatherNetworkManager.fetchWeather(for: city)
     }
-
 }
 
