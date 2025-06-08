@@ -134,6 +134,9 @@ class ViewController: UIViewController {
         view.backgroundColor = .white
         searchBtn.addTarget(self, action: #selector(showWeather), for: .touchUpInside)
         setupConstraints()
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
+        view.addGestureRecognizer(tapGesture)
+        searchCityBar.delegate = self
     }
 
     private func setupConstraints() {
@@ -169,7 +172,6 @@ class ViewController: UIViewController {
         weatherNetworkManager.fetchWeather(for: city) { [weak self] weather in
             guard let self, let weather else { return }
             
-            
             DispatchQueue.main.async {
                 let id = weather.weather[0].id
                 let description = self.weatherID.descriptionForWeatherId(id)
@@ -185,5 +187,15 @@ class ViewController: UIViewController {
             }
         }
     }
+    
+    @objc func dismissKeyboard() {
+        view.endEditing(true)
+    }
 }
 
+extension ViewController: UISearchBarDelegate {
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        showWeather()
+        searchBar.resignFirstResponder()
+    }
+}
