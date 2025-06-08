@@ -24,6 +24,14 @@ class ViewController: UIViewController {
         return label
     }()
     
+    private lazy var settingsButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.setImage(UIImage(systemName: "ellipsis.circle"), for: .normal)
+        button.tintColor = .black
+        button.addTarget(self, action: #selector(showTemperatureUnitAlert), for: .touchUpInside)
+        return button
+    }()
+    
     private lazy var searchCityBar: UISearchBar = {
         let searchBar = UISearchBar()
         searchBar.placeholder = "Введите город"
@@ -54,6 +62,7 @@ class ViewController: UIViewController {
         button.translatesAutoresizingMaskIntoConstraints = false
         button.heightAnchor.constraint(equalToConstant: 36).isActive = true
         button.widthAnchor.constraint(equalToConstant: 80).isActive = true
+        button.addTarget(self, action: #selector(showWeather), for: .touchUpInside)
         return button
     }()
     
@@ -132,15 +141,22 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
-        searchBtn.addTarget(self, action: #selector(showWeather), for: .touchUpInside)
         setupConstraints()
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
         view.addGestureRecognizer(tapGesture)
         searchCityBar.delegate = self
+        searchCityBar.text = UserDefaults.standard.string(forKey: "city")
+        checkSearchBar()
+    }
+    
+    private func checkSearchBar() {
+        guard let text = searchCityBar.text, !text.isEmpty else { return }
+        showWeather()
     }
 
     private func setupConstraints() {
         view.addSubview(mainLabel)
+        view.addSubview(settingsButton)
         view.addSubview(searchStack)
         view.addSubview(weatherStack)
         view.addSubview(weatherImageView)
@@ -148,6 +164,11 @@ class ViewController: UIViewController {
         mainLabel.snp.makeConstraints {
             $0.centerX.equalTo(view.snp.centerX)
             $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(16)
+        }
+        settingsButton.snp.makeConstraints {
+            $0.centerY.equalTo(mainLabel.snp.centerY)
+            $0.trailing.equalTo(view.snp.trailing).inset(16)
+            $0.height.width.equalTo(mainLabel.snp.height)
         }
         searchStack.snp.makeConstraints {
             $0.top.equalTo(mainLabel.snp.bottom).offset(8)
@@ -169,6 +190,8 @@ class ViewController: UIViewController {
         let city = searchCityBar.text ?? ""
         cityLabel.text = city
         
+        UserDefaults.standard.set(city, forKey: "city")
+        
         weatherNetworkManager.fetchWeather(for: city) { [weak self] weather in
             guard let self, let weather else { return }
             
@@ -186,6 +209,27 @@ class ViewController: UIViewController {
                 self.weatherImageView.image = UIImage(named: nameImage)
             }
         }
+    }
+    
+    @objc private func showTemperatureUnitAlert() {
+        let alert = UIAlertController(
+            title: "В каких единицах показывать температуру?",
+            message: nil,
+            preferredStyle: .actionSheet
+        )
+        let celsiusAction = UIAlertAction(title: "Градусы Цельсия", style: .default) { [weak self] _ in
+            self?.viewModel.setTemperatureUnit(.celsius)
+        }
+        let fahrenheitAction = UIAlertAction(title: "Градусы Фарентгейт", style: .default) { [weak self] _ in
+            self?.viewModel.setTemperatureUnit(.fahrenheit)
+        }
+        
+        let cancelAction = UIAlertAction(title: "Отмена", style: .cancel)
+        
+        alert.addAction(celsiusAction)
+        alert.addAction(fahrenheitAction)
+        alert.addAction(cancelAction)
+        present(alert, animated: true)
     }
     
     @objc func dismissKeyboard() {
