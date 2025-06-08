@@ -25,25 +25,4 @@ class ViewModel {
             guard self != nil else { return }
         }
     }
-    
-    func descriptionForWeatherId(_ id: Int) -> String {
-        switch id {
-        case 200...232:
-            return "Гроза"
-        case 300...321:
-            return "Морось"
-        case 500...531:
-            return "Дождь"
-        case 600...622:
-            return "Снег"
-        case 701...781:
-            return "Туман"
-        case 800:
-            return "Ясно"
-        case 801...804:
-            return "Облачно"
-        default:
-            return "Неизвестно"
-        }
-    }
 }

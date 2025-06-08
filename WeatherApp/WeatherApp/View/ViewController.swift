@@ -13,6 +13,7 @@ class ViewController: UIViewController {
     private let viewModel = ViewModel()
     private let coordinateNetworkManager = CoordinateNetworkManager()
     private let weatherNetworkManager = WeatherNetworkManager()
+    private let weatherID = WeatherID()
     
     //MARK: -UI-Components
     private lazy var mainLabel: UILabel = {
@@ -121,11 +122,17 @@ class ViewController: UIViewController {
         return stack
     }()
     
+    private lazy var weatherImageView: UIImageView = {
+        let imageView = UIImageView()
+        imageView.contentMode = .scaleToFill
+        return imageView
+    }()
+    
     //MARK: -Lifycycle
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
-        searchBtn.addTarget(self, action: #selector(searchCity), for: .touchUpInside)
+        searchBtn.addTarget(self, action: #selector(showWeather), for: .touchUpInside)
         setupConstraints()
     }
 
@@ -133,6 +140,7 @@ class ViewController: UIViewController {
         view.addSubview(mainLabel)
         view.addSubview(searchStack)
         view.addSubview(weatherStack)
+        view.addSubview(weatherImageView)
         
         mainLabel.snp.makeConstraints {
             $0.centerX.equalTo(view.snp.centerX)
@@ -146,10 +154,15 @@ class ViewController: UIViewController {
             $0.top.equalTo(searchStack.snp.bottom).offset(24)
             $0.leading.trailing.equalTo(view).inset(16)
         }
+        weatherImageView.snp.makeConstraints {
+            $0.leading.trailing.equalTo(view).inset(16)
+            $0.height.equalTo(200)
+            $0.top.equalTo(weatherStack.snp.bottom).offset(24)
+        }
     }
     
     //MARK: -Logics
-    @objc private func searchCity() {
+    @objc private func showWeather() {
         let city = searchCityBar.text ?? ""
         cityLabel.text = city
         
@@ -159,7 +172,8 @@ class ViewController: UIViewController {
             
             DispatchQueue.main.async {
                 let id = weather.weather[0].id
-                let description = self.viewModel.descriptionForWeatherId(id)
+                let description = self.weatherID.descriptionForWeatherId(id)
+                let nameImage = self.weatherID.imageForWeatherId(id)
                 
                 self.temperatureLabel.text = "\(Int(weather.main.temp - 273.15))°C"
                 self.weatherLabel.text = description
@@ -167,6 +181,7 @@ class ViewController: UIViewController {
                 self.pressureLabel.text = "Давление: \(weather.main.pressure * 0.75) мм рт ст"
                 self.humidityLabel.text = "Влажность: \(weather.main.humidity)%"
                 self.windLabel.text = "Ветер: \(weather.wind.speed) м/с"
+                self.weatherImageView.image = UIImage(named: nameImage)
             }
         }
     }
