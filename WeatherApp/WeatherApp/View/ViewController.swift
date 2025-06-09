@@ -147,8 +147,19 @@ class ViewController: UIViewController {
         searchCityBar.delegate = self
         searchCityBar.text = UserDefaults.standard.string(forKey: "city")
         checkSearchBar()
+        viewModel.temperatureText = { [weak self] text in
+            DispatchQueue.main.async {
+                self?.temperatureLabel.text = text
+            }
+        }
     }
     
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        UserDefaults.standard.set(searchCityBar.text, forKey: "city")
+    }
+    
+    //MARK: - Logic
     private func checkSearchBar() {
         guard let text = searchCityBar.text, !text.isEmpty else { return }
         showWeather()
@@ -200,7 +211,8 @@ class ViewController: UIViewController {
                 let description = self.weatherID.descriptionForWeatherId(id)
                 let nameImage = self.weatherID.imageForWeatherId(id)
                 
-                self.temperatureLabel.text = "\(Int(weather.main.temp - 273.15))°C"
+//                self.temperatureLabel.text = "\(Int(weather.main.temp - 273.15))°C"
+                self.viewModel.setTemperature(weather.main.temp)
                 self.weatherLabel.text = description
                 self.feelsLikeLabel.text = "Ощущается как: \(Int(weather.main.feels_like - 273.15))°C"
                 self.pressureLabel.text = "Давление: \(weather.main.pressure * 0.75) мм рт ст"
