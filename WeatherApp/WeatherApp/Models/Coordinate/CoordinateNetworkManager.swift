@@ -10,7 +10,7 @@ import Foundation
 class CoordinateNetworkManager {
     let apiKey: String = "5c42533f27b084c1b2b5a8319e4060f5"
     
-    func sendRequest(city: String, completion: @escaping(_ lat: Double, _ lon: Double) -> Void) {
+    func sendRequest(city: String, completion: @escaping(Result<(Double, Double), NetworkError>) -> Void) {
         var urlComponents = URLComponents()
         urlComponents.scheme = "https"
         urlComponents.host = "api.openweathermap.org"
@@ -37,10 +37,12 @@ class CoordinateNetworkManager {
             do {
                 let result = try JSONDecoder().decode([CoordinateResponse].self, from: data)
                 if let first = result.first {
-                    completion(first.lat, first.lon)
+                    completion(.success((first.lat, first.lon)))
+                } else {
+                    completion(.failure(.noData))
                 }
             } catch {
-                print(error.localizedDescription)
+                completion(.failure(.invalidURL))
             }
         }.resume()
     }

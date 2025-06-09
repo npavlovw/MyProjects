@@ -159,12 +159,6 @@ class ViewController: UIViewController {
         UserDefaults.standard.set(searchCityBar.text, forKey: "city")
     }
     
-    //MARK: - Logic
-    private func checkSearchBar() {
-        guard let text = searchCityBar.text, !text.isEmpty else { return }
-        showWeather()
-    }
-
     private func setupConstraints() {
         view.addSubview(mainLabel)
         view.addSubview(settingsButton)
@@ -196,7 +190,12 @@ class ViewController: UIViewController {
         }
     }
     
-    //MARK: -Logics
+    //MARK: - Logic
+    private func checkSearchBar() {
+        guard let text = searchCityBar.text, !text.isEmpty else { return }
+        showWeather()
+    }
+    
     @objc private func showWeather() {
         let city = searchCityBar.text ?? ""
         cityLabel.text = city
@@ -204,21 +203,27 @@ class ViewController: UIViewController {
         UserDefaults.standard.set(city, forKey: "city")
         
         weatherNetworkManager.fetchWeather(for: city) { [weak self] weather in
-            guard let self, let weather else { return }
+            guard let self else { return }
             
             DispatchQueue.main.async {
-                let id = weather.weather[0].id
-                let description = self.weatherID.descriptionForWeatherId(id)
-                let nameImage = self.weatherID.imageForWeatherId(id)
                 
-//                self.temperatureLabel.text = "\(Int(weather.main.temp - 273.15))°C"
-                self.viewModel.setTemperature(weather.main.temp)
-                self.weatherLabel.text = description
-                self.feelsLikeLabel.text = "Ощущается как: \(Int(weather.main.feels_like - 273.15))°C"
-                self.pressureLabel.text = "Давление: \(weather.main.pressure * 0.75) мм рт ст"
-                self.humidityLabel.text = "Влажность: \(weather.main.humidity)%"
-                self.windLabel.text = "Ветер: \(weather.wind.speed) м/с"
-                self.weatherImageView.image = UIImage(named: nameImage)
+                switch weather {
+                case .success(let weatherResponse):
+                    let weather = weatherResponse.weather
+                    let id = weather[0].id
+                    let description = self.weatherID.descriptionForWeatherId(id)
+                    let nameImage = self.weatherID.imageForWeatherId(id)
+                    
+                    self.viewModel.setTemperature(weatherResponse.main.temp)
+                    self.weatherLabel.text = description
+                    self.feelsLikeLabel.text = "Ощущается как: \(Int(weatherResponse.main.feels_like - 273.15))°C"
+                    self.pressureLabel.text = "Давление: \(weatherResponse.main.pressure * 0.75) мм рт ст"
+                    self.humidityLabel.text = "Влажность: \(weatherResponse.main.humidity)%"
+                    self.windLabel.text = "Ветер: \(weatherResponse.wind.speed) м/с"
+                    self.weatherImageView.image = UIImage(named: nameImage)
+                case .failure(let error):
+                    print("Ошибка: \(error)")
+                }
             }
         }
     }

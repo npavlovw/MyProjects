@@ -16,6 +16,7 @@ class ViewModel {
         }
     }
     
+    //MARK: - TemperatureUnit
     enum TemperatureUnit: String {
         case celsius = "°C"
         case fahrenheit = "°F"
