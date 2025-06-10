@@ -1,20 +1,13 @@
 //
-//  ViewModel.swift
+//  WeatherViewModel.swift
 //  WeatherApp
 //
-//  Created by Никита Павлов on 06.06.2025.
+//  Created by Никита Павлов on 10.06.2025.
 //
 
 import Foundation
 
-class ViewModel {
-    
-    // MARK: - Public method to fetch weather
-    func fetchWeather(for city: String) {
-        WeatherNetworkManager.shared.fetchWeather(for: city) { [weak self] _ in
-            guard self != nil else { return }
-        }
-    }
+class WeatherViewModel {
     
     //MARK: - TemperatureUnit
     enum TemperatureUnit: String {
