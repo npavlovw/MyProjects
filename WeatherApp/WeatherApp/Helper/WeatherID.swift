@@ -6,110 +6,213 @@
 //
 
 import Foundation
-
-class WeatherID {
     
-    func descriptionForWeatherId(_ id: Int) -> String {
-        switch id {
-        case 200:
+enum WeatherID: Int {
+    case thunderstormWithLightRain = 200
+    case thunderstormWithRain = 201
+    case thunderstormWithHeavyRain = 202
+    case lightThunderstorm = 210
+    case thunderstorm = 211
+    case heavyThunderstorm = 212
+    case raggedThunderstorm = 221
+    case thunderstormWithLightDrizzle = 230
+    case thunderstormWithDrizzle = 231
+    case thunderstormWithHeavyDrizzle = 232
+    
+    case lightDrizzle = 300
+    case drizzle = 301
+    case heavyDrizzle = 302
+    case lightDrizzleTwo = 310
+    case drizzlingRain = 311
+    case heavyIntenseDrizzlingRain = 312
+    case rainAndDrizzle = 313
+    case heavyRainAndDrizzle = 314
+    case drizzlingRainTwo = 321
+    
+    case lightRain = 500
+    case moderateRain = 501
+    case heavyRain = 502
+    case veryHeavyRain = 503
+    case heavyRainTwo = 504
+    case freezingRain = 511
+    case lightRainfallIntensity = 520
+    case shower = 521
+    case heavyRainShower = 522
+    case raggedRainShower = 531
+    
+    case lightSnow = 600
+    case snow = 601
+    case heavySnowfall = 602
+    case wetSnow = 611
+    case lightShowerWithSnow = 612
+    case sleet = 613
+    case lightRainWithSnow = 615
+    case rainAndSnow = 616
+    case lightSnowShowers = 620
+    case heavySnowfallTwo = 621
+    case heavySnowShower = 622
+    
+    case fog = 701
+    case smoke = 711
+    case fogTwo = 721
+    case sandOrDustWhirlwinds = 731
+    case fogThree = 741
+    case sand = 751
+    case dust = 761
+    case volcanicAsh = 762
+    case squalls = 771
+    case tornado = 781
+    
+    case clearSky = 800
+    case slightlyCloudy = 801
+    case scatteredClouds = 802
+    case brokenClouds = 803
+    case cloudy = 804
+    
+    var message: String {
+        switch self {
+        case .thunderstormWithLightRain:
             return "Гроза с небольшим дождём"
-        case 201:
+        case .thunderstormWithRain:
             return "Гроза с дождем"
-        case 202:
+        case .thunderstormWithHeavyRain:
             return "Гроза с сильным дождем"
-        case 210:
+        case .lightThunderstorm:
             return "Небольшая гроза"
-        case 211:
+        case .thunderstorm:
             return "Гроза"
-        case 212, 221:
+        case .heavyThunderstorm, .raggedThunderstorm:
             return "Сильная гроза"
-        case 230:
+        case .thunderstormWithLightDrizzle:
             return "Гроза с небольшим моросящим дождем"
-        case 231:
+        case .thunderstormWithDrizzle:
             return "Гроза с моросью"
-        case 232:
+        case .thunderstormWithHeavyDrizzle:
             return "Гроза с сильным моросящим дождем"
-        case 300, 301:
+            
+        case .lightDrizzle, .drizzle:
             return "Морось"
-        case 302, 312:
+        case .heavyDrizzle, .heavyIntenseDrizzlingRain:
             return "Сильный моросящий дождь"
-        case 310:
+        case .lightDrizzleTwo:
             return "Слабый моросящий дождь"
-        case 311:
+        case .drizzlingRain:
             return "Моросящий дождь"
-        case 313, 521:
+        case .rainAndDrizzle, .shower:
             return "Ливень"
-        case 314:
+        case .heavyRainAndDrizzle:
             return "Сильный ливень"
-        case 321:
+        case .drizzlingRainTwo:
             return "Моросящий дождь"
-        case 500:
-            return "Неболльшой дождь"
-        case 501:
+            
+        case .lightRain:
+            return "Небольшой дождь"
+        case .moderateRain:
             return "Умеренный дождь"
-        case 502, 504:
+        case .heavyRain, .heavyRainTwo:
             return "Сильный ливень"
-        case 503:
+        case .veryHeavyRain:
             return "Очень сильный дождь"
-        case 511:
+        case .freezingRain:
             return "Ледяной дождь"
-        case 520:
+        case .lightRainfallIntensity:
             return "Слабый ливень"
-        case 522, 531:
+        case .heavyRainShower, .raggedRainShower:
             return "Сильный ливень"
-        case 600:
+            
+        case .lightSnow:
             return "Небольшой снег"
-        case 601:
+        case .snow:
             return "Снег"
-        case 602:
+        case .heavySnowfall:
             return "Сильный снегопад"
-        case 611:
+        case .wetSnow:
             return "Мокрый снег"
-        case 612:
+        case .lightShowerWithSnow:
             return "Небольшой ливень со снегом"
-        case 613:
+        case .sleet:
             return "Ливень со снегом"
-        case 615:
+        case .lightRainWithSnow:
             return "Небольшой дождь со снегом"
-        case 616:
+        case .rainAndSnow:
             return "Дождь и снег"
-        case 620:
+        case .lightSnowShowers:
             return "Небольшой ливневый снег"
-        case 621:
+        case .heavySnowfallTwo:
             return "Ливневый снег"
-        case 622:
+        case .heavySnowShower:
             return "Сильный ливненвый снег"
-        case 701...781:
+            
+        case .fog, .fogTwo, .fogThree:
             return "Туман"
-        case 800:
+        case .smoke:
+            return "Дым"
+        case .sandOrDustWhirlwinds:
+            return "Песчаные/пылевые бури"
+        case .sand:
+            return "Песок"
+        case .dust:
+            return "Пыль"
+        case .volcanicAsh:
+            return "Вулканический пепел"
+        case .squalls:
+            return "Шквалы"
+        case .tornado:
+            return "Торнадо"
+            
+        case .clearSky:
             return "Ясное небо"
-        case 801...804:
+        case .slightlyCloudy:
+            return "Небольшая облачность"
+        case .scatteredClouds, .brokenClouds:
+            return "Рассечнные облака"
+        case .cloudy:
             return "Облачно"
-        default:
-            return "Неизвестно"
         }
     }
     
-    func imageForWeatherId(_ id: Int) -> String {
-        switch id {
-        case 800:
+    var imageForWeather: String {
+        switch self {
+        case .clearSky:
             return "Ясное небо"
-        case 801, 802:
+        case .slightlyCloudy, .scatteredClouds:
             return "Рассеянные облака"
-        case 803, 804:
+        case .brokenClouds, .cloudy:
             return "Разорванные облака"
-        case 300...321, 520...531:
+        case .lightDrizzle, .drizzle,
+             .heavyDrizzle, .lightDrizzleTwo,
+             .drizzlingRain, .heavyIntenseDrizzlingRain,
+             .rainAndDrizzle, .heavyRainAndDrizzle,
+             .drizzlingRainTwo, .lightRainfallIntensity,
+             .shower, .heavyRainShower,
+             .raggedRainShower:
             return "Ливень"
-        case 500...504:
+        case .lightRain, .moderateRain,
+             .heavyRain, .veryHeavyRain,
+             .heavyRainTwo, .freezingRain:
             return "Дождь"
-        case 200...232:
+        case .thunderstormWithLightRain, .thunderstormWithRain,
+             .thunderstormWithHeavyRain, .lightThunderstorm,
+             .thunderstorm, .heavyThunderstorm,
+             .raggedThunderstorm, .thunderstormWithLightDrizzle,
+             .thunderstormWithDrizzle, .thunderstormWithHeavyDrizzle:
             return "Гроза"
-        case 600...622:
+        case .lightSnow, .snow,
+             .heavySnowfall, .wetSnow,
+             .lightShowerWithSnow, .sleet,
+             .lightRainWithSnow, .rainAndSnow,
+             .lightSnowShowers, .heavySnowfallTwo,
+             .heavySnowShower:
             return "Снег"
-        case 701...781:
+        case .fog, .smoke,
+             .fogTwo, .sandOrDustWhirlwinds,
+             .fogThree, .sand,
+             .dust, .volcanicAsh,
+             .squalls, .tornado:
             return "Туман"
-        default:
-            return "Неизвестно"
+            
         }
     }
 }
+
+

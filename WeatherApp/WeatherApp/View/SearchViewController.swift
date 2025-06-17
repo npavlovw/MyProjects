@@ -11,9 +11,6 @@ import SnapKit
 class SearchViewController: UIViewController {
     
     private let viewModel = SearchViewModel()
-    private let coordinateNetworkManager = CoordinateNetworkManager()
-    private let weatherNetworkManager = WeatherNetworkManager()
-    private let weatherID = WeatherID()
     
     //MARK: -UI-Components
     private lazy var mainLabel: UILabel = {
@@ -28,7 +25,6 @@ class SearchViewController: UIViewController {
         let searchBar = UISearchBar()
         searchBar.placeholder = "Введите город"
         searchBar.searchBarStyle = .minimal
-        searchBar.translatesAutoresizingMaskIntoConstraints = false
         
         let textField = searchBar.searchTextField
         textField.translatesAutoresizingMaskIntoConstraints = false
@@ -78,11 +74,6 @@ class SearchViewController: UIViewController {
         checkSearchBar()
     }
     
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        UserDefaults.standard.set(searchCityBar.text, forKey: "city")
-    }
-    
     //MARK: - Constraints
     private func setupConstraints() {
         view.addSubview(mainLabel)
@@ -106,9 +97,11 @@ class SearchViewController: UIViewController {
     
     @objc private func searchWeather() {
         guard let city = searchCityBar.text, !city.isEmpty else { return }
+        dismissKeyboard()
+        viewModel.saveCity(city)
         let weatherVC = WeatherViewController()
-        weatherVC.savedCity = searchCityBar.text ?? ""
-        navigationController?.pushViewController(weatherVC, animated: true)
+        weatherVC.savedCity = city
+        navigationController?.pushViewController(weatherVC, animated: false)
     }
     
     @objc private func dismissKeyboard() {

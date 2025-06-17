@@ -6,15 +6,14 @@
 //
 
 import UIKit
+import SnapKit
 
 class WeatherViewController: UIViewController {
     
-    private let viewModel = WeatherViewModel()
-    private let weatherNetworkManager = WeatherNetworkManager()
-    private let weatherID = WeatherID()
-
     var savedCity: String?
     
+    private let viewModel = WeatherViewModel()
+        
     //MARK: -UI-Components
     private lazy var settingsButton: UIButton = {
         let button = UIButton(type: .system)
@@ -26,15 +25,15 @@ class WeatherViewController: UIViewController {
     
     private lazy var cityLabel: UILabel = {
         let label = UILabel()
-        label.text = ""
-        label.font = .systemFont(ofSize: 19, weight: .medium)
+        label.text = savedCity ?? ""
+        label.font = .systemFont(ofSize: 30, weight: .bold)
         return label
     }()
     
     private lazy var temperatureLabel: UILabel = {
         let label = UILabel()
         label.text = ""
-        label.font = .systemFont(ofSize: 19, weight: .medium)
+        label.font = .systemFont(ofSize: 80, weight: .medium)
         return label
     }()
     
@@ -74,7 +73,7 @@ class WeatherViewController: UIViewController {
     }()
     
     private lazy var weatherStack: UIStackView = {
-        let stack = UIStackView(arrangedSubviews: [temperatureLabel, weatherLabel, feelsLikeLabel, pressureLabel, humidityLabel, windLabel])
+        let stack = UIStackView(arrangedSubviews: [weatherLabel, feelsLikeLabel, pressureLabel, humidityLabel, windLabel])
         stack.axis = .vertical
         stack.spacing = 8
         stack.alignment = .leading
@@ -83,7 +82,8 @@ class WeatherViewController: UIViewController {
     
     private lazy var weatherImageView: UIImageView = {
         let imageView = UIImageView()
-        imageView.contentMode = .scaleToFill
+        imageView.isUserInteractionEnabled = true
+        imageView.contentMode = .scaleAspectFill
         return imageView
     }()
     
@@ -91,86 +91,120 @@ class WeatherViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
+        viewModel.fetchData(for: savedCity ?? "")
         setupConstraints()
-        showWeather()
-        viewModel.temperatureText = { [weak self] text in
-            DispatchQueue.main.async {
-                self?.temperatureLabel.text = text
-            }
-        }
+        setupBindings()
     }
     
     //MARK: - Constraints
     private func setupConstraints() {
-        view.addSubview(settingsButton)
-        view.addSubview(weatherStack)
         view.addSubview(weatherImageView)
+        weatherImageView.addSubview(temperatureLabel)
+        weatherImageView.addSubview(cityLabel)
+        weatherImageView.addSubview(weatherStack)
+        weatherImageView.addSubview(settingsButton)
         
-        settingsButton.snp.makeConstraints {
-            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(12)
-            $0.trailing.equalTo(view.snp.trailing).inset(12)
-            $0.height.width.equalTo(32)
+        weatherImageView.snp.makeConstraints {
+            $0.edges.equalToSuperview()
         }
         weatherStack.snp.makeConstraints {
-            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(12)
-            $0.leading.equalTo(view).offset(16)
-            $0.trailing.equalTo(settingsButton.snp.leading).inset(16)
+            $0.centerY.equalToSuperview()
+            $0.leading.equalToSuperview().offset(16)
         }
-        weatherImageView.snp.makeConstraints {
-            $0.leading.trailing.equalTo(view).inset(16)
-            $0.height.equalTo(200)
-            $0.top.equalTo(weatherStack.snp.bottom).offset(24)
+        cityLabel.snp.makeConstraints {
+            $0.centerX.equalToSuperview()
+            $0.bottom.equalTo(weatherStack.snp.top).offset(-60)
+        }
+        temperatureLabel.snp.makeConstraints {
+            $0.centerX.equalToSuperview()
+            $0.bottom.equalTo(cityLabel.snp.top).offset(-12)
+        }
+        settingsButton.snp.makeConstraints {
+            $0.top.equalTo(weatherStack.snp.top)
+            $0.trailing.equalToSuperview().inset(12)
+            $0.height.width.equalTo(26)
         }
     }
     
     //MARK: - Logic
-    private func showWeather() {
-        cityLabel.text = savedCity
-        
-        UserDefaults.standard.set(savedCity, forKey: "city")
-        
-        guard let savedCity else { return }
-        weatherNetworkManager.fetchWeather(for: savedCity) { [weak self] weather in
-            guard let self else { return }
-            
+    private func setupBindings() {
+        viewModel.onDataUpdate = { [weak self] weather in
             DispatchQueue.main.async {
-                
-                switch weather {
-                case .success(let weatherResponse):
-                    let weather = weatherResponse.weather
-                    let id = weather[0].id
-                    let description = self.weatherID.descriptionForWeatherId(id)
-                    let nameImage = self.weatherID.imageForWeatherId(id)
-                    
-                    self.viewModel.setTemperature(weatherResponse.main.temp)
-                    self.weatherLabel.text = description
-                    self.feelsLikeLabel.text = "Ощущается как: \(Int(weatherResponse.main.feels_like - 273.15))°C"
-                    self.pressureLabel.text = "Давление: \(weatherResponse.main.pressure * 0.75) мм рт ст"
-                    self.humidityLabel.text = "Влажность: \(weatherResponse.main.humidity)%"
-                    self.windLabel.text = "Ветер: \(weatherResponse.wind.speed) м/с"
-                    self.weatherImageView.image = UIImage(named: nameImage)
-                case .failure(let error):
-                    print("Ошибка: \(error)")
-                }
+                self?.updateUI(with: weather)
             }
         }
+        viewModel.onError = { [weak self] message in
+            DispatchQueue.main.async {
+                self?.showError(message)
+            }
+        }
+        viewModel.temperatureText = { [weak self] temp in
+            DispatchQueue.main.async {
+                self?.temperatureLabel.text = temp
+            }
+        }
+        viewModel.feelsLike = { [weak self] feelsLike in
+            DispatchQueue.main.async {
+                self?.feelsLikeLabel.text = "Ощущается как: \(feelsLike)"
+            }
+        }
+    }
+        
+    private func updateUI(with weather: WeatherResponse) {
+        setMainInfo(weather: weather)
+        setDescription(weather: weather)
+    }
+    
+    private func setMainInfo(weather: WeatherResponse) {
+        viewModel.setTemperature(weather.main.temp)
+        viewModel.setFeelsLikeTemperature(weather.main.feels_like)
+        self.pressureLabel.text = viewModel.getPressure(weather.main.pressure)
+        self.humidityLabel.text = viewModel.getHumidity(weather.main.humidity)
+        self.windLabel.text = viewModel.getWindSpeed(weather.wind.speed)
+    }
+    
+    private func setDescription(weather: WeatherResponse) {
+        let weatherDescription = viewModel.getWeatherDescription(id: weather.weather.first?.id ?? 800)
+        self.weatherLabel.text = weatherDescription.message
+        self.weatherImageView.image = UIImage(named: weatherDescription.imageName)
+        
+        switch self.weatherImageView.image {
+            case UIImage(named: "Дождь")?, UIImage(named: "Снег"):
+            [self.cityLabel, self.temperatureLabel, self.weatherLabel,
+             self.pressureLabel, self.humidityLabel, self.windLabel,
+             self.feelsLikeLabel] .forEach {
+                $0.textColor = .white
+            }
+            self.settingsButton.tintColor = .white
+        case .none:
+            print ("none")
+        case .some(_):
+            print ("some")
+        }
+    }
+    
+    private func showError(_ message: String) {
+        let alert = UIAlertController(title: "Ошибка", message: message, preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "Ок", style: .default))
+            present(alert, animated: true)
     }
     
     @objc private func showTemperatureUnitAlert() {
         let alert = UIAlertController(
             title: "В каких единицах показывать температуру?",
             message: nil,
-            preferredStyle: .actionSheet
+            preferredStyle: .alert
         )
         let celsiusAction = UIAlertAction(title: "Градусы Цельсия", style: .default) { [weak self] _ in
             self?.viewModel.setTemperatureUnit(.celsius)
+            self?.viewModel.setFeelsLikeTemperatureUnit(.celsius)
         }
         let fahrenheitAction = UIAlertAction(title: "Градусы Фарентгейт", style: .default) { [weak self] _ in
             self?.viewModel.setTemperatureUnit(.fahrenheit)
+            self?.viewModel.setFeelsLikeTemperatureUnit(.fahrenheit)
         }
         
         let cancelAction = UIAlertAction(title: "Отмена", style: .cancel)
-        
         alert.addAction(celsiusAction)
         alert.addAction(fahrenheitAction)
         alert.addAction(cancelAction)

@@ -9,12 +9,11 @@ import Foundation
 
 class SearchViewModel {
     
-    // MARK: - Public method to fetch weather
-    func fetchWeather(for city: String) {
-        WeatherNetworkManager.shared.fetchWeather(for: city) { [weak self] _ in
-            guard self != nil else { return }
-        }
+    func saveCity(_ city: String) {
+        UserDefaults.standard.set(city, forKey: "city")
     }
     
-    
+    func loadSavedCity() -> String {
+            return UserDefaults.standard.string(forKey: "city") ?? ""
+    }
 }
