@@ -6,15 +6,19 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		14907ED12E03498800DD76E2 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 14907ED02E03498800DD76E2 /* SnapKit */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXFileReference section */
 		14907EB72E03410E00DD76E2 /* InspirationAlarm.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = InspirationAlarm.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		14907EC92E03411000DD76E2 /* Exceptions for "InspirationAlarm" folder in "InspirationAlarm" target */ = {
+		14907EE82E03503500DD76E2 /* Exceptions for "InspirationAlarm" folder in "InspirationAlarm" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
-				Info.plist,
+				Resources/Info.plist,
 			);
 			target = 14907EB62E03410E00DD76E2 /* InspirationAlarm */;
 		};
@@ -24,7 +28,7 @@
 		14907EB92E03410E00DD76E2 /* InspirationAlarm */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
-				14907EC92E03411000DD76E2 /* Exceptions for "InspirationAlarm" folder in "InspirationAlarm" target */,
+				14907EE82E03503500DD76E2 /* Exceptions for "InspirationAlarm" folder in "InspirationAlarm" target */,
 			);
 			path = InspirationAlarm;
 			sourceTree = "<group>";
@@ -36,6 +40,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				14907ED12E03498800DD76E2 /* SnapKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -78,6 +83,7 @@
 			);
 			name = InspirationAlarm;
 			packageProductDependencies = (
+				14907ED02E03498800DD76E2 /* SnapKit */,
 			);
 			productName = InspirationAlarm;
 			productReference = 14907EB72E03410E00DD76E2 /* InspirationAlarm.app */;
@@ -107,6 +113,9 @@
 			);
 			mainGroup = 14907EAE2E03410E00DD76E2;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				14907ECF2E03498800DD76E2 /* XCRemoteSwiftPackageReference "SnapKit" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 14907EB82E03410E00DD76E2 /* Products */;
 			projectDirPath = "";
@@ -147,7 +156,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 7V9BP9ZF45;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = InspirationAlarm/Info.plist;
+				INFOPLIST_FILE = InspirationAlarm/Resources/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
@@ -178,7 +187,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 7V9BP9ZF45;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = InspirationAlarm/Info.plist;
+				INFOPLIST_FILE = InspirationAlarm/Resources/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
@@ -343,6 +352,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		14907ECF2E03498800DD76E2 /* XCRemoteSwiftPackageReference "SnapKit" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/SnapKit/SnapKit";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.7.1;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		14907ED02E03498800DD76E2 /* SnapKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 14907ECF2E03498800DD76E2 /* XCRemoteSwiftPackageReference "SnapKit" */;
+			productName = SnapKit;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 14907EAF2E03410E00DD76E2 /* Project object */;
 }
