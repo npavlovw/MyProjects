@@ -82,6 +82,7 @@ class WeatherViewController: UIViewController {
     
     private lazy var weatherImageView: UIImageView = {
         let imageView = UIImageView()
+        imageView.clipsToBounds = true
         imageView.isUserInteractionEnabled = true
         imageView.contentMode = .scaleAspectFill
         return imageView
