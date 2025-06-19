@@ -8,12 +8,10 @@
 import UIKit
 import SnapKit
 
-class SearchViewController: UIViewController {
-    
-    private let viewModel = SearchViewModel()
-    
+final class SearchViewController: UIViewController {
+        
     //MARK: -UI-Components
-    private lazy var mainLabel: UILabel = {
+    private let mainLabel: UILabel = {
         let label = UILabel()
         label.textAlignment = .center
         label.text = "ПОГОДА"
@@ -21,7 +19,7 @@ class SearchViewController: UIViewController {
         return label
     }()
     
-    private lazy var searchCityBar: UISearchBar = {
+    private let searchCityBar: UISearchBar = {
         let searchBar = UISearchBar()
         searchBar.placeholder = "Введите город"
         searchBar.searchBarStyle = .minimal
@@ -38,6 +36,7 @@ class SearchViewController: UIViewController {
             textField.topAnchor.constraint(equalTo: searchBar.topAnchor, constant: 0),
             textField.bottomAnchor.constraint(equalTo: searchBar.bottomAnchor, constant: 0),
         ])
+        
         return searchBar
     }()
     
@@ -66,13 +65,20 @@ class SearchViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
+        
         setupConstraints()
-        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
+        
+        let tapGesture = UITapGestureRecognizer(
+            target: self,
+            action: #selector(dismissKeyboard)
+        )
         view.addGestureRecognizer(tapGesture)
+        
+        
         searchCityBar.delegate = self
-        searchCityBar.text = UserDefaults.standard.string(forKey: "city")
-        checkSearchBar()
+        
     }
+
     
     //MARK: - Constraints
     private func setupConstraints() {
@@ -80,27 +86,25 @@ class SearchViewController: UIViewController {
         view.addSubview(searchStack)
         
         mainLabel.snp.makeConstraints {
-            $0.centerX.equalTo(view.snp.centerX)
+            $0.centerX.equalToSuperview()
             $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(16)
         }
         searchStack.snp.makeConstraints {
             $0.top.equalTo(mainLabel.snp.bottom).offset(8)
-            $0.leading.trailing.equalTo(view).inset(16)
+            $0.leading.trailing.equalToSuperview().inset(16)
         }
     }
     
     //MARK: - Logic
-    private func checkSearchBar() {
-        guard let text = searchCityBar.text, !text.isEmpty else { return }
-        searchWeather()
-    }
     
     @objc private func searchWeather() {
         guard let city = searchCityBar.text, !city.isEmpty else { return }
+        
         dismissKeyboard()
-        viewModel.saveCity(city)
-        let weatherVC = WeatherViewController()
-        weatherVC.savedCity = city
+        
+        let viewModel = WeatherViewModel(city: city)
+        let weatherVC = WeatherViewController(viewModel: viewModel)
+                
         navigationController?.pushViewController(weatherVC, animated: false)
     }
     

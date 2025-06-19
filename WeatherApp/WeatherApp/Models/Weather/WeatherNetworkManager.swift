@@ -18,8 +18,8 @@ final class WeatherNetworkManager {
     
     static let shared = WeatherNetworkManager()
     
-    let apiKey: String = "5c42533f27b084c1b2b5a8319e4060f5"
-    let coordinateNetworkManager = CoordinateNetworkManager()
+    private let apiKey: String = "5c42533f27b084c1b2b5a8319e4060f5"
+    private let coordinateNetworkManager = CoordinateNetworkManager()
     
     func fetchWeather(for city: String, completion: @escaping (Result<WeatherResponse, NetworkError>) -> Void) {
             coordinateNetworkManager.sendRequest(city: city) { [weak self] result in
@@ -32,7 +32,11 @@ final class WeatherNetworkManager {
             }
         }
     
-    func sendWeatherRequest(lat: Double, lon: Double, completion: @escaping (Result<WeatherResponse, NetworkError>) -> Void) {
+    func sendWeatherRequest(
+        lat: Double,
+        lon: Double,
+        completion: @escaping (Result<WeatherResponse, NetworkError>) -> Void
+    ) {
         var urlComponents = URLComponents()
         urlComponents.scheme = "https"
         urlComponents.host = "api.openweathermap.org"

@@ -7,16 +7,22 @@
 
 import Foundation
 
-class WeatherViewModel {
+final class WeatherViewModel {
+    
+    private var city: String
+    
+    init(city: String) {
+        self.city = city
+    }
     
     var onDataUpdate: ((WeatherResponse) -> Void)?
     var onError: ((String) -> Void)?
     
-    func fetchData(for city: String) {
+    func fetchData() {
         guard isValidCity(city) else {
                     onError?("Введите корректное название города")
                     return
-                }
+        }
         
         WeatherNetworkManager.shared.fetchWeather(for: city) { result in
             switch result {
@@ -75,6 +81,9 @@ class WeatherViewModel {
         updateTemperatureText()
     }
     
+    func getCity() -> String {
+        return city
+    }
     
     func getTemperatureUnit() -> TemperatureUnit {
         let storedUnitString = UserDefaults.standard.string(forKey: "temperatureUnit") ?? TemperatureUnit.celsius.rawValue

@@ -8,11 +8,9 @@
 import UIKit
 import SnapKit
 
-class WeatherViewController: UIViewController {
+final class WeatherViewController: UIViewController {
     
-    var savedCity: String?
-    
-    private let viewModel = WeatherViewModel()
+    private let viewModel: WeatherViewModel!
         
     //MARK: -UI-Components
     private lazy var settingsButton: UIButton = {
@@ -25,7 +23,7 @@ class WeatherViewController: UIViewController {
     
     private lazy var cityLabel: UILabel = {
         let label = UILabel()
-        label.text = savedCity ?? ""
+        label.text = viewModel.getCity()
         label.font = .systemFont(ofSize: 30, weight: .bold)
         return label
     }()
@@ -88,11 +86,20 @@ class WeatherViewController: UIViewController {
         return imageView
     }()
     
+    init(viewModel: WeatherViewModel) {
+        self.viewModel = viewModel
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     //MARK: -Lifycycle
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
-        viewModel.fetchData(for: savedCity ?? "")
+        viewModel.fetchData()
         setupConstraints()
         setupBindings()
     }

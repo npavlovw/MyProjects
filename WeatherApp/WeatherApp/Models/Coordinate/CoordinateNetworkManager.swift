@@ -8,7 +8,7 @@
 import Foundation
 
 class CoordinateNetworkManager {
-    let apiKey: String = "5c42533f27b084c1b2b5a8319e4060f5"
+    private let apiKey: String = "5c42533f27b084c1b2b5a8319e4060f5"
     
     func sendRequest(city: String, completion: @escaping(Result<(Double, Double), NetworkError>) -> Void) {
         var urlComponents = URLComponents()
