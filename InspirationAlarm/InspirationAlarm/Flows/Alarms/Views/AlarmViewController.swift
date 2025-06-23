@@ -10,8 +10,8 @@ import SnapKit
 
 class AlarmViewController: UIViewController {
     
-    let alarmTableViewCell = AlarmCell()
-    var alarmClocks: [Int] = [1, 2, 3, 4, 5]
+    let viewModel = AlarmsViewModel()
+    let alarm = Alarm.setAlarms()
     
     //MARK: -UI-components
     private lazy var tableView: UITableView = {
@@ -48,10 +48,10 @@ class AlarmViewController: UIViewController {
 
     private func setAppearance() {
         let appearance = UINavigationBarAppearance()
-            appearance.configureWithOpaqueBackground()
-            appearance.backgroundColor = .black
-            appearance.titleTextAttributes = [.foregroundColor: UIColor.white]
-            appearance.largeTitleTextAttributes = [.foregroundColor: UIColor.white]
+        appearance.configureWithOpaqueBackground()
+        appearance.backgroundColor = .black
+        appearance.titleTextAttributes = [.foregroundColor: UIColor.white]
+        appearance.largeTitleTextAttributes = [.foregroundColor: UIColor.white]
         
         navigationController?.navigationBar.standardAppearance = appearance
         navigationController?.navigationBar.scrollEdgeAppearance = appearance
@@ -64,6 +64,10 @@ class AlarmViewController: UIViewController {
     
     //MARK: -Logics
     @objc private func addButtonTapped() {
+        let alarmSettingsVC = AlarmsSettingsViewController()
+        let navController = UINavigationController(rootViewController: alarmSettingsVC)
+        navController.modalPresentationStyle = .automatic
+        present(navController, animated: true)
     }
 
 }
@@ -71,12 +75,16 @@ class AlarmViewController: UIViewController {
 //MARK: -TableView
 extension AlarmViewController:  UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        alarmClocks.count
+        alarm.count
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: AlarmCell.reuseID, for: indexPath)
-        cell.textLabel?.text = "\(indexPath.row + 1)"
-        return cell
+        if let cell = tableView.dequeueReusableCell(withIdentifier: AlarmCell.reuseID, for: indexPath) as? AlarmCell {
+            let alarm = alarm[indexPath.row]
+            cell.setupCell(data: alarm)
+            cell.backgroundColor = .black
+            return cell
+        }
+        return UITableViewCell()
     }
 }
