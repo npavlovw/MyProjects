@@ -7,9 +7,11 @@
 
 import Foundation
 
-class AlarmsViewModel{
+class AlarmViewModel{
     
-    func presentAlarmSettingsVC() {
-        
+    var onSettingsScreenRequested: (() -> Void)?
+    
+    func presentSettingsVC() {
+        onSettingsScreenRequested?()
     }
 }

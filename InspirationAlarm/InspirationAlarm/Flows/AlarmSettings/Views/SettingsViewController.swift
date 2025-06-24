@@ -8,7 +8,9 @@
 import UIKit
 import SnapKit
 
-class AlarmsSettingsViewController: UIViewController {
+class SettingsViewController: UIViewController {
+    
+    let viewModel = SettingsViewModel()
     
     //MARK: -UI-Components
     private let datePicker: UIDatePicker = {
@@ -26,17 +28,8 @@ class AlarmsSettingsViewController: UIViewController {
         setNavigationItem()
         setAppearance()
         setupConstraints()
-    }
-    
-    //MARK: -Constraints
-    private func setupConstraints() {
-        view.addSubview(datePicker)
+        setupBindings()
         
-        datePicker.snp.makeConstraints {
-            $0.leading.trailing.equalToSuperview()
-            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top)
-            $0.height.equalTo(200)
-        }
     }
     
     //MARK: -Logics
@@ -47,7 +40,7 @@ class AlarmsSettingsViewController: UIViewController {
             title: "Отмена",
             style: .plain,
             target: self,
-            action: #selector(cancel))
+            action: #selector(cancelSettings))
         navigationItem.leftBarButtonItem?.tintColor = .systemOrange
         
         navigationItem.rightBarButtonItem = UIBarButtonItem(
@@ -68,11 +61,32 @@ class AlarmsSettingsViewController: UIViewController {
         navigationController?.navigationBar.scrollEdgeAppearance = appearance
     }
     
-    @objc private func saveSettings() {
-        dismiss(animated: true)
+    //MARK: -Constraints
+    private func setupConstraints() {
+        view.addSubview(datePicker)
+        
+        datePicker.snp.makeConstraints {
+            $0.leading.trailing.equalToSuperview()
+            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top)
+            $0.height.equalTo(200)
+        }
     }
     
-    @objc private func cancel() {
-        dismiss(animated: true)
+    private func setupBindings() {
+        viewModel.cancel = { [weak self] in
+            self?.dismiss(animated: true)
+        }
+        
+        viewModel.settings = { [weak self] in
+            self?.dismiss(animated: true)
+        }
+    }
+    
+    @objc private func saveSettings() {
+        viewModel.saveSettingsTapped()
+    }
+    
+    @objc private func cancelSettings() {
+        viewModel.cancelTapped()
     }
 }

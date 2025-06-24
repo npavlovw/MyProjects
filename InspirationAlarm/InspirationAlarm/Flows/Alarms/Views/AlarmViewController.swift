@@ -10,7 +10,7 @@ import SnapKit
 
 class AlarmViewController: UIViewController {
     
-    let viewModel = AlarmsViewModel()
+    let viewModel = AlarmViewModel()
     let alarm = Alarm.setAlarms()
     
     //MARK: -UI-components
@@ -30,8 +30,15 @@ class AlarmViewController: UIViewController {
         view.backgroundColor = .black
         
         setNavigationItem()
-        setupTableView()
         setAppearance()
+        setupTableView()
+        
+        viewModel.onSettingsScreenRequested = { [weak self] in
+            let SettingsVC = SettingsViewController()
+            let navController = UINavigationController(rootViewController: SettingsVC)
+            navController.modalPresentationStyle = .automatic
+            self?.present(navController, animated: true)
+        }
     }
     
     private func setNavigationItem() {
@@ -64,12 +71,8 @@ class AlarmViewController: UIViewController {
     
     //MARK: -Logics
     @objc private func addButtonTapped() {
-        let alarmSettingsVC = AlarmsSettingsViewController()
-        let navController = UINavigationController(rootViewController: alarmSettingsVC)
-        navController.modalPresentationStyle = .automatic
-        present(navController, animated: true)
+        viewModel.presentSettingsVC()
     }
-
 }
 
 //MARK: -TableView
