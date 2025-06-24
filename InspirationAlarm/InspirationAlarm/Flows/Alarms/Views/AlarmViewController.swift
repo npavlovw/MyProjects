@@ -11,7 +11,9 @@ import SnapKit
 class AlarmViewController: UIViewController {
     
     let viewModel = AlarmViewModel()
-    let alarm = Alarm.setAlarms()
+    let settingsViewModel = SettingsViewModel()
+    
+    var alarms: [Alarm] = []
     
     //MARK: -UI-components
     private lazy var tableView: UITableView = {
@@ -32,13 +34,8 @@ class AlarmViewController: UIViewController {
         setNavigationItem()
         setAppearance()
         setupTableView()
+        setupBindings()
         
-        viewModel.onSettingsScreenRequested = { [weak self] in
-            let SettingsVC = SettingsViewController()
-            let navController = UINavigationController(rootViewController: SettingsVC)
-            navController.modalPresentationStyle = .automatic
-            self?.present(navController, animated: true)
-        }
     }
     
     private func setNavigationItem() {
@@ -69,6 +66,21 @@ class AlarmViewController: UIViewController {
         view.addSubview(tableView)
     }
     
+    private func setupBindings() {
+        viewModel.onSettingsScreenRequested = { [weak self] in
+            let settingsVC = SettingsViewController()
+            settingsVC.viewModel = self?.settingsViewModel
+            let navController = UINavigationController(rootViewController: settingsVC)
+            navController.modalPresentationStyle = .automatic
+            self?.present(navController, animated: true)
+        }
+        
+        settingsViewModel.newAlarmForSetup = { newAlarm in
+            self.alarms.append(newAlarm)
+            self.tableView.reloadData()
+        }
+    }
+    
     //MARK: -Logics
     @objc private func addButtonTapped() {
         viewModel.presentSettingsVC()
@@ -78,12 +90,12 @@ class AlarmViewController: UIViewController {
 //MARK: -TableView
 extension AlarmViewController:  UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        alarm.count
+        alarms.count
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if let cell = tableView.dequeueReusableCell(withIdentifier: AlarmCell.reuseID, for: indexPath) as? AlarmCell {
-            let alarm = alarm[indexPath.row]
+            let alarm = alarms[indexPath.row]
             cell.setupCell(data: alarm)
             cell.backgroundColor = .black
             return cell
