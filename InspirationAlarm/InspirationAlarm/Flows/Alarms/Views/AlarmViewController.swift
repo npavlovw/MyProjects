@@ -101,4 +101,12 @@ extension AlarmViewController:  UITableViewDelegate, UITableViewDataSource {
         }
         return UITableViewCell()
     }
+    
+    func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        let deleteAction = UIContextualAction(style: .destructive, title: "Удалить") { [weak self] (_, _, completionHandler) in
+                self?.viewModel.deleteAlarm(at: indexPath.row)
+                completionHandler(true)
+            }
+            return UISwipeActionsConfiguration(actions: [deleteAction])
+    }
 }

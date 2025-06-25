@@ -10,7 +10,7 @@ import UIKit
 
 class MainCoordinator: Coordinator {
     var navigationController: UINavigationController
-    let alarmViewModel = AlarmViewModel()
+    private let alarmViewModel = AlarmViewModel()
     
     init(navigationController: UINavigationController) {
         self.navigationController = navigationController

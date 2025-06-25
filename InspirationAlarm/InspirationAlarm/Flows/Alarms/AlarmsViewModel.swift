@@ -16,4 +16,10 @@ class AlarmViewModel{
         alarms.append(alarm)
         onAlarmsUpdated?()
     }
+    
+    func deleteAlarm(at index: Int) {
+        guard index >= 0 && index < alarms.count else { return }
+        alarms.remove(at: index)
+        onAlarmsUpdated?()
+    }
 }
