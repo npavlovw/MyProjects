@@ -10,10 +10,18 @@ import SnapKit
 
 class AlarmViewController: UIViewController {
     
-    let viewModel = AlarmViewModel()
-    let settingsViewModel = SettingsViewModel()
+    var viewModel: AlarmViewModel
     
-    var alarms: [Alarm] = []
+    weak var coordinator: MainCoordinator?
+        
+    init(viewModel: AlarmViewModel) {
+        self.viewModel = viewModel
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     //MARK: -UI-components
     private lazy var tableView: UITableView = {
@@ -67,35 +75,26 @@ class AlarmViewController: UIViewController {
     }
     
     private func setupBindings() {
-        viewModel.onSettingsScreenRequested = { [weak self] in
-            let settingsVC = SettingsViewController()
-            settingsVC.viewModel = self?.settingsViewModel
-            let navController = UINavigationController(rootViewController: settingsVC)
-            navController.modalPresentationStyle = .automatic
-            self?.present(navController, animated: true)
-        }
-        
-        settingsViewModel.newAlarmForSetup = { newAlarm in
-            self.alarms.append(newAlarm)
-            self.tableView.reloadData()
+        viewModel.onAlarmsUpdated = { [weak self] in
+            self?.tableView.reloadData()
         }
     }
     
     //MARK: -Logics
     @objc private func addButtonTapped() {
-        viewModel.presentSettingsVC()
+        coordinator?.showSettingsScreen()
     }
 }
 
 //MARK: -TableView
 extension AlarmViewController:  UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        alarms.count
+        self.viewModel.alarms.count
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if let cell = tableView.dequeueReusableCell(withIdentifier: AlarmCell.reuseID, for: indexPath) as? AlarmCell {
-            let alarm = alarms[indexPath.row]
+            let alarm = self.viewModel.alarms[indexPath.row]
             cell.setupCell(data: alarm)
             cell.backgroundColor = .black
             return cell

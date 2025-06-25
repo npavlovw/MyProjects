@@ -8,10 +8,12 @@
 import Foundation
 
 class AlarmViewModel{
+    var alarms: [Alarm] = []
+
+    var onAlarmsUpdated: (() -> Void)?
     
-    var onSettingsScreenRequested: (() -> Void)?
-    
-    func presentSettingsVC() {
-        onSettingsScreenRequested?()
+    func addNewAlarm(_ alarm: Alarm) {
+        alarms.append(alarm)
+        onAlarmsUpdated?()
     }
 }

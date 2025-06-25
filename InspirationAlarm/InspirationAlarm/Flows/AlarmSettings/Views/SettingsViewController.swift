@@ -10,7 +10,20 @@ import SnapKit
 
 class SettingsViewController: UIViewController {
     
-    var viewModel: SettingsViewModel!
+    weak var coordinator: MainCoordinator?
+    
+    var viewModel: SettingsViewModel
+    
+    init(viewModel: SettingsViewModel) {
+        self.viewModel = viewModel
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    
     
     //MARK: -UI-Components
     private let datePicker: UIDatePicker = {
@@ -45,7 +58,6 @@ class SettingsViewController: UIViewController {
         setNavigationItem()
         setAppearance()
         setupConstraints()
-        setupBindings()
         
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
         view.addGestureRecognizer(tapGesture)
@@ -97,16 +109,6 @@ class SettingsViewController: UIViewController {
         }
     }
     
-    private func setupBindings() {
-        viewModel.cancel = { [weak self] in
-            self?.dismiss(animated: true)
-        }
-        
-        viewModel.settings = { [weak self] in
-            self?.dismiss(animated: true)
-        }
-    }
-    
     @objc private func saveSettings() {
         let formatter = DateFormatter()
         formatter.dateFormat = "HH:mm"
@@ -115,10 +117,11 @@ class SettingsViewController: UIViewController {
         let name = nameTextField.text?.isEmpty == false ? nameTextField.text! : "Будильник"
         
         viewModel.saveSettingsTapped(clock: timeString, name: name)
+        coordinator?.dismissPresentedScreen()
     }
     
     @objc private func cancelSettings() {
-        viewModel.cancelTapped()
+        coordinator?.dismissPresentedScreen()
     }
     
     @objc private func dismissKeyboard() {
