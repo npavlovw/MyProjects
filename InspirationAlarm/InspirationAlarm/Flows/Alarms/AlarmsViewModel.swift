@@ -7,10 +7,14 @@
 
 import Foundation
 
-class AlarmViewModel{
-    var alarms: [Alarm] = []
+final class AlarmViewModel {
+    // юзер дефолтс private не забываем
 
     var onAlarmsUpdated: (() -> Void)?
+    
+    func getAlarms() -> [Alarm] {
+        return alarms
+    }
     
     func addNewAlarm(_ alarm: Alarm) {
         alarms.append(alarm)

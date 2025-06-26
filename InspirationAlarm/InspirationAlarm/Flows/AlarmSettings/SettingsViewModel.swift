@@ -8,7 +8,7 @@
 import Foundation
 import UserNotifications
 
-class SettingsViewModel {
+final class SettingsViewModel {
     
     var newAlarmForSetup: ((Alarm) -> Void)?
     

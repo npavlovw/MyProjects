@@ -8,7 +8,12 @@
 import Foundation
 import UIKit
 
-class MainCoordinator: Coordinator {
+protocol Coordinator {
+    var navigationController: UINavigationController { get set }
+    func start() // 
+}
+
+final class MainCoordinator: Coordinator {
     var navigationController: UINavigationController
     private let alarmViewModel = AlarmViewModel()
     
@@ -32,8 +37,7 @@ class MainCoordinator: Coordinator {
         let settingsVC = SettingsViewController(viewModel: settingsViewModel)
         settingsVC.coordinator = self
         
-        let navController = UINavigationController(rootViewController: settingsVC)
-        navigationController.present(navController, animated: true)
+        navigationController.present(settingsVC, animated: true)
     }
     
     func dismissPresentedScreen() {

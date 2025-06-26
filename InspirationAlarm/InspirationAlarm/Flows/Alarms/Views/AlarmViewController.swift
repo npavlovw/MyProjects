@@ -13,6 +13,7 @@ class AlarmViewController: UIViewController {
     
     var viewModel: AlarmViewModel
     
+    // перенести во вью модель
     weak var coordinator: MainCoordinator?
         
     init(viewModel: AlarmViewModel) {
@@ -45,6 +46,7 @@ class AlarmViewController: UIViewController {
         setupTableView()
         setupBindings()
         
+        // обернуть в метод.
         UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge]) { granted, error in
             if granted {
                 print("✅ Разрешение получено")
@@ -61,7 +63,7 @@ class AlarmViewController: UIViewController {
         navigationItem.rightBarButtonItem = UIBarButtonItem(
             barButtonSystemItem: .add,
             target: self,
-            action: #selector(addButtonTapped)
+            action: #selector(addButtonTapped) //
         )
         navigationItem.rightBarButtonItem?.tintColor = .orange
     }
@@ -82,6 +84,7 @@ class AlarmViewController: UIViewController {
         view.addSubview(tableView)
     }
     
+    // UserDefaults
     private func setupBindings() {
         viewModel.onAlarmsUpdated = { [weak self] in
             self?.tableView.reloadData()
@@ -89,22 +92,22 @@ class AlarmViewController: UIViewController {
     }
     
     //MARK: -Logics
+    // функция нейминг исправить
     @objc private func addButtonTapped() {
-        coordinator?.showSettingsScreen()
+        // viewModel.goToSettingsVC()
     }
 }
 
 //MARK: -TableView
 extension AlarmViewController:  UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        self.viewModel.alarms.count
+        self.viewModel.getAlarms().count
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if let cell = tableView.dequeueReusableCell(withIdentifier: AlarmCell.reuseID, for: indexPath) as? AlarmCell {
-            let alarm = self.viewModel.alarms[indexPath.row]
+            let alarm = self.viewModel.getAlarms().count.alarms[indexPath.row]
             cell.setupCell(data: alarm)
-            cell.backgroundColor = .black
             return cell
         }
         return UITableViewCell()

@@ -26,6 +26,7 @@ class AlarmCell: UITableViewCell {
         return label
     }()
     
+    // Не пишем излишний код, KISS
     private var alarmSwitch: UISwitch = {
         let switchView = UISwitch()
         return switchView
@@ -34,6 +35,7 @@ class AlarmCell: UITableViewCell {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         setConstraints()
+        backgroundColor = .black
         alarmSwitch.addTarget(self, action: #selector(switchTapped), for: .touchUpInside)
     }
     
@@ -71,6 +73,7 @@ class AlarmCell: UITableViewCell {
         nameLabel.textColor = textColor
     }
     
+    // Название это то что делает метод, а не что нажато
     @objc func switchTapped() {
         timeLabel.textColor = alarmSwitch.isOn ? .white : .lightGray
         nameLabel.textColor = alarmSwitch.isOn ? .white : .lightGray

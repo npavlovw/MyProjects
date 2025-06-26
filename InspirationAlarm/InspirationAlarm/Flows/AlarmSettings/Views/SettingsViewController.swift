@@ -23,8 +23,6 @@ class SettingsViewController: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
-    
-    
     //MARK: -UI-Components
     private let datePicker: UIDatePicker = {
         let datePicker = UIDatePicker()
@@ -120,9 +118,11 @@ class SettingsViewController: UIViewController {
         
         viewModel.sheduleAlertNotification(date: datePicker.date, title: name)
         
+        // перенести во вью модель
         coordinator?.dismissPresentedScreen()
     }
     
+    // перенести во вью модель
     @objc private func cancelSettings() {
         coordinator?.dismissPresentedScreen()
     }
