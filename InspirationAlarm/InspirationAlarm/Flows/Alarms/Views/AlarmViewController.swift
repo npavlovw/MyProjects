@@ -7,6 +7,7 @@
 
 import UIKit
 import SnapKit
+import UserNotifications
 
 class AlarmViewController: UIViewController {
     
@@ -44,6 +45,13 @@ class AlarmViewController: UIViewController {
         setupTableView()
         setupBindings()
         
+        UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge]) { granted, error in
+            if granted {
+                print("✅ Разрешение получено")
+            } else {
+                print("❌ Разрешение не получено")
+            }
+        }
     }
     
     private func setNavigationItem() {

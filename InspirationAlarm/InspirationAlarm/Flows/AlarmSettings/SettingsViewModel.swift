@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import UserNotifications
 
 class SettingsViewModel {
     
@@ -14,5 +15,24 @@ class SettingsViewModel {
     func saveSettingsTapped(clock: String, name: String) {
         let newAlarm = Alarm(clock: clock, name: name)
         newAlarmForSetup?(newAlarm)
+    }
+    
+    func sheduleAlertNotification(date: Date, title: String) {
+        let content = UNMutableNotificationContent()
+        content.title = title
+        content.body = "Будильник сработал!"
+        content.sound = UNNotificationSound.default
+        
+        let triggerDate = Calendar.current.dateComponents([.hour, .minute], from: date)
+        let trigger = UNCalendarNotificationTrigger(dateMatching: triggerDate, repeats: false)
+        let request = UNNotificationRequest(identifier: UUID().uuidString, content: content, trigger: trigger)
+        
+        UNUserNotificationCenter.current().add(request) { error in
+            if let error = error {
+                print("❌ Ошибка при добавлении уведомления: \(error)")
+            } else {
+                print("🔔 Уведомление запланировано")
+            }
+        }
     }
 }

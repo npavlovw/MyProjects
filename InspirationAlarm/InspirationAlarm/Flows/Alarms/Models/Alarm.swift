@@ -10,5 +10,5 @@ import Foundation
 struct Alarm {
     var clock: String
     var name: String
-    var isActive: Bool = false
+    var isActive: Bool = true
 }

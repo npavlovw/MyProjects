@@ -15,14 +15,14 @@ class AlarmCell: UITableViewCell {
     private let timeLabel: UILabel = {
         let label = UILabel()
         label.font = .systemFont(ofSize: 37, weight: .medium)
-        label.textColor = .lightGray
+        label.textColor = .white
         return label
     }()
     
     private let nameLabel: UILabel = {
         let label = UILabel()
         label.font = .systemFont(ofSize: 20, weight: .regular)
-        label.textColor = .lightGray
+        label.textColor = .white
         return label
     }()
     
@@ -64,15 +64,15 @@ class AlarmCell: UITableViewCell {
     func setupCell(data: Alarm) {
         timeLabel.text = data.clock
         nameLabel.text = data.name
+        alarmSwitch.isOn = data.isActive
+        
+        let textColor: UIColor = data.isActive ? .white : .lightGray
+        timeLabel.textColor = textColor
+        nameLabel.textColor = textColor
     }
     
     @objc func switchTapped() {
-        if alarmSwitch.isOn {
-            timeLabel.textColor = .white
-            nameLabel.textColor = .white
-        } else {
-            timeLabel.textColor = .lightGray
-            nameLabel.textColor = .lightGray
-        }
+        timeLabel.textColor = alarmSwitch.isOn ? .white : .lightGray
+        nameLabel.textColor = alarmSwitch.isOn ? .white : .lightGray
     }
 }

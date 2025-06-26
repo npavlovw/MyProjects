@@ -117,6 +117,9 @@ class SettingsViewController: UIViewController {
         let name = nameTextField.text?.isEmpty == false ? nameTextField.text! : "Будильник"
         
         viewModel.saveSettingsTapped(clock: timeString, name: name)
+        
+        viewModel.sheduleAlertNotification(date: datePicker.date, title: name)
+        
         coordinator?.dismissPresentedScreen()
     }
     
