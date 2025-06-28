@@ -8,14 +8,19 @@
 import Foundation
 import UserNotifications
 
+protocol SettingsViewModelDelegate: AnyObject {
+    func didSaveAlarm(_ alarm: Alarm)
+}
+
 final class SettingsViewModel {
     
-    var newAlarmForSetup: ((Alarm) -> Void)?
+    weak var coordinator: MainCoordinator?
     
-    func saveSettingsTapped(clock: String, name: String) {
-        let newAlarm = Alarm(clock: clock, name: name)
-        newAlarmForSetup?(newAlarm)
-    }
+    weak var delegate: SettingsViewModelDelegate?
+    
+//    func saveSettings(clock: String, name: String) {
+//        let newAlarm = Alarm(clock: clock, name: name, isActive: true)
+//    }
     
     func sheduleAlertNotification(date: Date, title: String) {
         let content = UNMutableNotificationContent()
@@ -34,5 +39,16 @@ final class SettingsViewModel {
                 print("🔔 Уведомление запланировано")
             }
         }
+    }
+    
+    func dismissPresentedScreen() {
+        coordinator?.dismissPresentedScreen()
+    }
+    
+    func saveAlarm(alarm: Alarm) {
+        if let encoded = try? JSONEncoder().encode(alarm) {
+            UserDefaults.standard.set(encoded, forKey: "alarm")
+        }
+        delegate?.didSaveAlarm(alarm)
     }
 }

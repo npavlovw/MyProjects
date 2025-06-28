@@ -5,38 +5,33 @@
 //  Created by Никита Павлов on 25.06.2025.
 //
 
-import Foundation
 import UIKit
 
 protocol Coordinator {
     var navigationController: UINavigationController { get set }
-    func start() // 
+    func showAlarmScreen()
 }
 
 final class MainCoordinator: Coordinator {
     var navigationController: UINavigationController
-    private let alarmViewModel = AlarmViewModel()
+    
     
     init(navigationController: UINavigationController) {
         self.navigationController = navigationController
     }
     
-    func start() {
+    func showAlarmScreen() {
+        let alarmViewModel = AlarmViewModel()
+        alarmViewModel.coordinator = self
         let alarmVC = AlarmViewController(viewModel: alarmViewModel)
-        alarmVC.coordinator = self
         navigationController.pushViewController(alarmVC, animated: true)
     }
     
-    func showSettingsScreen() {
+    func showSettingsScreen(with delegate: SettingsViewModelDelegate) {
         let settingsViewModel = SettingsViewModel()
-        
-        settingsViewModel.newAlarmForSetup = { newAlarm in
-            self.alarmViewModel.addNewAlarm(newAlarm)
-        }
-        
+        settingsViewModel.coordinator = self
+        settingsViewModel.delegate = delegate
         let settingsVC = SettingsViewController(viewModel: settingsViewModel)
-        settingsVC.coordinator = self
-        
         navigationController.present(settingsVC, animated: true)
     }
     

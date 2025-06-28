@@ -9,11 +9,9 @@ import UIKit
 import SnapKit
 
 class SettingsViewController: UIViewController {
-    
-    weak var coordinator: MainCoordinator?
-    
+        
     var viewModel: SettingsViewModel
-    
+        
     init(viewModel: SettingsViewModel) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
@@ -24,6 +22,24 @@ class SettingsViewController: UIViewController {
     }
     
     //MARK: -UI-Components
+    private lazy var cancelBtn: UIButton = {
+        let button = UIButton()
+        button.setTitle("Отмена", for: .normal)
+        button.setTitleColor(.orange, for: .normal)
+        button.titleLabel?.font = .systemFont(ofSize: 20)
+        button.addTarget(self, action: #selector(cancelSettings), for: .touchUpInside)
+        return button
+    }()
+    
+    private lazy var saveSettingsBtn: UIButton = {
+        let button = UIButton()
+        button.setTitle("Сохранить", for: .normal)
+        button.setTitleColor(.orange, for: .normal)
+        button.titleLabel?.font = .systemFont(ofSize: 20)
+        button.addTarget(self, action: #selector(saveSettings), for: .touchUpInside)
+        return button
+    }()
+    
     private let datePicker: UIDatePicker = {
         let datePicker = UIDatePicker()
         datePicker.datePickerMode = .time
@@ -53,58 +69,41 @@ class SettingsViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .black
-        setNavigationItem()
-        setAppearance()
         setupConstraints()
-        
-        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
-        view.addGestureRecognizer(tapGesture)
-    }
-    
-    //MARK: -Logics
-    private func setNavigationItem() {
-        title = "Настройки"
-        
-        navigationItem.leftBarButtonItem = UIBarButtonItem(
-            title: "Отмена",
-            style: .plain,
-            target: self,
-            action: #selector(cancelSettings))
-        navigationItem.leftBarButtonItem?.tintColor = .systemOrange
-        
-        navigationItem.rightBarButtonItem = UIBarButtonItem(
-            title: "Сохранить",
-            style: .done,
-            target: self,
-            action: #selector(saveSettings))
-        navigationItem.rightBarButtonItem?.tintColor = .systemOrange
-    }
-    
-    private func setAppearance() {
-        let appearance = UINavigationBarAppearance()
-        appearance.configureWithOpaqueBackground()
-        appearance.backgroundColor = .black
-        appearance.titleTextAttributes = [.foregroundColor: UIColor.white]
-        
-        navigationController?.navigationBar.standardAppearance = appearance
-        navigationController?.navigationBar.scrollEdgeAppearance = appearance
+        setupTapGesture()
     }
     
     //MARK: -Constraints
-    private func setupConstraints() {
-        view.addSubview(datePicker)
-        view.addSubview(nameTextField)
-        
-        datePicker.snp.makeConstraints {
-            $0.leading.trailing.equalToSuperview()
-            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top)
-            $0.height.equalTo(200)
+        private func setupConstraints() {
+            view.addSubview(cancelBtn)
+            view.addSubview(saveSettingsBtn)
+            view.addSubview(datePicker)
+            view.addSubview(nameTextField)
+
+            cancelBtn.snp.makeConstraints {
+                $0.top.equalToSuperview()
+                $0.leading.equalToSuperview().offset(16)
+            }
+            saveSettingsBtn.snp.makeConstraints {
+                $0.top.equalToSuperview()
+                $0.trailing.equalToSuperview().inset(16)
+            }
+            datePicker.snp.makeConstraints {
+                $0.leading.trailing.equalToSuperview()
+                $0.top.equalTo(cancelBtn.snp.bottom)
+                $0.height.equalTo(200)
+            }
+            nameTextField.snp.makeConstraints {
+                $0.leading.trailing.equalToSuperview().inset(16)
+                $0.top.equalTo(datePicker.snp.bottom).offset(24)
+                $0.height.equalTo(44)
+            }
         }
-        nameTextField.snp.makeConstraints {
-            $0.leading.trailing.equalToSuperview().inset(16)
-            $0.top.equalTo(datePicker.snp.bottom).offset(24)
-            $0.height.equalTo(44)
-        }
+    
+    //MARK: -Logics
+    private func setupTapGesture() {
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
+        view.addGestureRecognizer(tapGesture)
     }
     
     @objc private func saveSettings() {
@@ -114,17 +113,35 @@ class SettingsViewController: UIViewController {
         
         let name = nameTextField.text?.isEmpty == false ? nameTextField.text! : "Будильник"
         
-        viewModel.saveSettingsTapped(clock: timeString, name: name)
+        let newAlarm = Alarm(clock: timeString, name: name, isActive: true)
         
-        viewModel.sheduleAlertNotification(date: datePicker.date, title: name)
+        viewModel.saveAlarm(alarm: newAlarm)
         
-        // перенести во вью модель
-        coordinator?.dismissPresentedScreen()
+//        viewModel.sheduleAlertNotification(date: datePicker.date, title: name)
+        
+        viewModel.dismissPresentedScreen()
     }
     
-    // перенести во вью модель
+//    private func saveAlarm(alarm: Alarm) {
+//        var currentAlarms = fetchAlarms()
+//        currentAlarms.append(alarm)
+//        
+//        if let data = try? JSONEncoder().encode(currentAlarms) {
+//            UserDefaults.standard.set(data, forKey: "alarms")
+//        }
+//    }
+//    
+//    private func fetchAlarms() -> [Alarm] {
+//        guard let data = UserDefaults.standard.data(forKey: "alarms"),
+//            let alarms = try? JSONDecoder().decode([Alarm].self, from: data)
+//        else {
+//            return []
+//        }
+//        return alarms
+//    }
+    
     @objc private func cancelSettings() {
-        coordinator?.dismissPresentedScreen()
+        viewModel.dismissPresentedScreen()
     }
     
     @objc private func dismissKeyboard() {

@@ -5,7 +5,7 @@
 //  Created by Никита Павлов on 23.06.2025.
 //
 
-struct Alarm {
+struct Alarm: Codable{
     var clock: String
     var name: String
     var isActive: Bool

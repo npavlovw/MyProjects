@@ -12,9 +12,6 @@ import UserNotifications
 class AlarmViewController: UIViewController {
     
     var viewModel: AlarmViewModel
-    
-    // перенести во вью модель
-    weak var coordinator: MainCoordinator?
         
     init(viewModel: AlarmViewModel) {
         self.viewModel = viewModel
@@ -45,16 +42,23 @@ class AlarmViewController: UIViewController {
         setAppearance()
         setupTableView()
         setupBindings()
+        setupNotification()
         
-        // обернуть в метод.
-        UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge]) { granted, error in
-            if granted {
-                print("✅ Разрешение получено")
-            } else {
-                print("❌ Разрешение не получено")
-            }
-        }
+//        if let savedData = UserDefaults.standard.data(forKey: "alarm"),
+//           let newAlarm = try? JSONDecoder().decode(Alarm.self, from: savedData) {
+//            print("Будильник: \(newAlarm.clock) - \(newAlarm.name), активен: \(newAlarm.isActive)")
+//            viewModel.addNewAlarm(newAlarm)
+//        }
     }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        print("viewWillAppear на AlarmVC")
+    }
+            
+//        let clock = UserDefaults.standard.string(forKey: "clock") ?? ""
+//        let name = UserDefaults.standard.string(forKey: "name") ?? ""
+//        let newAlarm = Alarm(clock: clock, name: name, isActive: true)
     
     private func setNavigationItem() {
         navigationItem.title = "Будильник"
@@ -63,7 +67,7 @@ class AlarmViewController: UIViewController {
         navigationItem.rightBarButtonItem = UIBarButtonItem(
             barButtonSystemItem: .add,
             target: self,
-            action: #selector(addButtonTapped) //
+            action: #selector(addAlarm)
         )
         navigationItem.rightBarButtonItem?.tintColor = .orange
     }
@@ -84,6 +88,16 @@ class AlarmViewController: UIViewController {
         view.addSubview(tableView)
     }
     
+    private func setupNotification() {
+        UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge]) { granted, error in
+            if granted {
+                print("✅ Разрешение получено")
+            } else {
+                print("❌ Разрешение не получено")
+            }
+        }
+    }
+    
     // UserDefaults
     private func setupBindings() {
         viewModel.onAlarmsUpdated = { [weak self] in
@@ -92,9 +106,8 @@ class AlarmViewController: UIViewController {
     }
     
     //MARK: -Logics
-    // функция нейминг исправить
-    @objc private func addButtonTapped() {
-        // viewModel.goToSettingsVC()
+    @objc private func addAlarm() {
+         viewModel.showSettingsScreen()
     }
 }
 
@@ -106,7 +119,7 @@ extension AlarmViewController:  UITableViewDelegate, UITableViewDataSource {
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if let cell = tableView.dequeueReusableCell(withIdentifier: AlarmCell.reuseID, for: indexPath) as? AlarmCell {
-            let alarm = self.viewModel.getAlarms().count.alarms[indexPath.row]
+            let alarm = self.viewModel.getAlarms()[indexPath.row]
             cell.setupCell(data: alarm)
             return cell
         }
