@@ -45,18 +45,6 @@ class AlarmViewController: UIViewController {
         setupNotification()
         
         viewModel.showSavedAlarms()
-
-        
-//        if let savedData = UserDefaults.standard.data(forKey: "alarm"),
-//           let newAlarm = try? JSONDecoder().decode(Alarm.self, from: savedData) {
-//            print("Будильник: \(newAlarm.clock) - \(newAlarm.name), активен: \(newAlarm.isActive)")
-//            viewModel.addNewAlarm(newAlarm)
-//        }
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        print("viewWillAppear на AlarmVC")
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -64,11 +52,7 @@ class AlarmViewController: UIViewController {
         viewModel.saveAlarmsForExit()
     }
 
-//        let clock = UserDefaults.standard.string(forKey: "clock") ?? ""
-//        let name = UserDefaults.standard.string(forKey: "name") ?? ""
-//        let newAlarm = Alarm(clock: clock, name: name, isActive: true)
-    
-    private func setNavigationItem() {
+private func setNavigationItem() {
         navigationItem.title = "Будильник"
         navigationItem.largeTitleDisplayMode = .automatic
         
@@ -108,10 +92,6 @@ class AlarmViewController: UIViewController {
     
     private func setupBindings() {
         viewModel.onAlarmsUpdated = { [weak self] in
-            self?.tableView.reloadData()
-        }
-        
-        viewModel.onSavedAlarms = { [weak self] in
             DispatchQueue.main.async {
                 self?.tableView.reloadData()
             }
@@ -134,6 +114,9 @@ extension AlarmViewController:  UITableViewDelegate, UITableViewDataSource {
         if let cell = tableView.dequeueReusableCell(withIdentifier: AlarmCell.reuseID, for: indexPath) as? AlarmCell {
             let alarm = self.viewModel.getAlarms()[indexPath.row]
             cell.setupCell(data: alarm)
+            cell.onSwitchToggled = { [weak self] isOn in
+                self?.viewModel.checkSwitch(isOn: isOn, at: indexPath.row)
+            }
             return cell
         }
         return UITableViewCell()

@@ -12,6 +12,8 @@ class AlarmCell: UITableViewCell {
     
     static let reuseID = "AlarmCell"
     
+    var onSwitchToggled: ((Bool) -> Void)?
+    
     private let timeLabel: UILabel = {
         let label = UILabel()
         label.font = .systemFont(ofSize: 37, weight: .medium)
@@ -32,7 +34,7 @@ class AlarmCell: UITableViewCell {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         backgroundColor = .black
         setConstraints()
-        alarmSwitch.addTarget(self, action: #selector(alarmIsOn), for: .touchUpInside)
+        alarmSwitch.addTarget(self, action: #selector(switchToggled), for: .touchUpInside)
     }
     
     required init?(coder: NSCoder) {
@@ -69,8 +71,10 @@ class AlarmCell: UITableViewCell {
         nameLabel.textColor = textColor
     }
     
-    @objc func alarmIsOn() {
+    @objc func switchToggled() {
         timeLabel.textColor = alarmSwitch.isOn ? .white : .lightGray
         nameLabel.textColor = alarmSwitch.isOn ? .white : .lightGray
+        
+        onSwitchToggled?(alarmSwitch.isOn)
     }
 }

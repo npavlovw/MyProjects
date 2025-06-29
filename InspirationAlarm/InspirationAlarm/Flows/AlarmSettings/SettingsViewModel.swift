@@ -5,7 +5,6 @@
 //  Created by Никита Павлов on 24.06.2025.
 //
 
-import Foundation
 import UserNotifications
 
 protocol SettingsViewModelDelegate: AnyObject {
@@ -18,37 +17,35 @@ final class SettingsViewModel {
     
     weak var delegate: SettingsViewModelDelegate?
     
-//    func saveSettings(clock: String, name: String) {
-//        let newAlarm = Alarm(clock: clock, name: name, isActive: true)
-//    }
+    var deleteKeyboard: (() -> Void)?
     
+    func saveAlarm(selectedDate: Date, name: String) {
+        let selectedDate = selectedDate
+        let now = Date()
+        
+        let correctedDate = selectedDate < now
+        ? Calendar.current.date(byAdding: .day, value: 1, to: selectedDate)!
+        : selectedDate
+        
+        let formatter = DateFormatter()
+        formatter.dateFormat = "HH:mm"
+        let timeString = formatter.string(from: correctedDate)
+        
+        let newAlarm = Alarm.createAlarm(clock: timeString, name: name, notificationID: UUID().uuidString)
+        
+        delegate?.didSaveAlarm(newAlarm)
+    }
+    
+    //метод установки будильника
     func sheduleAlertNotification(date: Date, title: String) {
-        let content = UNMutableNotificationContent()
-        content.title = title
-        content.body = "Будильник сработал!"
-        content.sound = UNNotificationSound.default
         
-        let triggerDate = Calendar.current.dateComponents([.hour, .minute], from: date)
-        let trigger = UNCalendarNotificationTrigger(dateMatching: triggerDate, repeats: false)
-        let request = UNNotificationRequest(identifier: UUID().uuidString, content: content, trigger: trigger)
-        
-        UNUserNotificationCenter.current().add(request) { error in
-            if let error = error {
-                print("❌ Ошибка при добавлении уведомления: \(error)")
-            } else {
-                print("🔔 Уведомление запланировано")
-            }
-        }
     }
     
     func dismissPresentedScreen() {
         coordinator?.dismissPresentedScreen()
     }
     
-    func saveAlarm(alarm: Alarm) {
-        if let encoded = try? JSONEncoder().encode(alarm) {
-            UserDefaults.standard.set(encoded, forKey: "alarm")
-        }
-        delegate?.didSaveAlarm(alarm)
+    func dismissKeyboard() {
+        deleteKeyboard?()
     }
 }

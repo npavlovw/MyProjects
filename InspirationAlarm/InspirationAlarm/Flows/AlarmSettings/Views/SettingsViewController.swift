@@ -8,8 +8,8 @@
 import UIKit
 import SnapKit
 
-class SettingsViewController: UIViewController {
-        
+final class SettingsViewController: UIViewController {
+
     var viewModel: SettingsViewModel
         
     init(viewModel: SettingsViewModel) {
@@ -71,6 +71,7 @@ class SettingsViewController: UIViewController {
         view.backgroundColor = .black
         setupConstraints()
         setupTapGesture()
+        setupBindings()
     }
     
     //MARK: -Constraints
@@ -100,51 +101,31 @@ class SettingsViewController: UIViewController {
             }
         }
     
+    //MARK: -Bindings
+    private func setupBindings() {
+        viewModel.deleteKeyboard = { [weak self] in
+            self?.view.endEditing(true)
+        }
+    }
+    
     //MARK: -Logics
     private func setupTapGesture() {
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
         view.addGestureRecognizer(tapGesture)
     }
     
-    @objc private func saveSettings() {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "HH:mm"
-        let timeString = formatter.string(from: datePicker.date)
-        
+    @objc private func saveSettings() {        
         let name = nameTextField.text?.isEmpty == false ? nameTextField.text! : "Будильник"
         
-        let newAlarm = Alarm(clock: timeString, name: name, isActive: true)
-        
-        viewModel.saveAlarm(alarm: newAlarm)
-        
-//        viewModel.sheduleAlertNotification(date: datePicker.date, title: name)
-        
+        viewModel.saveAlarm(selectedDate: datePicker.date, name: name)
         viewModel.dismissPresentedScreen()
     }
-    
-//    private func saveAlarm(alarm: Alarm) {
-//        var currentAlarms = fetchAlarms()
-//        currentAlarms.append(alarm)
-//        
-//        if let data = try? JSONEncoder().encode(currentAlarms) {
-//            UserDefaults.standard.set(data, forKey: "alarms")
-//        }
-//    }
-//    
-//    private func fetchAlarms() -> [Alarm] {
-//        guard let data = UserDefaults.standard.data(forKey: "alarms"),
-//            let alarms = try? JSONDecoder().decode([Alarm].self, from: data)
-//        else {
-//            return []
-//        }
-//        return alarms
-//    }
     
     @objc private func cancelSettings() {
         viewModel.dismissPresentedScreen()
     }
     
     @objc private func dismissKeyboard() {
-        view.endEditing(true)
+        viewModel.dismissKeyboard()
     }
 }
