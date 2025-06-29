@@ -10,6 +10,7 @@ import UserNotifications
 final class AlarmViewModel: SettingsViewModelDelegate {
     
     weak var coordinator: MainCoordinator?
+    let quoteNetworkManager = QuoteNetworkManager()
     
     private var alarms: [Alarm] = []
     
@@ -76,23 +77,37 @@ final class AlarmViewModel: SettingsViewModelDelegate {
     
     //установка будильника
     func didSetAlarm(alarm: Alarm) {
-        let content = UNMutableNotificationContent()
-        content.title = alarm.name
-        content.body = "Будильник сработал!"
-        content.sound = UNNotificationSound.default
-        
-        let date = convertClockToDate(clock: alarm.clock)
-        
-        let triggerDate = Calendar.current.dateComponents([.year, .month, .day, .hour, .minute], from: date)
-        let trigger = UNCalendarNotificationTrigger(dateMatching: triggerDate, repeats: false)
-        
-        let request = UNNotificationRequest(identifier: alarm.notificationID, content: content, trigger: trigger)
-        
-        UNUserNotificationCenter.current().add(request) { error in
-            if let error = error {
-                print("❌ Ошибка при добавлении уведомления: \(error)")
+        getQuote { [weak self] quote in
+            guard let self = self, let quote = quote else { return }
+            
+            let content = UNMutableNotificationContent()
+            content.title = alarm.name
+            content.body = quote
+            content.sound = UNNotificationSound.default
+            
+            let date = convertClockToDate(clock: alarm.clock)
+            
+            let triggerDate = Calendar.current.dateComponents([.year, .month, .day, .hour, .minute], from: date)
+            let trigger = UNCalendarNotificationTrigger(dateMatching: triggerDate, repeats: false)
+            
+            let request = UNNotificationRequest(identifier: alarm.notificationID, content: content, trigger: trigger)
+            
+            UNUserNotificationCenter.current().add(request) { error in
+                if let error = error {
+                    print("❌ Ошибка при добавлении уведомления: \(error)")
+                } else {
+                    print("🔔 Уведомление запланировано")
+                }
+            }
+        }
+    }
+    
+    func getQuote(completion: @escaping (String?) -> Void) {
+        quoteNetworkManager.fetchRandomQuote { quote in
+            if let quote = quote {
+                completion("\(quote.a)")
             } else {
-                print("🔔 Уведомление запланировано")
+                completion(nil)
             }
         }
     }
