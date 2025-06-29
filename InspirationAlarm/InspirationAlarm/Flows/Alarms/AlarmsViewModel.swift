@@ -15,6 +15,7 @@ final class AlarmViewModel: SettingsViewModelDelegate {
     private var alarms: [Alarm] = []
     
     var onAlarmsUpdated: (() -> Void)?
+    var onSavedAlarms: (() -> Void)?
     
     func getAlarms() -> [Alarm] {
         return alarms
@@ -28,6 +29,22 @@ final class AlarmViewModel: SettingsViewModelDelegate {
         alarms.append(alarm)
         onAlarmsUpdated?()
     }
+    
+    func showSavedAlarms() {
+        if let data = UserDefaults.standard.data(forKey: "savedAlarms"),
+           let savedAlarms = try? JSONDecoder().decode([Alarm].self, from: data) {
+            self.alarms = savedAlarms
+            onSavedAlarms?()
+        }
+    }
+    
+    func saveAlarmsForExit() {
+        if let data = try? JSONEncoder().encode(alarms) {
+            UserDefaults.standard.set(data, forKey: "savedAlarms")
+        }
+    }
+    
+    
     
 //    func showNewAlarm() {
 //        if let savedData = UserDefaults.standard.data(forKey: "alarm"),

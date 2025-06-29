@@ -44,6 +44,9 @@ class AlarmViewController: UIViewController {
         setupBindings()
         setupNotification()
         
+        viewModel.showSavedAlarms()
+
+        
 //        if let savedData = UserDefaults.standard.data(forKey: "alarm"),
 //           let newAlarm = try? JSONDecoder().decode(Alarm.self, from: savedData) {
 //            print("Будильник: \(newAlarm.clock) - \(newAlarm.name), активен: \(newAlarm.isActive)")
@@ -55,7 +58,12 @@ class AlarmViewController: UIViewController {
         super.viewWillAppear(animated)
         print("viewWillAppear на AlarmVC")
     }
-            
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        viewModel.saveAlarmsForExit()
+    }
+
 //        let clock = UserDefaults.standard.string(forKey: "clock") ?? ""
 //        let name = UserDefaults.standard.string(forKey: "name") ?? ""
 //        let newAlarm = Alarm(clock: clock, name: name, isActive: true)
@@ -98,10 +106,15 @@ class AlarmViewController: UIViewController {
         }
     }
     
-    // UserDefaults
     private func setupBindings() {
         viewModel.onAlarmsUpdated = { [weak self] in
             self?.tableView.reloadData()
+        }
+        
+        viewModel.onSavedAlarms = { [weak self] in
+            DispatchQueue.main.async {
+                self?.tableView.reloadData()
+            }
         }
     }
     
