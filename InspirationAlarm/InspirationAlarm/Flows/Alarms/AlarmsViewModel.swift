@@ -80,6 +80,8 @@ final class AlarmViewModel: SettingsViewModelDelegate {
         getQuote { [weak self] quote in
             guard let self = self, let quote = quote else { return }
             
+            UserDefaults.standard.set(quote, forKey: "quote")
+            
             let content = UNMutableNotificationContent()
             content.title = alarm.name
             content.body = quote

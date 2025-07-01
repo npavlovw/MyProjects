@@ -8,6 +8,8 @@
 import Foundation
 
 class ImageNetworkManager {
+    static let shared = ImageNetworkManager()
+    
     let apiKey: String = "rzgwC_c2KEpleQW46_NGvOJ6pFq_xqYsKgMLC9NQaDE"
     let url: String = "https://api.unsplash.com/photos/random"
         
@@ -26,14 +28,20 @@ class ImageNetworkManager {
         URLSession.shared.dataTask(with: request) { (data, response, error) in
             guard error == nil else {
                 print(error!.localizedDescription)
+                print("Ошибка запроса: \(String(describing: error))")
                 return
             }
             
-            guard let data else { return}
+            guard let data else {
+                print("❌ Data отсутствует")
+                return
+            }
             
+            print("📦 Ответ сервера: \(String(data: data, encoding: .utf8) ?? "Не удалось прочитать строку")")
+
             do {
-                let result = try JSONDecoder().decode(ImageResponse.self, from: data)
-                completion(URL(string: result.url.regular))
+                let image = try JSONDecoder().decode(ImageResponse.self, from: data)
+                    completion(URL(string: image.urls.regular))
             } catch {
                 print(error.localizedDescription)
             }

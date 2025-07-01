@@ -27,7 +27,7 @@ final class SettingsViewController: UIViewController {
         button.setTitle("Отмена", for: .normal)
         button.setTitleColor(.orange, for: .normal)
         button.titleLabel?.font = .systemFont(ofSize: 20)
-        button.addTarget(self, action: #selector(cancelSettings), for: .touchUpInside)
+        button.addTarget(self, action: #selector(showInspirationScreen), for: .touchUpInside)
         return button
     }()
     
@@ -127,5 +127,9 @@ final class SettingsViewController: UIViewController {
     
     @objc private func dismissKeyboard() {
         viewModel.dismissKeyboard()
+    }
+    
+    @objc private func showInspirationScreen() {
+        viewModel.coordinator?.showInspirationScreen()
     }
 }

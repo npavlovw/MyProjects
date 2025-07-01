@@ -4,9 +4,10 @@
 //
 //  Created by Никита Павлов on 29.06.2025.
 //
+import Foundation
 
 struct ImageResponse: Decodable {
-    let url: ImageURL
+    let urls: ImageURL
 }
 
 struct ImageURL: Decodable {

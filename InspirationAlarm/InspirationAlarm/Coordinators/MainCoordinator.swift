@@ -35,7 +35,18 @@ final class MainCoordinator: Coordinator {
         navigationController.present(settingsVC, animated: true)
     }
     
+    func showInspirationScreen() {
+        let inspirationViewModel = InspirationViewModel()
+        inspirationViewModel.coordinator = self
+        let inspirationVC = InspirationViewController(viewModel: inspirationViewModel)
+        navigationController.pushViewController(inspirationVC, animated: true)
+    }
+    
     func dismissPresentedScreen() {
         navigationController.presentedViewController?.dismiss(animated: true)
+    }
+    
+    func dismissPushedScreen() {
+        navigationController.popViewController(animated: true)
     }
 }
