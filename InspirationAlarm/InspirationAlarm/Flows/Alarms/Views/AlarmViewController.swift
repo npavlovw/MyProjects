@@ -52,7 +52,7 @@ class AlarmViewController: UIViewController {
         viewModel.saveAlarmsForExit()
     }
 
-private func setNavigationItem() {
+    private func setNavigationItem() {
         navigationItem.title = "Будильник"
         navigationItem.largeTitleDisplayMode = .automatic
         

@@ -49,7 +49,7 @@ final class AlarmViewModel: SettingsViewModelDelegate {
             print("Будильник с индексом \(alarm.notificationID) включён")
         } else {
             UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: [alarm.notificationID])
-            print("Будильник \(alarm.notificationID) выключен")
+            print("Будильник с индексом \(alarm.notificationID) выключен")
         }
         
         saveAlarmsForExit()
@@ -105,7 +105,7 @@ final class AlarmViewModel: SettingsViewModelDelegate {
     func getQuote(completion: @escaping (String?) -> Void) {
         quoteNetworkManager.fetchRandomQuote { quote in
             if let quote = quote {
-                completion("\(quote.a)")
+                completion("\(quote.q) - \(quote.a)")
             } else {
                 completion(nil)
             }
