@@ -36,6 +36,7 @@ final class MainCoordinator: Coordinator {
     }
     
     func showInspirationScreen() {
+        dismissPresentedScreen()
         let inspirationViewModel = InspirationViewModel()
         inspirationViewModel.coordinator = self
         let inspirationVC = InspirationViewController(viewModel: inspirationViewModel)

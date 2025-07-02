@@ -27,6 +27,7 @@ final class InspirationViewController: UIViewController {
     let mainImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFit
+        imageView.clipsToBounds = true
         return imageView
     }()
     
@@ -43,6 +44,7 @@ final class InspirationViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        view.backgroundColor = .black
         setupConstraints()
         loadImage()
         setupBindings()
@@ -58,7 +60,7 @@ final class InspirationViewController: UIViewController {
         }
         quoteLabel.snp.makeConstraints {
             $0.leading.trailing.equalToSuperview().inset(16)
-            $0.bottom.equalToSuperview().inset(20)
+            $0.bottom.equalToSuperview().inset(80)
         }
     }
     

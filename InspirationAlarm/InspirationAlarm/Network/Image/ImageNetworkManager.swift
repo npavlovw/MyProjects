@@ -18,7 +18,7 @@ class ImageNetworkManager {
         var urlComponents = URLComponents(string: url)
         urlComponents?.queryItems = [
             URLQueryItem(name: "client_id", value: apiKey),
-            URLQueryItem(name: "query", value: "inspiretion"),
+            URLQueryItem(name: "query", value: "nature"),
         ]
         
         guard let url = urlComponents?.url else { return }
@@ -37,8 +37,6 @@ class ImageNetworkManager {
                 return
             }
             
-            print("📦 Ответ сервера: \(String(data: data, encoding: .utf8) ?? "Не удалось прочитать строку")")
-
             do {
                 let image = try JSONDecoder().decode(ImageResponse.self, from: data)
                     completion(URL(string: image.urls.regular))

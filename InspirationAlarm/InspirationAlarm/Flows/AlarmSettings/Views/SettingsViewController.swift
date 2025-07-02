@@ -130,6 +130,6 @@ final class SettingsViewController: UIViewController {
     }
     
     @objc private func showInspirationScreen() {
-        viewModel.coordinator?.showInspirationScreen()
+        viewModel.showInspirationScreen()
     }
 }

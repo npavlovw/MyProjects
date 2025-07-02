@@ -15,11 +15,16 @@ class InspirationViewModel{
     func loadImage(){
         ImageNetworkManager.shared.sendRequest { url in
             guard let url = url else { return }
-            DispatchQueue.main.async {
-                if let data = try? Data(contentsOf: url) {
-                    self.imageData?(data)
+            
+            URLSession.shared.dataTask(with: url) { data, _, error in
+                guard let data = data, error == nil else {
+                    print("Ошибка загрузки изображения: \(error?.localizedDescription ?? "Нет описания")")
+                    return
                 }
-            }
+                DispatchQueue.main.async {
+                        self.imageData?(data)
+                }
+            }.resume()
         }
     }
 }

@@ -45,6 +45,10 @@ final class SettingsViewModel {
         coordinator?.dismissPresentedScreen()
     }
     
+    func showInspirationScreen() {
+        coordinator?.showInspirationScreen()
+    }
+    
     func dismissKeyboard() {
         deleteKeyboard?()
     }
